@@ -341,9 +341,10 @@ function createCategoryBar(name, weight, subjectId) {
             <span id="CategoriNameTitle">${name}</span>
             <span id="GewichtNameTitle">x ${weight}</span>
         </div>
-        <div class="gradesContainer"></div>
+        
         <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add2.png" alt="+"></button>
-    `;
+        <div class="gradesContainer"></div>
+        `;
     categoryBar.id = `category-${name}`; // Hinzufügen einer ID für die spätere Verwendung
 
     const subjectPage = document.getElementById('subjectPage');
@@ -428,7 +429,9 @@ function displayGrade(categoryName, gradeValue, gradeDate) {
 
     // Anhängen der Note an die entsprechende Kategorie
     const categoryBar = document.getElementById(`category-${categoryName}`);
-    categoryBar.appendChild(gradeElement);
+    
+    const gradesContainer = categoryBar.querySelector('.gradesContainer');
+    gradesContainer.appendChild(gradeElement);
 }
 
 
