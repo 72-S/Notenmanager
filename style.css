@@ -419,21 +419,73 @@ button.close:hover {
     display: none;
 }
 
+
+
 #subjectPageContainer {
     display: none;
 }
 
 .categoryBar {
     align-items: center;
-    background-color: lightblue;
+    background-color: #d1dce5;
     display: flex;
     flex-direction: column;
-    margin: 5px 0;
+    margin-left: 20px;
+    margin-top: 15px;
     padding: 10px;
+    height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
+    width:250px;
+    border-radius: 10px;
+
 }
 
-.categoryBar span {
+.titleContainer {
+    /* Ihre vorhandenen Stile... */
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    padding-bottom: 10px;
+}
+
+
+#GradeCreationPopupButton {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-right: 35px;
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+#GradeCreationPopupButton:hover {
+    background-color: #0056b3;
+}
+#CategoriNameTitle {
+    color: #333333;
+    font-size: 20px;
+    text-align: left;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 180px;
+}
+
+#GewichtNameTitle {
+    color: #333333;
+    font-size: 20px;
+    text-align: right;
+    font-weight: bold;
+    
 }
 
 .categoryBar button {
@@ -442,8 +494,30 @@ button.close:hover {
 }
 
 .gradeElement {
-    color: darkgreen;
+    display: flex;
     margin: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 98%;
+    height: 10px;
+}
+
+
+
+#gradeDate {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+
+}
+
+#gradeValue {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+
 }
 
 .color-circle {

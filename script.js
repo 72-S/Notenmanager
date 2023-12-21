@@ -336,9 +336,14 @@ function addCategory(subjectId, categoryName, categoryWeight) {
 function createCategoryBar(name, weight, subjectId) {
     const categoryBar = document.createElement('div');
     categoryBar.className = 'categoryBar';
-    categoryBar.innerHTML = `<span>${name}</span>
-                             <span>Gewichtung: ${weight}</span>
-                             <button onclick="openGradeCreationPopup('${name}', '${subjectId}')">Add</button>`;
+    categoryBar.innerHTML = `
+        <div class="titleContainer">
+            <span id="CategoriNameTitle">${name}</span>
+            <span id="GewichtNameTitle">x ${weight}</span>
+        </div>
+        <div class="gradesContainer"></div>
+        <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add2.png" alt="+"></button>
+    `;
     categoryBar.id = `category-${name}`; // Hinzufügen einer ID für die spätere Verwendung
 
     const subjectPage = document.getElementById('subjectPage');
@@ -359,48 +364,66 @@ function closeSubjectPage() {
 
 
 function openGradeCreationPopup(categoryName, subjectId) {
-    const gradePopup = document.createElement('div');
-    gradePopup.id = 'gradePopup';
-    gradePopup.innerHTML = `
-        <input type="number" id="gradeValue" placeholder="Note">
-        <input type="date" id="gradeDate">
-        <button onclick="addGrade('${categoryName}', '${subjectId}')">Note hinzufügen</button>
-        <button onclick="closeGradePopup()">Schließen</button>
-    `;
-    document.body.appendChild(gradePopup);
+    // Speichern Sie categoryName und subjectId als globale Variablen oder als Attribute des Popups
+    window.currentCategoryName = categoryName;
+    window.currentSubjectId = subjectId;
+
+    const gradePopup = document.getElementById('gradePopup');
+    gradePopup.style.display = 'block';
 }
 
-function addGrade(categoryName, subjectId) {
-    const gradeValue = document.getElementById('gradeValue').value;
-    const gradeDate = document.getElementById('gradeDate').value;
+
+function addGrade() {
+    const gradeValueElement = document.getElementById('gradeValue');
+    const gradeDateElement = document.getElementById('gradeDate');
+
+    if (!gradeValueElement || !gradeDateElement) {
+        console.error('Grade input elements not found');
+        return;
+    }
+
+    const gradeValue = gradeValueElement.value;
+    const gradeDate = gradeDateElement.value;
+
+    if (!gradeValue || !gradeDate) {
+        console.error('Grade value or date is missing');
+        return;
+    }
 
     var newGradeRef = firebase.database().ref('grades').push();
     newGradeRef.set({
         value: gradeValue,
         date: gradeDate,
-        categoryName: categoryName,
-        subjectId: subjectId
+        categoryName: window.currentCategoryName,
+        subjectId: window.currentSubjectId
     }).then(() => {
         closeGradePopup();
-        displayGrade(categoryName, gradeValue, gradeDate);
+        displayGrade(window.currentCategoryName, gradeValue, gradeDate);
 
         // Durchschnitt neu berechnen
-        calculateSubjectAverage(subjectId);
+        calculateSubjectAverage(window.currentSubjectId);
+    }).catch(error => {
+        console.error('Error adding grade:', error);
     });
 }
 
 
+
+
 function closeGradePopup() {
     const gradePopup = document.getElementById('gradePopup');
-    document.body.removeChild(gradePopup);
+    gradePopup.style.display = 'none';
 }
+
+
 
 function displayGrade(categoryName, gradeValue, gradeDate) {
     const gradeElement = document.createElement('div');
     gradeElement.className = 'gradeElement';
     gradeElement.innerHTML = ` 
-        <span>${gradeValue}</span>
-        <span>${gradeDate}</span>
+        <span id="gradeDate">${gradeDate}</span>
+        <span id="gradeValue">${gradeValue}</span>
+        
     `;
 
     // Anhängen der Note an die entsprechende Kategorie
