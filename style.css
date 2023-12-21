@@ -691,7 +691,7 @@ button.close:hover {
 .popup-content3 button {
     font-family: "Lato-Medium", Helvetica;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .category-popup-buttons3 {
@@ -741,7 +741,9 @@ button.close:hover {
     padding: 10px;
     margin-bottom: 10px;
     box-sizing: border-box;
-    font-weight: normal !important;
+    font-weight: 500 !important;
+    color: #757575 !important;
+    font-size: 16px !important;
 }
 
 .gradeInput {
@@ -756,7 +758,11 @@ button.close:hover {
     background: url('assets/arrow.png') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
     background-position: 75% center;
     background-size: 15px;
-    
+    color: #757575 !important;
+    font-size: 16px !important;
+    padding-right: 45px; /* Vergrößern Sie den Padding auf der rechten Seite */
+    text-align: left; /* Stellt sicher, dass der Text links ausgerichtet ist */
+    direction: rtl;
     
 }
 
