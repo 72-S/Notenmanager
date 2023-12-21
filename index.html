@@ -119,8 +119,9 @@
     </div>
 
     <div id="gradePopup" class="popup3" style="display: none;">
-        <input type="date" id="gradeDate">
-        <select id="gradeValue">
+        <div class="popup-content3">
+        <input type="date" id="gradeDate" class="gradeDateInput">
+        <select id="gradeValue" class="gradeInput">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3" selected>3</option>
@@ -128,8 +129,11 @@
             <option value="5">5</option>
             <option value="6">6</option>
         </select>
-        <button onclick="addGrade()">Note hinzufügen</button>
-        <button onclick="closeGradePopup()">Schließen</button>
+        <div class="category-popup-buttons3">
+        <button id="createNote" onclick="addGrade()">Note hinzufügen</button>
+        <button id="cancelNote" onclick="closeGradePopup()">Schließen</button>
+        </div>
+        </div>
     </div>
     
 
@@ -141,3 +145,4 @@
 </body>
 
 </html>
+

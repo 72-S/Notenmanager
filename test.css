@@ -15,7 +15,7 @@ body {
     border: none;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: #333333;
+    color: black;
     cursor: pointer;
     font-family: "Lato-Medium", Helvetica;
     font-size: 16px;
@@ -103,7 +103,7 @@ h2 {
 #newSubjectForm #createFach:disabled {
   background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
   color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-  border: 1px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -111,7 +111,7 @@ h2 {
 #newSubjectForm #createFach:disabled:hover {
     background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
     color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-    border: 1px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -127,7 +127,7 @@ h2 {
 #newSubjectForm .button-container button {
     border: none;
     border-radius: 10px;
-    color: #333333;
+    color: black;
     cursor: pointer;
     font-size: 16px;
     padding: 10px 20px; /* Adjust padding as needed */
@@ -163,7 +163,54 @@ h2 {
 }
 
 
-CreateCategory
+#CreateCategory {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-top: 20px;
+    outline: none;
+    padding-bottom: 7px;
+    padding-right: 35px;
+    padding-top: 7px;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+#CreateCategory:hover {
+    background-color: #0056b3;
+}
+
+#BacktoMain {
+    background-color: #ffcc80 ;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #333333;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 5px;
+    margin-top: 20px;
+    outline: none;
+    padding-bottom: 7px;
+    padding-right: 35px;
+    padding-top: 7px;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+#BacktoMain:hover {
+    background-color: #ffad33;
+
+}
 
 #subjectName {
     border: 1px solid #ccc;
@@ -372,21 +419,73 @@ button.close:hover {
     display: none;
 }
 
+
+
 #subjectPageContainer {
     display: none;
 }
 
 .categoryBar {
     align-items: center;
-    background-color: lightblue;
+    background-color: #d1dce5;
     display: flex;
     flex-direction: column;
-    margin: 5px 0;
+    margin-left: 20px;
+    margin-top: 15px;
     padding: 10px;
+    height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
+    width:250px;
+    border-radius: 10px;
+
 }
 
-.categoryBar span {
+.titleContainer {
+    /* Ihre vorhandenen Stile... */
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    padding-bottom: 10px;
+}
+
+
+#GradeCreationPopupButton {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-right: 35px;
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+#GradeCreationPopupButton:hover {
+    background-color: #0056b3;
+}
+#CategoriNameTitle {
+    color: #333333;
+    font-size: 20px;
+    text-align: left;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 180px;
+}
+
+#GewichtNameTitle {
+    color: #333333;
+    font-size: 20px;
+    text-align: right;
+    font-weight: bold;
+    
 }
 
 .categoryBar button {
@@ -395,8 +494,30 @@ button.close:hover {
 }
 
 .gradeElement {
-    color: darkgreen;
+    display: flex;
     margin: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 98%;
+    height: 10px;
+}
+
+
+
+#gradeDate {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+
+}
+
+#gradeValue {
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+
 }
 
 .color-circle {
@@ -410,4 +531,141 @@ button.close:hover {
     margin-top: 20px;
     text-align: center;
 }
+
+
+
+
+
+
+
+.popup2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #dbebfa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1002; /* Stellen Sie sicher, dass es über anderen Elementen liegt */
+    display: none; /* Standardmäßig nicht sichtbar */
+    width: 80%; /* Oder eine spezifische Breite */
+    max-width: 400px; /* Maximum Breite */
+}
+
+.popup-content2 {
+    text-align: center;
+}
+
+.popup-content2 button {
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.category-popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#createCategory {
+    border: none;
+    border-radius: 10px;
+    color: #333333;
+    background-color: #007BFF;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    margin: 0 10px;
+    transition: 0.2s ease;
+}
+
+#createCategory:hover {
+    background-color: #0056b3;
+}
+
+#cancelCategory {
+    border: none;
+    border-radius: 10px;
+    color: #333333;
+    background-color: #6c757d;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    margin: 0 10px;
+    transition: 0.2s ease;
+}
+
+#cancelCategory:hover {
+    background-color: #545b62;
+}
+
+#categoryInput {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#weightInput {
+    border: 1px solid #ccc;
+    background-color: #ffffff !important;
+    border-radius: 10px;
+    width: 77px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    appearance: none; /* Entfernt den Standardpfeil */
+    background: url('assets/arrow.png') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
+    background-position: 75% center;
+    background-size: 15px;
+}
+
+#categoryInput:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+#weightInput:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+#createCategory:disabled {
+  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#createCategory:disabled:hover {
+    background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+    color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#Fachname {
+    color: #000000;
+    font-size: 46px;
+    margin: 0;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#back {
+    height: 1.2em;
+    margin-left: 7px;
+    margin-top: 0px;
+    position: absolute;
+    width: auto;
+}
+
 
