@@ -20,8 +20,7 @@ let localGrades = {};
 let selectedColor = '';
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
-    const gridAnimation = document.querySelector('.categoriesContainer');
-    animateCSSGrid.wrapGrid(gridAnimation, {duration : 600});
+    
     loadSubjects();
     setSubmitButtonState();
 
