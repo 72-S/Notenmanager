@@ -1,3 +1,4 @@
+
 // Firebase Initialisierung (Ersetzen Sie dies mit Ihrer Konfiguration)
 const firebaseConfig = {
     apiKey: "AIzaSyBFnHlWuc5pR9NxAvUVZkeFORIZor1lmrs",
@@ -19,6 +20,8 @@ let localGrades = {};
 let selectedColor = '';
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
+    const gridAnimation = document.querySelector('.categoriesContainer');
+    animateCSSGrid.wrapGrid(gridAnimation, {duration : 600});
     loadSubjects();
     setSubmitButtonState();
 
@@ -64,12 +67,35 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then(() => {
             createSubjectBox(subjectName, selectedColor, newSubjectRef.key);
             document.getElementById('newSubjectPopup').style.display = 'none';
-            document.getElementById('newSubjectForm').reset(); // Reset the form
+            document.getElementById('newSubjectForm').reset();
+            resetNewSubjectForm(); // Reset the form
             setSubmitButtonState();
             document.getElementById('noSubjectsMessage').style.display = 'none';
         });
     });
 });
+
+
+function resetNewSubjectForm() {
+    // Setzen Sie das Eingabefeld für den Fachnamen zurück
+    const subjectNameInput = document.getElementById('subjectName');
+    subjectNameInput.value = '';
+
+    // Deaktivieren Sie den Button zum Erstellen eines neuen Faches
+    const createSubjectButton = document.getElementById('createFach');
+    createSubjectButton.disabled = true;
+
+    // Setzen Sie die ausgewählten Farben zurück
+    const colorChoices = document.querySelectorAll('.color-choice.selected');
+    colorChoices.forEach(function(choice) {
+        choice.classList.remove('selected');
+    });
+
+    // Setzen Sie die Variable für die ausgewählte Farbe zurück
+    selectedColor = '';
+}
+
+
 
 
 function selectColor(element) {
@@ -81,12 +107,39 @@ function selectColor(element) {
 
     // Aktualisiere die ausgewählte Farbe
     selectedColor = element.getAttribute('data-color');
+    setSubmitButtonState();
 }
 
 // Event-Listener zu allen Farbwahl-Span-Elementen hinzufügen
 document.querySelectorAll('.color-choice').forEach(span => {
     span.addEventListener('click', () => selectColor(span));
+
 });
+
+
+
+function setSubmitButtonState() {
+    const subjectName = document.getElementById('subjectName').value.trim();
+    const submitButton = document.getElementById('newSubjectForm').querySelector('button[type="submit"]');
+    submitButton.disabled = !subjectName || !selectedColor;
+}
+
+
+function setAddGradeButtonState() {
+    const gradeDateElement = document.getElementById('gradeDate');
+    const addGradeButton = document.getElementById('createNote');
+
+    // Prüft, ob das Eingabefeld für das Datum leer ist
+    // und deaktiviert/aktiviert den Button entsprechend
+    addGradeButton.disabled = !gradeDateElement.value;
+}
+
+// Event-Listener für das Datumseingabefeld, der bei jeder Änderung aufgerufen wird
+document.getElementById('gradeDate').addEventListener('input', setAddGradeButtonState);
+
+// Initialer Aufruf, um den Zustand beim Laden der Seite zu setzen
+setAddGradeButtonState();
+
 
 function calculateSubjectAverage(subjectId) {
     return new Promise((resolve, reject) => {
@@ -186,11 +239,7 @@ function createSubjectBox(name, color, id) {
     }, 20); // Warten Sie einen kurzen Moment, bevor Sie die Opacity ändern, um sicherzustellen, dass die Transition funktioniert
 }
 
-function setSubmitButtonState() {
-    const subjectName = document.getElementById('subjectName').value.trim();
-    const submitButton = document.getElementById('newSubjectForm').querySelector('button[type="submit"]');
-    submitButton.disabled = !subjectName;
-}
+
 
 function loadSubjects() {
     var dbRef = firebase.database().ref('subjects');
@@ -243,7 +292,7 @@ function openSubjectPage(subjectName, subjectId) {
                              </div>
                              </div>
                          </div>
-                         <div id="categoriesContainer"></div>`;
+                         <div class="categoriesContainer"></div>`;
     document.body.appendChild(subjectPage);
 
     // Rufen Sie diese Funktion auf, um den Anfangszustand des Buttons zu setzen
@@ -257,7 +306,17 @@ document.getElementById('categoryInput').addEventListener('input', setCreateCate
     loadGradesForSubject(subjectId);
 }
 
+function resetCategoryInputs() {
+    const categoryInput = document.getElementById('categoryInput');
+    const weightInput = document.getElementById('weightInput');
+    
+    categoryInput.value = ''; // Setzt den Kategorienamen zurück
+    weightInput.value = '1'; // Setzt das Gewicht zurück auf den Standardwert
+}
+
 function closeCategoryCreationPopup() {
+    resetCategoryInputs();
+    setCreateCategoryButtonState();
     document.getElementById('categoryCreationPopup').style.display = 'none';
 }
 
@@ -290,6 +349,8 @@ function createCategory(subjectId) {
         document.getElementById('categoryCreationPopup').style.display = 'none';
         document.getElementById('categoryInput').value = '';
         document.getElementById('weightInput').value = '';
+        resetCategoryInputs();
+        setCreateCategoryButtonState();
     });
 }
 
@@ -348,7 +409,8 @@ function createCategoryBar(name, weight, subjectId) {
     categoryBar.id = `category-${name}`; // Hinzufügen einer ID für die spätere Verwendung
 
     const subjectPage = document.getElementById('subjectPage');
-    subjectPage.appendChild(categoryBar);
+    const subjectContainer = subjectPage.querySelector('.categoriesContainer');
+    subjectContainer.appendChild(categoryBar);
 }
 
 
@@ -398,8 +460,22 @@ function addGrade() {
         categoryName: window.currentCategoryName,
         subjectId: window.currentSubjectId
     }).then(() => {
-        closeGradePopup();
+        // Aktualisieren Sie die lokale Speicherung mit der neuen Note
+        if (!localGrades[window.currentSubjectId]) {
+            localGrades[window.currentSubjectId] = [];
+        }
+        localGrades[window.currentSubjectId].push({
+            value: gradeValue,
+            date: gradeDate,
+            categoryName: window.currentCategoryName
+        });
+
+        // Zeigen Sie die neue Note an
         displayGrade(window.currentCategoryName, gradeValue, gradeDate);
+
+        gradeDateElement.value = '';
+        setAddGradeButtonState();
+        closeGradePopup();
 
         // Durchschnitt neu berechnen
         calculateSubjectAverage(window.currentSubjectId);
@@ -411,11 +487,27 @@ function addGrade() {
 
 
 
+
 function closeGradePopup() {
     const gradePopup = document.getElementById('gradePopup');
+    const gradeDateElement = document.getElementById('gradeDate');
+    
+    // Setzen Sie das Datum zurück
+    gradeDateElement.value = '';
+    
+    // Aktualisieren Sie den Zustand des Buttons zum Hinzufügen von Noten
+    setAddGradeButtonState();
+    
     gradePopup.style.display = 'none';
 }
 
+
+document.getElementById('closePopup').addEventListener('click', function(e) {
+    e.preventDefault();
+    resetNewSubjectForm();
+    const popup = document.getElementById('newSubjectPopup');
+    popup.style.display = 'none';
+});
 
 
 function displayGrade(categoryName, gradeValue, gradeDate) {
@@ -482,7 +574,7 @@ function addSubject() {
         name: subjectName,
         color: subjectColor
     }).then(() => {
-        closeSubjectPopup();
+        
         createSubjectBox(subjectName, subjectColor, newSubjectRef.key);
 
         // Fach im Cache speichern
@@ -497,5 +589,9 @@ function addSubject() {
 
         // Durchschnitt für das neue Fach berechnen
         calculateSubjectAverage(newSubjectRef.key);
+        
     });
 }
+
+
+

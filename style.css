@@ -421,6 +421,7 @@ button.close:hover {
 
 
 
+
 #subjectPageContainer {
     display: none;
 }
@@ -438,6 +439,18 @@ button.close:hover {
     border-radius: 10px;
 
 }
+
+.categoriesContainer {
+    width: 100%; /* Füllt die gesamte Breite der Seite aus */
+    height: 100vh; /* Füllt die gesamte Höhe der Seite aus */
+    display: grid; /* Stellt die Kategorien in einem Grid dar */
+    grid-template-columns: repeat(auto-fit, 250px); /* Erstellt Spalten mit einer festen Breite von 250px */
+    grid-auto-rows: 220px; /* Setzt eine feste Höhe für jede Zeile */
+    gap: 40px; /* Legt den Abstand zwischen den Kategorien fest */
+}
+
+
+
 
 .titleContainer {
     /* Ihre vorhandenen Stile... */
@@ -488,6 +501,7 @@ button.close:hover {
     white-space: nowrap;
     width: 180px;
 }
+
 
 #GewichtNameTitle {
     color: #333333;
@@ -748,6 +762,14 @@ button.close:hover {
 
 #createNote:hover {
     background-color: #0056b3;
+}
+
+#createNote:disabled{
+  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 #cancelNote {
