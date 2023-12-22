@@ -437,7 +437,7 @@ button.close:hover {
     height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
     width:250px;
     border-radius: 10px;
-
+    transition: all 0.5s ease;
 }
 
 .categoriesContainer {
@@ -447,6 +447,7 @@ button.close:hover {
     grid-template-columns: repeat(auto-fit, 250px); /* Erstellt Spalten mit einer festen Breite von 250px */
     grid-auto-rows: 220px; /* Setzt eine feste Höhe für jede Zeile */
     gap: 40px; /* Legt den Abstand zwischen den Kategorien fest */
+    transition: all 0.5s ease;
 }
 
 
