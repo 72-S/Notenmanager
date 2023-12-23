@@ -186,6 +186,7 @@ h2 {
     padding-bottom: 7px;
     padding-right: 35px;
     padding-top: 7px;
+    
     text-align: left;
     transition: 0.2s ease;
 }
@@ -431,6 +432,11 @@ button.close:hover {
 
 #subjectPageContainer {
     display: none;
+}
+
+#subjectPage {
+    padding-left: 20px;
+    padding-top: 20px;
 }
 
 .categoryBar {
