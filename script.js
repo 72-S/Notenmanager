@@ -53,20 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('EditSubjectPopup').style.display = 'none';
     });
     
-    function updateSubjectInUI(id, name, color) {
-        // Zugriff auf das Fach-Element in der Benutzeroberfläche
-        const subjectBox = document.getElementById(`subject-${id}`);
-        if (subjectBox) {
-            // Aktualisieren Sie den Namen und die Farbe des Fachs
-            const nameElement = subjectBox.querySelector('.subject-name');
-            if (nameElement) {
-                nameElement.textContent = name;
-            }
-            subjectBox.style.backgroundColor = color;
-        }
-    }
-    
-
     
 
     // Zugriff auf den "Fach bearbeiten"-Button
@@ -85,31 +71,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 name: editSubjectNameInput.value,
                 color: selectedEditColor
             }).then(() => {
-                // Laden Sie das Fach erneut aus der Firebase-Datenbank
-                firebase.database().ref('subjects/' + currentSubjectId).once('value').then(function(snapshot) {
-                    const updatedSubject = snapshot.val();
-
-                    // Aktualisieren Sie das Fach im lokalen Speicher
-                    localSubjects[currentSubjectId] = updatedSubject;
-
-                    // Aktualisieren Sie das Fach in der Benutzeroberfläche
-                    const subjectBox = document.getElementById(`subject-${currentSubjectId}`);
-                    if (subjectBox) {
-                        subjectBox.textContent = updatedSubject.name;
-                        subjectBox.style.backgroundColor = updatedSubject.color;
-                    }
-
-                    updateSubjectInUI(currentSubjectId, updatedSubject.name, updatedSubject.color);
-
-                    // Schließen Sie das Bearbeitungs-Popup
+                
+                    location.reload(); //TODO: Remove this line and replace it with a function that updates the subject box
                     
-                });
             });
         });
 
+        
 
+    function removeAllSubjects() {
+        // Get the container that holds the subjects
+        const subjectContainer = document.getElementById('subjectContainer');
 
-
+        // Check if the container exists
+        if (subjectContainer) {
+            // Remove all child elements (subjects) of the container
+            while (subjectContainer.firstChild) {
+                subjectContainer.removeChild(subjectContainer.firstChild);
+            }
+        } else {
+            console.error('Element with id "subjectContainer" not found');
+        }
+    }
+        
 
     document.getElementById('subjectName').addEventListener('input', setSubmitButtonState);
 
@@ -283,7 +267,6 @@ function createSubjectBox(name, color, id) {
     box.style.backgroundColor = color;
     box.textContent = name;
     box.style.opacity = '0'; // Setzt die Anfangs-Opacity auf 0
-    box.id = `subject-${id}`;
 
     // Event Listener für das Öffnen der Fachseite
     box.addEventListener('click', function () {
