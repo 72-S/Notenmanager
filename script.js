@@ -42,6 +42,15 @@ document.addEventListener('DOMContentLoaded', function () {
             popup.style.display = 'none';
         }, 300); // Warten Sie, bis die Transition abgeschlossen ist, bevor Sie das Display auf 'none' setzen
     });
+
+
+
+
+    document.getElementById('EditPopup').addEventListener('click', function(event) {
+        event.preventDefault();
+        // Schließen Sie das Popup
+        document.getElementById('EditSubjectPopup').style.display = 'none';
+    });
     
 
 
