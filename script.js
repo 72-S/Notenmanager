@@ -547,7 +547,7 @@ function createCategoryBar(name, weight, subjectId) {
         </div>
         <div class="buttonsContainerKategorie">
         <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add.svg" alt="+"></button>
-        <button id="GradeEditPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
+        <button id="GradeEditPopupButton" onclick="openGradeEditPopup('${name}', '${subjectId}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
         </div>
         <div class="gradesContainer"></div>
         `;
