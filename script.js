@@ -217,6 +217,55 @@ function createSubjectBox(name, color, id) {
         openSubjectPage(name, id);
     });
 
+    // Event Listener für das Kontextmenü
+    box.addEventListener('contextmenu', function (event) {
+        event.preventDefault(); // Verhindert das Standard-Kontextmenü
+    
+        // Entfernen Sie ein vorhandenes Kontextmenü
+        const existingMenu = document.querySelector('.context-menu');
+        if (existingMenu) {
+            existingMenu.remove();
+        }
+    
+        // Erstellen Sie das Kontextmenü
+        const contextMenu = document.createElement('div');
+        contextMenu.classList.add('context-menu');
+        contextMenu.style.position = 'absolute';
+        contextMenu.style.top = `${event.clientY}px`;
+        contextMenu.style.left = `${event.clientX}px`;
+        contextMenu.style.backgroundColor = 'white';
+        contextMenu.style.border = '1px solid black';
+        contextMenu.style.padding = '10px';
+    
+        // Erstellen Sie die Menüpunkte
+        const editItem = document.createElement('button');
+        editItem.textContent = 'Bearbeiten';
+        editItem.addEventListener('click', function () {
+            // Hier können Sie die Funktion zum Bearbeiten des Fachs aufrufen
+        });
+    
+        const deleteItem = document.createElement('button');
+        deleteItem.textContent = 'Löschen';
+        deleteItem.addEventListener('click', function () {
+            // Hier können Sie die Funktion zum Löschen des Fachs aufrufen
+        });
+    
+        // Fügen Sie die Menüpunkte zum Kontextmenü hinzu
+        contextMenu.appendChild(editItem);
+        contextMenu.appendChild(deleteItem);
+    
+        // Fügen Sie das Kontextmenü zum Dokument hinzu
+        document.body.appendChild(contextMenu);
+    });
+    
+    // Event Listener, um das Kontextmenü zu schließen, wenn Sie irgendwo anders klicken
+    document.addEventListener('click', function (event) {
+        const contextMenu = document.querySelector('.context-menu');
+        if (contextMenu && !contextMenu.contains(event.target)) {
+            contextMenu.remove();
+        }
+    });
+
     // Durchschnitt berechnen und anzeigen
     calculateSubjectAverage(id)
         .then(average => {
