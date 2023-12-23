@@ -247,7 +247,28 @@ function createSubjectBox(name, color, id) {
         const deleteItem = document.createElement('button');
         deleteItem.textContent = 'Löschen';
         deleteItem.addEventListener('click', function () {
-            // Hier können Sie die Funktion zum Löschen des Fachs aufrufen
+            // Löschen Sie das Fach aus der Datenbank
+            firebase.database().ref('subjects/' + id).remove();
+
+            // Löschen Sie alle Kategorien, die zu diesem Fach gehören
+            firebase.database().ref('categories').orderByChild('subjectId').equalTo(id).once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    firebase.database().ref('categories/' + childSnapshot.key).remove();
+                });
+            });
+
+            // Löschen Sie alle Noten, die zu diesem Fach gehören
+            firebase.database().ref('grades').orderByChild('subjectId').equalTo(id).once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    firebase.database().ref('grades/' + childSnapshot.key).remove();
+                });
+            });
+
+            // Entfernen Sie das Fach aus der Benutzeroberfläche
+            box.remove();
+
+            // Schließen Sie das Kontextmenü
+            contextMenu.remove();
         });
     
         // Fügen Sie die Menüpunkte zum Kontextmenü hinzu
