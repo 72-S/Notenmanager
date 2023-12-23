@@ -72,28 +72,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 color: selectedEditColor
             }).then(() => {
                 
-                    location.reload(); //TODO: Remove this line and replace it with a function that updates the subject box
+                    removeBoxes(); 
                     
             });
         });
 
-        
-
-    function removeAllSubjects() {
-        // Get the container that holds the subjects
-        const subjectContainer = document.getElementById('subjectContainer');
-
-        // Check if the container exists
-        if (subjectContainer) {
-            // Remove all child elements (subjects) of the container
-            while (subjectContainer.firstChild) {
-                subjectContainer.removeChild(subjectContainer.firstChild);
+        function removeBoxes() {
+            document.getElementById('mainContent').style.display = 'block';
+            const subjectBoxes = document.getElementsByClassName('subjectBox');
+            for (let box of subjectBoxes) {
+                box.remove(); // Remove each subject box
             }
-        } else {
-            console.error('Element with id "subjectContainer" not found');
+            
+            // Subjects und deren Durchschnitt neu laden
+            loadSubjects();
         }
-    }
-        
+       
 
     document.getElementById('subjectName').addEventListener('input', setSubmitButtonState);
 
