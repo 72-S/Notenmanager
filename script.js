@@ -53,38 +53,56 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('EditSubjectPopup').style.display = 'none';
     });
     
-
-    // Zugriff auf den "Fach bearbeiten"-Button
-    // Zugriff auf den "Fach bearbeiten"-Button
-const editFachButton = document.getElementById('EditFach');
-
-editFachButton.addEventListener('click', function(event) {
-    event.preventDefault(); // Verhindert das Neuladen der Seite
-
-    // Zugriff auf das Eingabefeld und die ausgewählte Farbe
-    const editSubjectNameInput = document.getElementById('EditsubjectName');
-    const selectedEditColor = document.querySelector('#EditcolorOptions .color-choice.selected').dataset.color;
-
-    // Aktualisieren Sie das Fach in der Firebase-Datenbank
-    firebase.database().ref('subjects/' + currentSubjectId).update({
-        name: editSubjectNameInput.value,
-        color: selectedEditColor
-    }).then(() => {
-        // Aktualisieren Sie das Fach im lokalen Speicher
-        localSubjects[currentSubjectId].name = editSubjectNameInput.value;
-        localSubjects[currentSubjectId].color = selectedEditColor;
-
-        // Aktualisieren Sie das Fach in der Benutzeroberfläche
-        const subjectBox = document.getElementById(`subject-${currentSubjectId}`);
+    function updateSubjectInUI(id, name, color) {
+        console.log(id, name, color);
+        // Zugriff auf das Fach-Element in der Benutzeroberfläche
+        const subjectBox = document.getElementById(`subject-${id}`);
         if (subjectBox) {
-            subjectBox.textContent = editSubjectNameInput.value;
-            subjectBox.style.backgroundColor = selectedEditColor;
+            console.log('Updating subject in UI');
+            // Aktualisieren Sie den Namen und die Farbe des Fachs
+            subjectBox.textContent = name;
+            subjectBox.style.backgroundColor = color;
         }
+    }
+    
 
-        // Schließen Sie das Bearbeitungs-Popup
-        document.getElementById('EditSubjectPopup').style.display = 'none';
-    });
-});
+    // Zugriff auf den "Fach bearbeiten"-Button
+    // Zugriff auf den "Fach bearbeiten"-Button
+        const editFachButton = document.getElementById('EditFach');
+
+        editFachButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Verhindert das Neuladen der Seite
+
+            // Zugriff auf das Eingabefeld und die ausgewählte Farbe
+            const editSubjectNameInput = document.getElementById('EditsubjectName');
+            const selectedEditColor = document.querySelector('#EditcolorOptions .color-choice.selected').dataset.color;
+
+            // Aktualisieren Sie das Fach in der Firebase-Datenbank
+            firebase.database().ref('subjects/' + currentSubjectId).update({
+                name: editSubjectNameInput.value,
+                color: selectedEditColor
+            }).then(() => {
+                // Laden Sie das Fach erneut aus der Firebase-Datenbank
+                firebase.database().ref('subjects/' + currentSubjectId).once('value').then(function(snapshot) {
+                    const updatedSubject = snapshot.val();
+
+                    // Aktualisieren Sie das Fach im lokalen Speicher
+                    localSubjects[currentSubjectId] = updatedSubject;
+
+                    // Aktualisieren Sie das Fach in der Benutzeroberfläche
+                    const subjectBox = document.getElementById(`subject-${currentSubjectId}`);
+                    if (subjectBox) {
+                        subjectBox.textContent = updatedSubject.name;
+                        subjectBox.style.backgroundColor = updatedSubject.color;
+                    }
+
+                    updateSubjectInUI(currentSubjectId, updatedSubject.name, updatedSubject.color);
+
+                    // Schließen Sie das Bearbeitungs-Popup
+                    document.getElementById('EditSubjectPopup').style.display = 'none';
+                });
+            });
+        });
 
 
 
@@ -117,6 +135,13 @@ editFachButton.addEventListener('click', function(event) {
         });
     });
 });
+
+
+
+
+
+
+
 
 
 function resetNewSubjectForm() {
@@ -255,6 +280,7 @@ function createSubjectBox(name, color, id) {
     box.style.backgroundColor = color;
     box.textContent = name;
     box.style.opacity = '0'; // Setzt die Anfangs-Opacity auf 0
+    box.id = `subject-${id}`;
 
     // Event Listener für das Öffnen der Fachseite
     box.addEventListener('click', function () {
