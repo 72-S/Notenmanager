@@ -54,16 +54,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     
     function updateSubjectInUI(id, name, color) {
-        console.log(id, name, color);
         // Zugriff auf das Fach-Element in der Benutzeroberfläche
         const subjectBox = document.getElementById(`subject-${id}`);
         if (subjectBox) {
-            console.log('Updating subject in UI');
             // Aktualisieren Sie den Namen und die Farbe des Fachs
-            subjectBox.textContent = name;
+            const nameElement = subjectBox.querySelector('.subject-name');
+            if (nameElement) {
+                nameElement.textContent = name;
+            }
             subjectBox.style.backgroundColor = color;
         }
     }
+    
+
     
 
     // Zugriff auf den "Fach bearbeiten"-Button
@@ -72,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         editFachButton.addEventListener('click', function(event) {
             event.preventDefault(); // Verhindert das Neuladen der Seite
-
+            document.getElementById('EditSubjectPopup').style.display = 'none';
             // Zugriff auf das Eingabefeld und die ausgewählte Farbe
             const editSubjectNameInput = document.getElementById('EditsubjectName');
             const selectedEditColor = document.querySelector('#EditcolorOptions .color-choice.selected').dataset.color;
@@ -99,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateSubjectInUI(currentSubjectId, updatedSubject.name, updatedSubject.color);
 
                     // Schließen Sie das Bearbeitungs-Popup
-                    document.getElementById('EditSubjectPopup').style.display = 'none';
+                    
                 });
             });
         });
