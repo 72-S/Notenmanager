@@ -46,12 +46,19 @@ body {
 }
 
 #add {
-    height: 1.5em;
-    margin-left: 4px;
-    margin-top: -3px;
+    height: 1em;
+    margin-left: 8px;
     position: absolute;
     width: auto;
 }
+
+#back {
+    height: 1em;
+    margin-left: 8px;
+    position: absolute;
+    width: auto;
+}
+
 
 #Übersicht {
     color: #000000;
@@ -669,7 +676,7 @@ button.close:hover {
     margin-bottom: 10px;
     box-sizing: border-box;
     appearance: none; /* Entfernt den Standardpfeil */
-    background: url('assets/arrow.png') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
+    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
     background-position: 75% center;
     background-size: 15px;
 }
@@ -708,13 +715,6 @@ button.close:hover {
     padding-top: 20px;
 }
 
-#back {
-    height: 1.2em;
-    margin-left: 7px;
-    margin-top: 0px;
-    position: absolute;
-    width: auto;
-}
 
 
 .popup3 {
@@ -811,7 +811,7 @@ button.close:hover {
     margin-bottom: 10px;
     box-sizing: border-box;
     appearance: none; /* Entfernt den Standardpfeil */
-    background: url('assets/arrow.png') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
+    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
     background-position: 75% center;
     background-size: 15px;
     color: #757575 !important;

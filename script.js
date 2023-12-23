@@ -270,8 +270,8 @@ function openSubjectPage(subjectName, subjectId) {
     const subjectPage = document.createElement('div');
     subjectPage.id = 'subjectPage';
     subjectPage.innerHTML = `<h1 id="Fachname">${subjectName}</h1>
-                             <button id="CreateCategory" onclick="openCategoryCreationPopup('${subjectId}')">Neue Kategorie <img id="add" src="assets/add2.png" alt="+"></button>
-                             <button id="BacktoMain" onclick="closeSubjectPage()">Zurück zur Hauptseite <img id="back" src="assets/back.png" alt="+"></button>
+                             <button id="CreateCategory" onclick="openCategoryCreationPopup('${subjectId}')">Neue Kategorie <img id="add" src="assets/add.svg" alt="+"></button>
+                             <button id="BacktoMain" onclick="closeSubjectPage()">Zurück zur Hauptseite <img id="back" src="assets/back.svg" alt="-"></button>
                          <div id="categoryCreationPopup" class="popup2" style="display: none;">
                             <div class="popup-content2">
                              <input id="categoryInput" type="text" placeholder="Kategoriename">
@@ -402,7 +402,7 @@ function createCategoryBar(name, weight, subjectId) {
             <span id="GewichtNameTitle">x ${weight}</span>
         </div>
         
-        <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add2.png" alt="+"></button>
+        <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add.svg" alt="+"></button>
         <div class="gradesContainer"></div>
         `;
     categoryBar.id = `category-${name}`; // Hinzufügen einer ID für die spätere Verwendung
