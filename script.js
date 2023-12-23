@@ -18,6 +18,7 @@ let localSubjects = {};
 let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
+let currentSubjectId;
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
     
@@ -52,6 +53,40 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('EditSubjectPopup').style.display = 'none';
     });
     
+
+    // Zugriff auf den "Fach bearbeiten"-Button
+    // Zugriff auf den "Fach bearbeiten"-Button
+const editFachButton = document.getElementById('EditFach');
+
+editFachButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Verhindert das Neuladen der Seite
+
+    // Zugriff auf das Eingabefeld und die ausgewählte Farbe
+    const editSubjectNameInput = document.getElementById('EditsubjectName');
+    const selectedEditColor = document.querySelector('#EditcolorOptions .color-choice.selected').dataset.color;
+
+    // Aktualisieren Sie das Fach in der Firebase-Datenbank
+    firebase.database().ref('subjects/' + currentSubjectId).update({
+        name: editSubjectNameInput.value,
+        color: selectedEditColor
+    }).then(() => {
+        // Aktualisieren Sie das Fach im lokalen Speicher
+        localSubjects[currentSubjectId].name = editSubjectNameInput.value;
+        localSubjects[currentSubjectId].color = selectedEditColor;
+
+        // Aktualisieren Sie das Fach in der Benutzeroberfläche
+        const subjectBox = document.getElementById(`subject-${currentSubjectId}`);
+        if (subjectBox) {
+            subjectBox.textContent = editSubjectNameInput.value;
+            subjectBox.style.backgroundColor = selectedEditColor;
+        }
+
+        // Schließen Sie das Bearbeitungs-Popup
+        document.getElementById('EditSubjectPopup').style.display = 'none';
+    });
+});
+
+
 
 
 
@@ -245,13 +280,14 @@ function createSubjectBox(name, color, id) {
         contextMenu.style.backgroundColor = 'white';
         contextMenu.style.border = '1px solid black';
         contextMenu.style.padding = '10px';
-    
+        
         // Erstellen Sie die Menüpunkte
         
         const editItem = document.createElement('button');
         editItem.textContent = 'Bearbeiten';
         editItem.addEventListener('click', function () {
             // Öffnen Sie das Popup
+            currentSubjectId = id;
             const editPopup = document.getElementById('EditSubjectPopup');
             editPopup.style.display = 'block';
 
