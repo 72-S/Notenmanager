@@ -439,25 +439,13 @@ button.close:hover {
     padding-top: 20px;
 }
 
-.categoryBar {
-    align-items: center;
-    background-color: #d1dce5;
-    display: flex;
-    flex-direction: column;
-    margin-left: 20px;
-    margin-top: 15px;
-    padding: 10px;
-    height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
-    width:250px;
-    border-radius: 10px;
-    transition: all 0.5s ease;
-}
+
 
 .categoriesContainer {
     width: 100%; /* Füllt die gesamte Breite der Seite aus */
     height: 100vh; /* Füllt die gesamte Höhe der Seite aus */
     display: grid; /* Stellt die Kategorien in einem Grid dar */
-    grid-template-columns: repeat(auto-fit, 250px); /* Erstellt Spalten mit einer festen Breite von 250px */
+    grid-template-columns: repeat(auto-fit, 304px); /* Erstellt Spalten mit einer festen Breite von 250px */
     grid-auto-rows: 220px; /* Setzt eine feste Höhe für jede Zeile */
     gap: 40px; /* Legt den Abstand zwischen den Kategorien fest */
     transition: all 0.5s ease;
@@ -472,6 +460,20 @@ button.close:hover {
     justify-content: space-between;
     width: 98%;
     padding-bottom: 10px;
+}
+
+.categoryBar {
+    align-items: center;
+    background-color: #d1dce5;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-top: 15px;
+    padding: 10px;
+    height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
+    width:304px;
+    border-radius: 10px;
+    transition: all 0.5s ease;
 }
 
 
@@ -491,6 +493,35 @@ button.close:hover {
     padding-right: 35px;
     text-align: center;
     transition: 0.2s ease;
+    width: auto;
+}
+
+
+#GradeEditPopupButton {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-right: 35px;
+    text-align: center;
+    transition: 0.2s ease;
+    width: auto;
+}
+
+
+.buttonsContainerKategorie {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    padding-bottom: 10px;
 }
 
 .gradesContainer {
@@ -505,6 +536,12 @@ button.close:hover {
 #GradeCreationPopupButton:hover {
     background-color: #0056b3;
 }
+
+#GradeEditPopupButton:hover {
+    background-color: #0056b3;
+}
+
+
 #CategoriNameTitle {
     color: #333333;
     font-size: 20px;
