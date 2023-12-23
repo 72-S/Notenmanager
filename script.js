@@ -79,12 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function removeBoxes() {
             document.getElementById('mainContent').style.display = 'block';
-            const subjectBoxes = document.getElementsByClassName('subjectBox');
+            const subjectBoxes = Array.from(document.getElementsByClassName('subjectBox'));
             for (let box of subjectBoxes) {
                 box.remove(); // Remove each subject box
             }
-            
-            // Subjects und deren Durchschnitt neu laden
             loadSubjects();
         }
        
