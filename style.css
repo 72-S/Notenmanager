@@ -832,3 +832,111 @@ button.close:hover {
     background-color: #ffffff;
 }
 
+
+
+
+.editpopup {
+    background-color: #dbebfa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    left: 50%;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: 500px;
+    z-index: 1000;
+}
+
+.Editpopup-content {
+    text-align: center;
+}
+
+.Editpopup-content button {
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#EditSubjectForm #EditFach:disabled {
+  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#EditSubjectForm #EditFach:disabled:hover {
+    background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+    color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#EditSubjectForm .button-container {
+    display: flex;
+    justify-content: space-between; /* This will place the buttons apart */
+    margin-top: 20px; /* Space above the buttons */
+}
+
+#EditSubjectForm .button-container button {
+    border: none;
+    border-radius: 10px;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px; /* Adjust padding as needed */
+    flex-grow: 1; /* This will make buttons grow to fill the container */
+    margin: 0 10px; /* Space between buttons */
+    transition: 0.2s ease;
+}
+
+#EditSubjectForm .button-container button:hover {
+    background-color: #575757;
+}
+
+#EditSubjectForm #EditFach {
+    background-color: #007BFF; /* Adjust color as needed */
+}
+
+#EditSubjectForm #EditFach:hover {
+    background-color: #0056b3;
+}
+
+#EditSubjectForm #EditPopup {
+    background-color: #6c757d; /* Adjust color as needed */
+}
+
+#EditSubjectForm #EditPopup:hover {
+    background-color: #545b62;
+}
+
+
+#EditsubjectName {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 460px;
+}
+
+#EditsubjectName:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+.Editpopup-content label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.Editpopup-content input[type="text"] {
+    background-color: #f7f7f7;
+    border: none;
+    border-radius: 10px;
+    color: #333333;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    transition: 0.2s ease;
+}

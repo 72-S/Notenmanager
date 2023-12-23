@@ -238,9 +238,29 @@ function createSubjectBox(name, color, id) {
         contextMenu.style.padding = '10px';
     
         // Erstellen Sie die Menüpunkte
+        
         const editItem = document.createElement('button');
         editItem.textContent = 'Bearbeiten';
         editItem.addEventListener('click', function () {
+            // Öffnen Sie das Popup
+            const editPopup = document.getElementById('EditSubjectPopup');
+            editPopup.style.display = 'block';
+
+            // Setzen Sie den Wert des Eingabefelds auf den Namen des Fachs
+            const editSubjectNameInput = document.getElementById('EditsubjectName');
+            editSubjectNameInput.value = localSubjects[id].name;
+
+            // Setzen Sie die ausgewählte Farbe auf die Farbe des Fachs
+            const colorChoices = document.querySelectorAll('#EditcolorOptions .color-choice');
+            colorChoices.forEach(function(choice) {
+                if (choice.dataset.color === localSubjects[id].color) {
+                    choice.classList.add('selected');
+                } else {
+                    choice.classList.remove('selected');
+                }
+            });
+
+            contextMenu.remove();
             // Hier können Sie die Funktion zum Bearbeiten des Fachs aufrufen
         });
     
