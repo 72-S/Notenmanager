@@ -105,6 +105,11 @@ document.addEventListener('DOMContentLoaded', function () {
             name: subjectName,
             color: selectedColor
         }).then(() => {
+            localSubjects[newSubjectRef.key] = {
+                name: subjectName,
+                color: selectedColor,
+                average: null // Setzen Sie den Durchschnittswert initial auf null
+            };
             createSubjectBox(subjectName, selectedColor, newSubjectRef.key);
             document.getElementById('newSubjectPopup').style.display = 'none';
             document.getElementById('newSubjectForm').reset();
