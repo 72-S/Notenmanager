@@ -746,6 +746,22 @@ function addSubject() {
     });
 }
 
+function getGradesForCategory(subjectId, categoryName) {
+    // Erstellen Sie eine Referenz zur Datenbank
+    const grades = localGrades[subjectId];
+    if (!grades) {
+        return error('Grades not found in local storage');
+    }
+
+    const gradesfilter = grades.filter(grade => grade.categoryName === categoryName);
+
+    gradesfilter.forEach(grade => {
+        console.log(`Datum: ${grade.date}, Wert: ${grade.value}`);
+    });
+
+    return gradesfilter;
+}
+
 function openGradeEditPopup(categoryName, subjectId, weight) {
     // Speichern Sie categoryName und subjectId als globale Variablen oder als Attribute des Popups
     window.currentCategoryName = categoryName;
@@ -753,8 +769,67 @@ function openGradeEditPopup(categoryName, subjectId, weight) {
     window.currentWeight = weight;
 
     const gradeEditPopup = document.getElementById('editGrades');
+    const gradeWeightElement = document.getElementById('EditgradeWeight');
+    const categoryNameElement = document.getElementById('editCategoryName');
+    const gradesListElement = document.getElementById('gradesList'); // Element, in dem die Noten angezeigt werden
+
     gradeEditPopup.style.display = 'block';
+    categoryNameElement.value = categoryName;
+    gradeWeightElement.value = weight;
+
+    // Noten aus der Datenbank abrufen und im Popup anzeigen
+    const grades = getGradesForCategory(subjectId, categoryName);
+    gradesListElement.innerHTML = '';
+    for (let grade of grades) {
+        const gradeElement = document.createElement('div');
+        gradeElement.textContent = `Datum: ${grade.date}, Wert: ${grade.value}`;
+
+        // Erstellen Sie einen Lösch-Button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Löschen';
+        deleteButton.addEventListener('click', function() {
+            deleteGrade(subjectId, categoryName, grade.id); // Diese Funktion muss implementiert werden
+        });
+
+        // Fügen Sie den Lösch-Button zum gradeElement hinzu
+        gradeElement.appendChild(deleteButton);
+
+        gradesListElement.appendChild(gradeElement);
+    }
 }
+
+function deleteGrade(subjectId, categoryName, gradeId) {
+    // Check if parameters are not undefined
+    if (!subjectId || !categoryName || !gradeId) {
+        console.error('Invalid parameters:', subjectId, categoryName, gradeId);
+        return;
+    }
+
+    // Erstellen Sie eine Referenz zur Datenbank
+    const dbRef = firebase.database().ref();
+
+    // Erstellen Sie eine Referenz zur Note, die gelöscht werden soll
+    const gradeRef = dbRef.child('grades').child(subjectId).child(categoryName).child(gradeId);
+
+    // Löschen Sie die Note
+    gradeRef.remove()
+        .then(function() {
+            console.log("Note successfully deleted");
+
+            // Aktualisieren Sie den lokalen Speicher
+            const subjectGrades = localGrades[subjectId];
+            if (subjectGrades) {
+                const index = subjectGrades.findIndex(grade => grade.id === gradeId);
+                if (index !== -1) {
+                    subjectGrades.splice(index, 1);
+                }
+            }
+        })
+        .catch(function(error) {
+            console.error("Error deleting note: ", error);
+        });
+}
+
 
 
 function closeGradeEditPopup() {
@@ -770,12 +845,4 @@ function closeGradeEditPopup() {
     gradeEditPopup.style.display = 'none';
 }
 
-
-function setupEditCategoryButton(categoryId) {
-    const editButton = document.getElementById(`editCategory-${categoryId}`);
-    editButton.addEventListener('click', function () {
-        loadCategoryData(categoryId);
-        document.getElementById('editCategoryPopup').style.display = 'block';
-    });
-}
 
