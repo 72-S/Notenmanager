@@ -667,8 +667,16 @@ function displayGrade(categoryName, gradeValue, gradeDate) {
     // Anhängen der Note an die entsprechende Kategorie
     const categoryBar = document.getElementById(`category-${categoryName}`);
     
-    const gradesContainer = categoryBar.querySelector('.gradesContainer');
-    gradesContainer.appendChild(gradeElement);
+    if (categoryBar) {
+        const gradesContainer = categoryBar.querySelector('.gradesContainer');
+        if (gradesContainer) {
+            gradesContainer.appendChild(gradeElement);
+        } else {
+            console.error(`gradesContainer not found in category-${categoryName}`);
+        }
+    } else {
+        console.error(`category-${categoryName} not found`);
+    }
 }
 
 
