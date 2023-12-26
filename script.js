@@ -547,7 +547,7 @@ function createCategoryBar(name, weight, subjectId) {
         </div>
         <div class="buttonsContainerKategorie">
         <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add.svg" alt="+"></button>
-        <button id="GradeEditPopupButton" onclick="openGradeEditPopup('${name}', '${subjectId}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
+        <button id="GradeEditPopupButton" onclick="openGradeEditPopup('${name}', '${subjectId}', '${weight}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
         </div>
         <div class="gradesContainer"></div>
         `;
@@ -746,5 +746,36 @@ function addSubject() {
     });
 }
 
+function openGradeEditPopup(categoryName, subjectId, weight) {
+    // Speichern Sie categoryName und subjectId als globale Variablen oder als Attribute des Popups
+    window.currentCategoryName = categoryName;
+    window.currentSubjectId = subjectId;
+    window.currentWeight = weight;
 
+    const gradeEditPopup = document.getElementById('editGrades');
+    gradeEditPopup.style.display = 'block';
+}
+
+
+function closeGradeEditPopup() {
+    const gradeEditPopup = document.getElementById('editGrades');
+    const gradeDateElement = document.getElementById('gradeDate');
+    
+    // Setzen Sie das Datum zurück
+    gradeDateElement.value = '';
+    
+    // Aktualisieren Sie den Zustand des Buttons zum Hinzufügen von Noten
+    setAddGradeButtonState();
+    
+    gradeEditPopup.style.display = 'none';
+}
+
+
+function setupEditCategoryButton(categoryId) {
+    const editButton = document.getElementById(`editCategory-${categoryId}`);
+    editButton.addEventListener('click', function () {
+        loadCategoryData(categoryId);
+        document.getElementById('editCategoryPopup').style.display = 'block';
+    });
+}
 
