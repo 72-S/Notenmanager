@@ -646,6 +646,9 @@ function addGrade() {
 function closeGradePopup() {
     const gradePopup = document.getElementById('gradePopup');
     const gradeDateElement = document.getElementById('gradeDate');
+    const selectElement = document.getElementById('EditgradeWeight');
+
+    selectElement.selectedIndex =2;
     
     // Setzen Sie das Datum zurück
     gradeDateElement.value = '';
@@ -811,8 +814,7 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
     const grades = getGradesForCategory(subjectId, categoryName);
     gradesListElement.innerHTML = '';
     for (let grade of grades) {
-        const gradeElement = document.createElement('div');
-        gradeElement.textContent = `Datum: ${grade.date}, Wert: ${grade.value}`;
+        
 
         // Erstellen Sie einen Checkbox
         const deleteCheckbox = document.createElement('input');
@@ -826,7 +828,8 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
                 gradesToDelete = gradesToDelete.filter(id => id !== grade.id);
             }
         });
-
+        const gradeElement = document.createElement('div');
+        gradeElement.textContent = `${grade.date} ${grade.value}`;
         // Fügen Sie die Checkbox zum gradeElement hinzu
         gradeElement.appendChild(deleteCheckbox);
 
