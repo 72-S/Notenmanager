@@ -844,6 +844,14 @@ function deleteGrade(subjectId, categoryId, gradeId) {
 }
 
 
+function removeCategoriesFromUI() {
+    const categoryBars = document.getElementsByClassName('categoryBar');
+    while(categoryBars.length > 0){
+        categoryBars[0].parentNode.removeChild(categoryBars[0]);
+    }
+}
+
+
 function closeGradeEditPopup() {
     const gradeEditPopup = document.getElementById('editGrades');
     const gradeDateElement = document.getElementById('gradeDate');
@@ -858,3 +866,23 @@ function closeGradeEditPopup() {
 }
 
 
+function saveChangesGradeEditPopup() {
+    const gradeEditPopup = document.getElementById('editGrades');
+    const gradeDateElement = document.getElementById('gradeDate');
+    
+    // Setzen Sie das Datum zurück
+    gradeDateElement.value = '';
+    
+    // Aktualisieren Sie den Zustand des Buttons zum Hinzufügen von Noten
+    setAddGradeButtonState();
+    
+    gradeEditPopup.style.display = 'none';
+
+    // Entfernen Sie die Kategorien aus der Benutzeroberfläche
+    removeCategoriesFromUI();
+
+    // Laden Sie die Kategorien und Noten neu
+    const subjectId = window.currentSubjectId; // Ersetzen Sie dies durch die tatsächliche Methode, um die subjectId zu erhalten
+    loadCategories(subjectId);
+    loadGradesForSubject(subjectId);
+}
