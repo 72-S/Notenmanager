@@ -503,7 +503,7 @@ function createCategory(subjectId) {
 function loadCategories(subjectId) {
     if (localCategories[subjectId]) {
         localCategories[subjectId].forEach(category => {
-            createCategoryBar(category.name, category.weight, subjectId);
+            createCategoryBar(category.name, category.weight, subjectId, category.id);
         });
     } else {
         var dbRef = firebase.database().ref('categories');
@@ -514,7 +514,7 @@ function loadCategories(subjectId) {
                 // Add the id to the local object
                 childData.id = childSnapshot.key;
                 localCategories[subjectId].push(childData);
-                createCategoryBar(childData.name, childData.weight, subjectId);
+                createCategoryBar(childData.name, childData.weight, subjectId, childSnapshot.key);
             });
         });
     }
@@ -563,6 +563,7 @@ function openGradeCreationPopup(categoryName, subjectId, categoryId) {
     window.currentCategoryName = categoryName;
     window.currentSubjectId = subjectId;
     window.currentCategoryId = categoryId;
+    console.log(categoryId);
 
     const gradePopup = document.getElementById('gradePopup');
     gradePopup.style.display = 'block';
@@ -709,6 +710,7 @@ function loadGradesForSubject(subjectId) {
         // Anzeigen der lokal gespeicherten Noten
         localGrades[subjectId].forEach(grade => {
             displayGrade(grade.categoryName, grade.value, grade.date, grade.categoryId); //!display Grade
+            console.log("loadGradesForSubject sucssesful called with grade id:",grade.categoryId);
         });
     } else {
         // Laden der Noten aus Firebase
@@ -722,6 +724,7 @@ function loadGradesForSubject(subjectId) {
                 grade.id = gradeId; // Fügen Sie die ID dem Notenobjekt hinzu
                 localGrades[subjectId].push(grade); // Speichern der Note im lokalen Array
                 displayGrade(grade.categoryName, grade.value, grade.date, grade.categoryId); //!display Grade
+                console.log("loadGradesForSubject sucssesful called from firebase with grade id:",grade.categoryId);
             });
         });
     }
