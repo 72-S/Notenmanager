@@ -538,7 +538,7 @@ function createCategoryBar(name, weight, subjectId, categoryId) {
         </div>
         <div class="gradesContainer"></div>
         `;
-    categoryBar.id = `category-${name}`; // Hinzufügen einer ID für die spätere Verwendung
+    categoryBar.id = `category-${categoryId}`; // Hinzufügen einer ID für die spätere Verwendung
 
     const subjectPage = document.getElementById('subjectPage');
     const subjectContainer = subjectPage.querySelector('.categoriesContainer');
@@ -671,7 +671,7 @@ function displayGrade(categoryName, gradeValue, gradeDate, categoryID) {
     `;
 
     // Anhängen der Note an die entsprechende Kategorie
-    const categoryBar = document.getElementById(`category-${categoryName}`);
+    const categoryBar = document.getElementById(`category-${categoryID}`);
     console.log("displayGrade sucssesful called with grade id:",categoryID);
     
     if (categoryBar) {
