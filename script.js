@@ -485,7 +485,9 @@ function createCategory(subjectId) {
         }
         localCategories[subjectId].push({
             name: categoryName,
-            weight: categoryWeight
+            subjectId: subjectId,
+            weight: categoryWeight,
+            id: newCategoryRef.key // Die ID von Firebase
         });
 
         createCategoryBar(categoryName, categoryWeight, subjectId);
@@ -510,6 +512,8 @@ function loadCategories(subjectId) {
             localCategories[subjectId] = [];
             snapshot.forEach(function (childSnapshot) {
                 var childData = childSnapshot.val();
+                // Add the id to the local object
+                childData.id = childSnapshot.key;
                 localCategories[subjectId].push(childData);
                 createCategoryBar(childData.name, childData.weight, subjectId);
             });
@@ -518,22 +522,6 @@ function loadCategories(subjectId) {
 }
 
 // Diese Funktion wird aufgerufen, um eine neue Kategorie hinzuzufügen
-function addCategory(subjectId, categoryName, categoryWeight) {
-    var newCategoryRef = firebase.database().ref('categories').push();
-    newCategoryRef.set({
-        name: categoryName,
-        weight: categoryWeight,
-        subjectId: subjectId
-    }).then(() => {
-        createCategoryBar(categoryName, categoryWeight, subjectId);
-        document.getElementById('categoryCreationPopup').style.display = 'none';
-        document.getElementById('categoryName').value = '';
-        document.getElementById('categoryWeight').value = '';
-
-        // Durchschnitt neu berechnen
-        calculateSubjectAverage(subjectId);
-    });
-}
 
 
 
@@ -592,38 +580,53 @@ function addGrade() {
 
     const gradeValue = gradeValueElement.value;
     const gradeDate = gradeDateElement.value;
+    const currentCategoryName = window.currentCategoryName;
+    const currentSubjectId = window.currentSubjectId;
 
     if (!gradeValue || !gradeDate) {
         console.error('Grade value or date is missing');
         return;
     }
 
+    // Erstellen einer neuen Note in Firebase und Speichern der ID
     var newGradeRef = firebase.database().ref('grades').push();
     newGradeRef.set({
         value: gradeValue,
         date: gradeDate,
-        categoryName: window.currentCategoryName,
-        subjectId: window.currentSubjectId
+        categoryName: currentCategoryName,
+        subjectId: currentSubjectId
     }).then(() => {
-        // Aktualisieren Sie die lokale Speicherung mit der neuen Note
-        if (!localGrades[window.currentSubjectId]) {
-            localGrades[window.currentSubjectId] = [];
-        }
-        localGrades[window.currentSubjectId].push({
-            value: gradeValue,
+        // Die ID der neuen Note ist der Schlüssel, den Firebase generiert hat
+        const newGradeId = newGradeRef.key;
+
+        // Aktualisieren der lokalen Speicherung mit der neuen Note, einschließlich der ID
+        const newGrade = {
+            categoryName: currentCategoryName,
             date: gradeDate,
-            categoryName: window.currentCategoryName
-        });
+            subjectId: currentSubjectId,
+            value: gradeValue,
+            id: newGradeId // Die ID von Firebase
+        };
 
-        // Zeigen Sie die neue Note an
-        displayGrade(window.currentCategoryName, gradeValue, gradeDate);
+        if (!localGrades[currentSubjectId]) {
+            localGrades[currentSubjectId] = [];
+        }
 
+        localGrades[currentSubjectId].push(newGrade);
+
+        // Anzeigen der neuen Note, inklusive der ID
+        displayGrade(currentCategoryName, gradeValue, gradeDate, newGradeId);
+
+        // Zurücksetzen des Formulars
+        gradeValueElement.value = '';
         gradeDateElement.value = '';
         setAddGradeButtonState();
+
+        // Schließen des Popups
         closeGradePopup();
 
-        // Durchschnitt neu berechnen
-        calculateSubjectAverage(window.currentSubjectId);
+        // Durchschnitt neu berechnen, falls notwendig
+        calculateSubjectAverage(currentSubjectId);
     }).catch(error => {
         console.error('Error adding grade:', error);
     });
@@ -697,18 +700,24 @@ function getCategoryWeight(subjectId, categoryName) {
 }
 
 function loadGradesForSubject(subjectId) {
+    // Überprüfen Sie, ob die Noten bereits lokal geladen wurden
     if (localGrades[subjectId]) {
+        // Anzeigen der lokal gespeicherten Noten
         localGrades[subjectId].forEach(grade => {
-            displayGrade(grade.categoryName, grade.value, grade.date);
+            displayGrade(grade.categoryName, grade.value, grade.date, grade.id); // Stellen Sie sicher, dass displayGrade die ID verarbeiten kann
         });
     } else {
+        // Laden der Noten aus Firebase
         var dbRef = firebase.database().ref('grades');
         dbRef.orderByChild('subjectId').equalTo(subjectId).once('value', function (snapshot) {
             localGrades[subjectId] = [];
             snapshot.forEach(function (childSnapshot) {
-                var childData = childSnapshot.val();
-                localGrades[subjectId].push(childData);
-                displayGrade(childData.categoryName, childData.value, childData.date);
+                // Der Schlüssel des Kind-Snapshots ist die ID der Note
+                var gradeId = childSnapshot.key;
+                var grade = childSnapshot.val();
+                grade.id = gradeId; // Fügen Sie die ID dem Notenobjekt hinzu
+                localGrades[subjectId].push(grade); // Speichern der Note im lokalen Array
+                displayGrade(grade.categoryName, grade.value, grade.date, gradeId); // Auch hier die ID übergeben
             });
         });
     }
@@ -788,7 +797,7 @@ function openGradeEditPopup(categoryName, subjectId, weight) {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Löschen';
         deleteButton.addEventListener('click', function() {
-            deleteGrade(subjectId, categoryName, grade.id); // Diese Funktion muss implementiert werden
+            deleteGrade(subjectId, categoryName, grade.id); // Diese Funktion muss implementiert werden // TODO: grade.id is undefinde
         });
 
         // Fügen Sie den Lösch-Button zum gradeElement hinzu
