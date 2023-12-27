@@ -534,7 +534,7 @@ function createCategoryBar(name, weight, subjectId, categoryId) {
         </div>
         <div class="buttonsContainerKategorie">
         <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}', '${categoryId}')">Note hinzufügen <img id="add" src="assets/add.svg" alt="+"></button>
-        <button id="GradeEditPopupButton" onclick="openGradeEditPopup('${name}', '${subjectId}', '${weight}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
+        <button id="GradeEditPopupButton" onclick="openGradeEditPopup('${name}', '${subjectId}', '${weight}', '${categoryId}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
         </div>
         <div class="gradesContainer"></div>
         `;
@@ -778,11 +778,12 @@ function getGradesForCategory(subjectId, categoryName) {
     return gradesfilter;
 }
 
-function openGradeEditPopup(categoryName, subjectId, weight) {
+function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
     // Speichern Sie categoryName und subjectId als globale Variablen oder als Attribute des Popups
     window.currentCategoryName = categoryName;
     window.currentSubjectId = subjectId;
     window.currentWeight = weight;
+    window.currentCategoryId = categroyId;
 
     const gradeEditPopup = document.getElementById('editGrades');
     const gradeWeightElement = document.getElementById('EditgradeWeight');
@@ -804,7 +805,7 @@ function openGradeEditPopup(categoryName, subjectId, weight) {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Löschen';
         deleteButton.addEventListener('click', function() {
-            deleteGrade(subjectId, categoryName, grade.id); // Diese Funktion muss implementiert werden // TODO: grade.id is undefinde
+            deleteGrade(subjectId, categroyId, grade.id); 
         });
 
         // Fügen Sie den Lösch-Button zum gradeElement hinzu
@@ -814,36 +815,14 @@ function openGradeEditPopup(categoryName, subjectId, weight) {
     }
 }
 
-function deleteGrade(subjectId, categoryName, gradeId) {
+function deleteGrade(subjectId, categoryID, gradeId) {
     // Check if parameters are not undefined
-    if (!subjectId || !categoryName || !gradeId) {
-        console.error('Invalid parameters:', subjectId, categoryName, gradeId);
+    if (!subjectId || !categoryID || !gradeId) {
+        console.error('Invalid parameters:', subjectId, categoryID, gradeId);
         return;
     }
-
+    console.log(subjectId, categoryID, gradeId);
     // Erstellen Sie eine Referenz zur Datenbank
-    const dbRef = firebase.database().ref();
-
-    // Erstellen Sie eine Referenz zur Note, die gelöscht werden soll
-    const gradeRef = dbRef.child('grades').child(subjectId).child(categoryName).child(gradeId);
-
-    // Löschen Sie die Note
-    gradeRef.remove()
-        .then(function() {
-            console.log("Note successfully deleted");
-
-            // Aktualisieren Sie den lokalen Speicher
-            const subjectGrades = localGrades[subjectId];
-            if (subjectGrades) {
-                const index = subjectGrades.findIndex(grade => grade.id === gradeId);
-                if (index !== -1) {
-                    subjectGrades.splice(index, 1);
-                }
-            }
-        })
-        .catch(function(error) {
-            console.error("Error deleting note: ", error);
-        });
 }
 
 
