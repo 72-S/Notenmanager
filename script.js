@@ -466,7 +466,6 @@ function closeCategoryCreationPopup() {
 function openCategoryCreationPopup(subjectId) {
     document.getElementById('categoryCreationPopup').style.display = 'block';
     document.getElementById('categoryCreationPopup').setAttribute('data-subjectId', subjectId);
-    console.log(subjectId);
 }
 
 function createCategory(subjectId) {
@@ -490,7 +489,7 @@ function createCategory(subjectId) {
             id: newCategoryRef.key // Die ID von Firebase
         });
 
-        createCategoryBar(categoryName, categoryWeight, subjectId);
+        createCategoryBar(categoryName, categoryWeight, subjectId, newCategoryRef.key);
         document.getElementById('categoryCreationPopup').style.display = 'none';
         document.getElementById('categoryInput').value = '';
         document.getElementById('weightInput').value = '';
@@ -525,7 +524,7 @@ function loadCategories(subjectId) {
 
 
 
-function createCategoryBar(name, weight, subjectId) {
+function createCategoryBar(name, weight, subjectId, categoryId) {
     const categoryBar = document.createElement('div');
     categoryBar.className = 'categoryBar';
     categoryBar.innerHTML = `
@@ -534,7 +533,7 @@ function createCategoryBar(name, weight, subjectId) {
             <span id="GewichtNameTitle">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
-        <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}')">Note hinzufügen <img id="add" src="assets/add.svg" alt="+"></button>
+        <button id="GradeCreationPopupButton" onclick="openGradeCreationPopup('${name}', '${subjectId}', '${categoryId}')">Note hinzufügen <img id="add" src="assets/add.svg" alt="+"></button>
         <button id="GradeEditPopupButton" onclick="openGradeEditPopup('${name}', '${subjectId}', '${weight}')">Bearbeiten <img id="add" src="assets/edit.svg" alt="+"></button>
         </div>
         <div class="gradesContainer"></div>
@@ -559,10 +558,11 @@ function closeSubjectPage() {
 }
 
 
-function openGradeCreationPopup(categoryName, subjectId) {
+function openGradeCreationPopup(categoryName, subjectId, categoryId) {
     // Speichern Sie categoryName und subjectId als globale Variablen oder als Attribute des Popups
     window.currentCategoryName = categoryName;
     window.currentSubjectId = subjectId;
+    window.currentCategoryId = categoryId;
 
     const gradePopup = document.getElementById('gradePopup');
     gradePopup.style.display = 'block';
@@ -582,6 +582,7 @@ function addGrade() {
     const gradeDate = gradeDateElement.value;
     const currentCategoryName = window.currentCategoryName;
     const currentSubjectId = window.currentSubjectId;
+    const currentCategoryId = window.currentCategoryId;
 
     if (!gradeValue || !gradeDate) {
         console.error('Grade value or date is missing');
@@ -594,7 +595,8 @@ function addGrade() {
         value: gradeValue,
         date: gradeDate,
         categoryName: currentCategoryName,
-        subjectId: currentSubjectId
+        subjectId: currentSubjectId,
+        categoryId: currentCategoryId
     }).then(() => {
         // Die ID der neuen Note ist der Schlüssel, den Firebase generiert hat
         const newGradeId = newGradeRef.key;
@@ -605,7 +607,8 @@ function addGrade() {
             date: gradeDate,
             subjectId: currentSubjectId,
             value: gradeValue,
-            id: newGradeId // Die ID von Firebase
+            id: newGradeId,
+            categoryId: currentCategoryId // Die ID von Firebase
         };
 
         if (!localGrades[currentSubjectId]) {
@@ -615,7 +618,7 @@ function addGrade() {
         localGrades[currentSubjectId].push(newGrade);
 
         // Anzeigen der neuen Note, inklusive der ID
-        displayGrade(currentCategoryName, gradeValue, gradeDate, newGradeId);
+        displayGrade(currentCategoryName, gradeValue, gradeDate, currentCategoryId); //!display Grade
 
         // Zurücksetzen des Formulars
         gradeValueElement.value = '';
@@ -658,7 +661,7 @@ document.getElementById('closePopup').addEventListener('click', function(e) {
 });
 
 
-function displayGrade(categoryName, gradeValue, gradeDate) {
+function displayGrade(categoryName, gradeValue, gradeDate, categoryID) {
     const gradeElement = document.createElement('div');
     gradeElement.className = 'gradeElement';
     gradeElement.innerHTML = ` 
@@ -669,6 +672,7 @@ function displayGrade(categoryName, gradeValue, gradeDate) {
 
     // Anhängen der Note an die entsprechende Kategorie
     const categoryBar = document.getElementById(`category-${categoryName}`);
+    console.log("displayGrade sucssesful called with grade id:",categoryID);
     
     if (categoryBar) {
         const gradesContainer = categoryBar.querySelector('.gradesContainer');
@@ -704,7 +708,7 @@ function loadGradesForSubject(subjectId) {
     if (localGrades[subjectId]) {
         // Anzeigen der lokal gespeicherten Noten
         localGrades[subjectId].forEach(grade => {
-            displayGrade(grade.categoryName, grade.value, grade.date, grade.id); // Stellen Sie sicher, dass displayGrade die ID verarbeiten kann
+            displayGrade(grade.categoryName, grade.value, grade.date, grade.categoryId); //!display Grade
         });
     } else {
         // Laden der Noten aus Firebase
@@ -717,7 +721,7 @@ function loadGradesForSubject(subjectId) {
                 var grade = childSnapshot.val();
                 grade.id = gradeId; // Fügen Sie die ID dem Notenobjekt hinzu
                 localGrades[subjectId].push(grade); // Speichern der Note im lokalen Array
-                displayGrade(grade.categoryName, grade.value, grade.date, gradeId); // Auch hier die ID übergeben
+                displayGrade(grade.categoryName, grade.value, grade.date, grade.categoryId); //!display Grade
             });
         });
     }
