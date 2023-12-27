@@ -19,6 +19,7 @@ let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
 let currentSubjectId;
+let gradesToDelete = [];
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
     
@@ -801,15 +802,21 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
         const gradeElement = document.createElement('div');
         gradeElement.textContent = `Datum: ${grade.date}, Wert: ${grade.value}`;
 
-        // Erstellen Sie einen Lösch-Button
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Löschen';
-        deleteButton.addEventListener('click', function() {
-            deleteGrade(subjectId, categroyId, grade.id); 
+        // Erstellen Sie einen Checkbox
+        const deleteCheckbox = document.createElement('input');
+        deleteCheckbox.type = 'checkbox';
+        deleteCheckbox.addEventListener('change', function() {
+            if (deleteCheckbox.checked) {
+                // Wenn der Haken gesetzt ist, fügen Sie die ID der Note zu gradesToDelete hinzu
+                gradesToDelete.push(grade.id);
+            } else {
+                // Wenn der Haken entfernt ist, entfernen Sie die ID der Note aus gradesToDelete
+                gradesToDelete = gradesToDelete.filter(id => id !== grade.id);
+            }
         });
 
-        // Fügen Sie den Lösch-Button zum gradeElement hinzu
-        gradeElement.appendChild(deleteButton);
+        // Fügen Sie die Checkbox zum gradeElement hinzu
+        gradeElement.appendChild(deleteCheckbox);
 
         gradesListElement.appendChild(gradeElement);
     }
@@ -872,6 +879,13 @@ function saveChangesGradeEditPopup() {
     
     // Setzen Sie das Datum zurück
     gradeDateElement.value = '';
+
+    for (let gradeId of gradesToDelete) {
+        deleteGrade(window.currentSubjectId, window.currentCategoryId, gradeId);
+    }
+
+    // Leeren Sie gradesToDelete
+    gradesToDelete = [];
     
     // Aktualisieren Sie den Zustand des Buttons zum Hinzufügen von Noten
     setAddGradeButtonState();
@@ -885,4 +899,5 @@ function saveChangesGradeEditPopup() {
     const subjectId = window.currentSubjectId; // Ersetzen Sie dies durch die tatsächliche Methode, um die subjectId zu erhalten
     loadCategories(subjectId);
     loadGradesForSubject(subjectId);
+    
 }
