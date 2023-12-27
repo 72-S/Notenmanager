@@ -20,6 +20,8 @@ let localGrades = {};
 let selectedColor = '';
 let currentSubjectId;
 let gradesToDelete = [];
+let newCategoryName;
+let newWeight;
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
     
@@ -791,6 +793,16 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
     const categoryNameElement = document.getElementById('editCategoryName');
     const gradesListElement = document.getElementById('gradesList'); // Element, in dem die Noten angezeigt werden
 
+    categoryNameElement.addEventListener('change', function() {
+        newCategoryName = categoryNameElement.value;
+    });
+
+    gradeWeightElement.addEventListener('change', function() {
+        newWeight = gradeWeightElement.value;
+    });
+
+
+
     gradeEditPopup.style.display = 'block';
     categoryNameElement.value = categoryName;
     gradeWeightElement.value = weight;
@@ -884,6 +896,29 @@ function saveChangesGradeEditPopup() {
         deleteGrade(window.currentSubjectId, window.currentCategoryId, gradeId);
     }
 
+    
+    if (newCategoryName) {
+        firebase.database().ref('categories/' + window.currentCategoryId).update({
+            name: newCategoryName
+        });
+
+        const category = localCategories[window.currentSubjectId].find(category => category.id === window.currentCategoryId);
+        if (category) {
+            category.name = newCategoryName;
+        }
+    }
+    if (newWeight) {
+        firebase.database().ref('categories/' + window.currentCategoryId).update({
+            weight: newWeight
+        });
+
+        const category = localCategories[window.currentSubjectId].find(category => category.id === window.currentCategoryId);
+        if (category) {
+            category.weight = newWeight;
+        }
+    }
+
+
     // Leeren Sie gradesToDelete
     gradesToDelete = [];
     
@@ -899,5 +934,5 @@ function saveChangesGradeEditPopup() {
     const subjectId = window.currentSubjectId; // Ersetzen Sie dies durch die tatsächliche Methode, um die subjectId zu erhalten
     loadCategories(subjectId);
     loadGradesForSubject(subjectId);
-    
+
 }
