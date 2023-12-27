@@ -815,16 +815,33 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
     }
 }
 
-function deleteGrade(subjectId, categoryID, gradeId) {
+function deleteGrade(subjectId, categoryId, gradeId) {
     // Check if parameters are not undefined
-    if (!subjectId || !categoryID || !gradeId) {
-        console.error('Invalid parameters:', subjectId, categoryID, gradeId);
+    if (!subjectId || !categoryId || !gradeId) {
+        console.error('Invalid parameters:', subjectId, categoryId, gradeId);
         return;
     }
-    console.log(subjectId, categoryID, gradeId);
-    // Erstellen Sie eine Referenz zur Datenbank
-}
 
+    // Erstellen Sie eine Referenz zur Datenbank
+    var dbRef = firebase.database().ref();
+
+    // Löschen Sie die Note aus der Firebase-Datenbank
+    dbRef.child('grades/' + gradeId).remove()
+        .then(function() {
+            console.log('Grade removed from Firebase');
+        })
+        .catch(function(error) {
+            console.error('Error removing grade from Firebase:', error);
+        });
+
+    // Löschen Sie die Note aus dem lokalen Speicher
+    localGrades[subjectId] = localGrades[subjectId].filter(function(grade) {
+        return grade.id !== gradeId;
+    });
+
+    console.log('Grade removed from local storage');
+    
+}
 
 
 function closeGradeEditPopup() {
