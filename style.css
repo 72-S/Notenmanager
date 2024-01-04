@@ -1219,3 +1219,49 @@ button.close:hover {
     background-color: #ffad33;
 }
 
+
+.boxaverage {
+    align-items: top;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 20px;
+    margin-top: 15px;
+
+}
+
+.boxaverage .rectangleaverage {
+    background: #D1DCE5;
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 120px;
+    position: relative;
+    width: auto;
+}
+
+.boxaverage .rectangleaverage .title {
+    border-bottom: 1px #57932E solid;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    color: #333333;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 13px;
+    text-align: center;
+}
+
+.boxaverage .rectangleaverage .average-wrapper #overallAverage{
+    color: #333333;
+    font-size: 26px;
+    font-family: "Lato-Medium", Helvetica;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.boxcontent {
+    display: flex;
+    justify-content: start;
+    margin-left: 20px;
+    margin-top: 15px;
+}

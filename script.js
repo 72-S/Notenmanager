@@ -212,7 +212,7 @@ function calculateOverallAverage() {
     var overallAverage = count > 0 ? total / count : 0;
 
     // Zeigen Sie den Durchschnitt auf der Hauptseite an
-    document.getElementById('overallAverage').textContent = 'Overall Average: ' + overallAverage.toFixed(2);
+    document.getElementById('overallAverage').textContent = overallAverage.toFixed(2) + "Ø";
 }
 
 
