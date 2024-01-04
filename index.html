@@ -22,38 +22,41 @@
         <h1 id="Übersicht">Übersicht</h1>
         <button id="newSubjectButton">Neues Fach <img id="add" src="assets/add.svg" alt="+"></button>
         <div class="boxcontent">
-        <div class="boxmain">
-            <div class="rectangle">
-                <div class="title">Fächer</div>
-                <div class="subjects-wrapper">
-                    <!-- Die subjectBox Elemente werden hier eingefügt -->
-                    <p id="noSubjectsMessage" style="display: none;">Du hast noch keine Fächer erstellt.</p>
+            <div class="boxmain">
+                <div class="rectangle">
+                    <div class="title">Fächer</div>
+                    <div class="subjects-wrapper">
+                        <!-- Die subjectBox Elemente werden hier eingefügt -->
+                        <p id="noSubjectsMessage" style="display: none;">Du hast noch keine Fächer erstellt.</p>
+                    </div>
                 </div>
             </div>
+    
+            <div>
+            <div class="boxaverage">
+                <div class="rectangleaverage">
+                    <div class="title">Durchschnitt</div>
+                    <div class="average-wrapper">
+                        <p id="overallAverage"></p>
+                    </div>
+                </div>
+            </div>
+            
+    
+            <div class="boxgraph">
+                <div class="boxcontent">
+                    <div class="boxgraphtitle">Notenentwicklung</div>
+                    <div class="chart-wrapper">
+                        <canvas id="gradeChart" ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
 
-        <div>
-        <div class="boxaverage">
-            <div class="rectangleaverage">
-                <div class="title">Durchschnitt</div>
-                <div class="average-wrapper">
-                    <p id="overallAverage"></p>
-                </div>
-            </div>
-        </div>
-        
-
-        <div class="boxgraph">
-            <div class="boxcontent">
-                <div class="boxgraphtitle">Notenentwicklung</div>
-                <div class="chart-wrapper">
-                    <canvas id="gradeChart" ></canvas>
-                </div>
-            </div>
-        </div>
     </div>
 
-    </div>
+    
 
 
     <div id="newSubjectPopup" class="popup">
@@ -163,7 +166,7 @@
     <!-- Grade Edit Popup-->
     <div id="editGrades" class="popup5" style="display: none;">
         <div class="popup-content">
-            <input type="text" id="editCategoryName" placeholder="Kategoriename" >
+            <input type="text" id="editCategoryName" placeholder="Kategoriename"></input>
             <select id="EditgradeWeight">
                 <option value="0.25">0.25</option>
                 <option value="0.5">0.5</option>

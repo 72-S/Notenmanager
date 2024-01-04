@@ -222,7 +222,7 @@ function calculateOverallAverage() {
 
 function calculateSubjectAverage(subjectId) {
     initializeChart();
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         // Überprüfen, ob der Durchschnitt bereits berechnet wurde
         if (localSubjects[subjectId] && localSubjects[subjectId].average !== null) {
             resolve(localSubjects[subjectId].average);
@@ -1028,7 +1028,9 @@ function generateChartData(grades) {
 }
 
 function createChart(chartData) {
-    const ctx = document.getElementById('gradeChart').getContext('2d');
+    const canvas = document.getElementById('gradeChart');
+    canvas.style.height = '350px';
+    const ctx = canvas.getContext('2d');
 
     // Wenn ein Chart bereits existiert, zerstören Sie es, bevor Sie ein neues erstellen
     if (window.gradeChart instanceof Chart) {
