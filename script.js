@@ -195,6 +195,29 @@ document.getElementById('gradeDate').addEventListener('input', setAddGradeButton
 // Initialer Aufruf, um den Zustand beim Laden der Seite zu setzen
 setAddGradeButtonState();
 
+function calculateOverallAverage() {
+    var total = 0;
+    var count = 0;
+
+    // Durchlaufen Sie alle Fächer und addieren Sie ihren Durchschnitt zum Gesamtwert
+    for (var subjectId in localSubjects) {
+        // Überprüfen Sie, ob der Durchschnitt nicht null und nicht 0.00 ist
+        if (localSubjects[subjectId].average !== null && localSubjects[subjectId].average !== 0.00) {
+            total += localSubjects[subjectId].average;
+            count++;
+        }
+    }
+
+    // Berechnen Sie den Durchschnitt
+    var overallAverage = count > 0 ? total / count : 0;
+
+    // Zeigen Sie den Durchschnitt auf der Hauptseite an
+    document.getElementById('overallAverage').textContent = 'Overall Average: ' + overallAverage.toFixed(2);
+}
+
+
+
+
 
 function calculateSubjectAverage(subjectId) {
     return new Promise((resolve, reject) => {
@@ -241,6 +264,8 @@ function calculateSubjectAverage(subjectId) {
                     localSubjects[subjectId].average = 0; // Keine Noten gefunden, setze Durchschnitt auf 0
                     resolve(0);
                 }
+
+            calculateOverallAverage();
             });
         });
     });
@@ -289,14 +314,12 @@ function createSubjectBox(name, color, id) {
         contextMenu.style.position = 'absolute';
         contextMenu.style.top = `${event.clientY}px`;
         contextMenu.style.left = `${event.clientX}px`;
-        contextMenu.style.backgroundColor = 'white';
-        contextMenu.style.border = '1px solid black';
-        contextMenu.style.padding = '10px';
         
         // Erstellen Sie die Menüpunkte
         
         const editItem = document.createElement('button');
         editItem.textContent = 'Bearbeiten';
+        editItem.id = 'EditGradePopupButton';
         editItem.addEventListener('click', function () {
             // Öffnen Sie das Popup
             currentSubjectId = id;
@@ -323,6 +346,7 @@ function createSubjectBox(name, color, id) {
     
         const deleteItem = document.createElement('button');
         deleteItem.textContent = 'Löschen';
+        deleteItem.id = 'DeleteGradePopupButton';
         deleteItem.addEventListener('click', function () {
             // Löschen Sie das Fach aus der Datenbank
             firebase.database().ref('subjects/' + id).remove();

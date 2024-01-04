@@ -46,12 +46,19 @@ body {
 }
 
 #add {
-    height: 1.5em;
-    margin-left: 4px;
-    margin-top: -3px;
+    height: 1em;
+    margin-left: 8px;
     position: absolute;
     width: auto;
 }
+
+#back {
+    height: 1em;
+    margin-left: 8px;
+    position: absolute;
+    width: auto;
+}
+
 
 #Übersicht {
     color: #000000;
@@ -88,6 +95,7 @@ body {
 .popup-content {
     text-align: center;
 }
+
 
 .popup-content button {
     font-family: "Lato-Medium", Helvetica;
@@ -179,6 +187,7 @@ h2 {
     padding-bottom: 7px;
     padding-right: 35px;
     padding-top: 7px;
+    
     text-align: left;
     transition: 0.2s ease;
 }
@@ -421,8 +430,37 @@ button.close:hover {
 
 
 
+
 #subjectPageContainer {
     display: none;
+}
+
+#subjectPage {
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+
+
+.categoriesContainer {
+    width: 100%; /* Füllt die gesamte Breite der Seite aus */
+    height: 100vh; /* Füllt die gesamte Höhe der Seite aus */
+    display: grid; /* Stellt die Kategorien in einem Grid dar */
+    grid-template-columns: repeat(auto-fit, 304px); /* Erstellt Spalten mit einer festen Breite von 250px */
+    grid-auto-rows: 220px; /* Setzt eine feste Höhe für jede Zeile */
+    gap: 40px; /* Legt den Abstand zwischen den Kategorien fest */
+    transition: all 0.5s ease;
+}
+
+
+
+
+.titleContainer {
+    /* Ihre vorhandenen Stile... */
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    padding-bottom: 10px;
 }
 
 .categoryBar {
@@ -434,17 +472,9 @@ button.close:hover {
     margin-top: 15px;
     padding: 10px;
     height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
-    width:250px;
+    width:304px;
     border-radius: 10px;
-
-}
-
-.titleContainer {
-    /* Ihre vorhandenen Stile... */
-    display: flex;
-    justify-content: space-between;
-    width: 98%;
-    padding-bottom: 10px;
+    transition: all 0.5s ease;
 }
 
 
@@ -464,11 +494,55 @@ button.close:hover {
     padding-right: 35px;
     text-align: center;
     transition: 0.2s ease;
+    width: auto;
 }
 
+
+#GradeEditPopupButton {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-right: 35px;
+    text-align: center;
+    transition: 0.2s ease;
+    width: auto;
+}
+
+
+.buttonsContainerKategorie {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    padding-bottom: 10px;
+}
+
+.gradesContainer {
+    overflow-y: auto;
+    max-height: 200px; 
+    width: 98%;
+    padding-bottom: 10px;
+    overflow-x: hidden;
+    margin-top: 10px;
+    padding-right: 5px;
+}
 #GradeCreationPopupButton:hover {
     background-color: #0056b3;
 }
+
+#GradeEditPopupButton:hover {
+    background-color: #0056b3;
+}
+
+
 #CategoriNameTitle {
     color: #333333;
     font-size: 20px;
@@ -479,6 +553,7 @@ button.close:hover {
     white-space: nowrap;
     width: 180px;
 }
+
 
 #GewichtNameTitle {
     color: #333333;
@@ -499,9 +574,33 @@ button.close:hover {
     flex-direction: row;
     justify-content: space-between;
     width: 98%;
-    height: 10px;
+    height: 13px;
+    margin-top: -2px;
+    padding-bottom: 5px;
 }
 
+.gradesContainer::-webkit-scrollbar {
+    width: 8px; /* Breite der Scrollbar */
+    
+}
+
+.gradesContainer::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+}
+
+
+.gradesContainer::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.gradesContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    border-radius: 5px;
+    width: 12px; /* Farbe des beweglichen Teils der Scrollbar beim Überfahren mit der Maus */
+}
 
 
 #gradeDate {
@@ -621,7 +720,7 @@ button.close:hover {
     margin-bottom: 10px;
     box-sizing: border-box;
     appearance: none; /* Entfernt den Standardpfeil */
-    background: url('assets/arrow.png') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
+    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
     background-position: 75% center;
     background-size: 15px;
 }
@@ -660,12 +759,465 @@ button.close:hover {
     padding-top: 20px;
 }
 
-#back {
-    height: 1.2em;
-    margin-left: 7px;
-    margin-top: 0px;
+
+
+.popup3 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #dbebfa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1005; /* Stellen Sie sicher, dass es über anderen Elementen liegt */
+    display: none; /* Standardmäßig nicht sichtbar */
+    width: 80%; /* Oder eine spezifische Breite */
+    max-width: 400px; /* Maximum Breite */
+}
+
+.popup-content3 {
+    text-align: center;
+}
+
+.popup-content3 button {
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.category-popup-buttons3 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#createNote {
+    border: none;
+    border-radius: 10px;
+    color: #333333;
+    background-color: #007BFF;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    margin: 0 10px;
+    transition: 0.2s ease;
+}
+
+#createNote:hover {
+    background-color: #0056b3;
+}
+
+#createNote:disabled{
+  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#cancelNote {
+    border: none;
+    border-radius: 10px;
+    color: #333333;
+    background-color: #6c757d;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    margin: 0 10px;
+    transition: 0.2s ease;
+}
+
+#cancelNote:hover {
+    background-color: #545b62;
+}
+
+.gradeDateInput {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    font-weight: 500 !important;
+    color: #757575 !important;
+    font-size: 16px !important;
+}
+
+.gradeInput {
+    border: 1px solid #ccc;
+    background-color: #ffffff !important;
+    border-radius: 10px;
+    width: 77px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    appearance: none; /* Entfernt den Standardpfeil */
+    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
+    background-position: 75% center;
+    background-size: 15px;
+    color: #757575 !important;
+    font-size: 16px !important;
+    padding-right: 45px; /* Vergrößern Sie den Padding auf der rechten Seite */
+    text-align: left; /* Stellt sicher, dass der Text links ausgerichtet ist */
+    direction: rtl;
+    
+}
+
+.gradeDateInput:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+.gradeInpu:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+
+
+
+.editpopup {
+    background-color: #dbebfa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    left: 50%;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: 500px;
+    z-index: 1000;
+}
+
+.Editpopup-content {
+    text-align: center;
+}
+
+.Editpopup-content button {
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#EditSubjectForm #EditFach:disabled {
+  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#EditSubjectForm #EditFach:disabled:hover {
+    background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
+    color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
+    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#EditSubjectForm .button-container {
+    display: flex;
+    justify-content: space-between; /* This will place the buttons apart */
+    margin-top: 20px; /* Space above the buttons */
+}
+
+#EditSubjectForm .button-container button {
+    border: none;
+    border-radius: 10px;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px; /* Adjust padding as needed */
+    flex-grow: 1; /* This will make buttons grow to fill the container */
+    margin: 0 10px; /* Space between buttons */
+    transition: 0.2s ease;
+}
+
+#EditSubjectForm .button-container button:hover {
+    background-color: #575757;
+}
+
+#EditSubjectForm #EditFach {
+    background-color: #007BFF; /* Adjust color as needed */
+}
+
+#EditSubjectForm #EditFach:hover {
+    background-color: #0056b3;
+}
+
+#EditSubjectForm #EditPopup {
+    background-color: #6c757d; /* Adjust color as needed */
+}
+
+#EditSubjectForm #EditPopup:hover {
+    background-color: #545b62;
+}
+
+
+#EditsubjectName {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 460px;
+}
+
+#EditsubjectName:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+.Editpopup-content label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.Editpopup-content input[type="text"] {
+    background-color: #f7f7f7;
+    border: none;
+    border-radius: 10px;
+    color: #333333;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    transition: 0.2s ease;
+}
+
+
+.popup5 {
+    background-color: #dbebfa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    left: 50%;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    width: 400px;
+    z-index: 1000;
+    height: auto;
+
+}
+
+
+
+#editCategoryName {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#EditgradeWeight {
+    border: 1px solid #ccc;
+    background-color: #f7f7f7 !important;
+    border-radius: 10px;
+    width: 77px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    appearance: none; /* Entfernt den Standardpfeil */
+    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
+    background-position: 75% center;
+    background-size: 15px;
+}
+
+
+#EditgradeWeight:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+#editCategoryName:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+#gradesList {
+    overflow-y: auto;
+    max-height: 100px; 
+    width: 98%;
+    padding-bottom: 10px;
+    overflow-x: hidden;
+    margin-top: 10px;
+    padding-right: 5px;
+    color: #333333;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    
+}
+
+#gradesList::-webkit-scrollbar {
+    width: 8px; /* Breite der Scrollbar */
+    
+}
+
+#gradesList::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+}
+
+#gradesList::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+#gradesList::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    border-radius: 5px;
+    width: 12px; /* Farbe des beweglichen Teils der Scrollbar beim Überfahren mit der Maus */
+}
+
+#gradesList::-webkit-scrollbar-track {
+    scrollbar-color: #888 transparent;
+    scrollbar-width: thin;
+}
+
+
+
+.Edit-category-popup-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+#closeEditCategoryPopup {
+    border: none;
+    align-self: flex-end;
+    border-radius: 10px;
+    color: black;
+    background-color: #6c757d;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    margin: 0 10px;
+    transition: 0.2s ease;
+}
+
+#closeEditCategoryPopup:hover {
+    background-color: #545b62;
+}
+
+#saveCategoryChanges {
+    border: none;
+    border-radius: 10px;
+    color: black;
+    background-color: #007BFF;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    margin: 0 10px;
+    transition: 0.2s ease;
+}
+
+#saveCategoryChanges:hover {
+    background-color: #0056b3;
+}
+
+
+/* Verstecken Sie die Standard-Checkbox */
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+/* Erstellen Sie eine neue Box */
+.custom-checkbox input[type="checkbox"] + label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] + label:before {
+    content: '';
     position: absolute;
+    left: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #000;
+    border-radius: 3px;
+}
+
+/* Überprüfen Sie die Box */
+.custom-checkbox input[type="checkbox"]:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 5px;
+    width: 8px;
+    height: 14px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+
+.context-menu {
+    background-color: #dbebfa;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    color: #333333;
+    left: 0;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    z-index: 1001;
+    border: none;
+    display: flex; /* Definiert einen Flex-Container */
+    flex-direction: column; /* Ordnet die Kinder in einer Spalte an */
+}
+#EditGradePopupButton {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-right: 35px;
+    text-align: center;
+    transition: 0.2s ease;
+    width: auto;
+    margin-bottom: 5px;
+}
+
+#EditGradePopupButton:hover {
+    background-color: #0056b3;
+}
+
+#DeleteGradePopupButton {
+    background-color: #ff6666;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-right: 35px;
+    text-align: center;
+    transition: 0.2s ease;
     width: auto;
 }
 
+#DeleteGradePopupButton:hover {
+    background-color: #ff3333;
+}
 

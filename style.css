@@ -1160,3 +1160,62 @@ button.close:hover {
 }
 
 
+.context-menu {
+    background-color: #dbebfa;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    color: #333333;
+    left: 0;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    z-index: 1001;
+    border: none;
+    display: flex; /* Definiert einen Flex-Container */
+    flex-direction: column; /* Ordnet die Kinder in einer Spalte an */
+}
+#EditGradePopupButton {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+    padding-bottom: 7px;
+    padding-right: 35px;
+    padding-top: 7px;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+#EditGradePopupButton:hover {
+    background-color: #0056b3;
+}
+
+#DeleteGradePopupButton {
+    background-color: #ffcc80 ;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #333333;
+    cursor: pointer;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 5px;
+    outline: none;
+    padding-bottom: 7px;
+    padding-right: 35px;
+    padding-top: 7px;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+#DeleteGradePopupButton:hover {
+    background-color: #ffad33;
+}
+
