@@ -337,7 +337,7 @@ button.close:hover {
 }
 
 .boxmain .rectangle .title {
-    border-bottom: 1px #57932E solid;
+    border-bottom: 1px #9da9b3 solid;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     color: #333333;
@@ -1239,7 +1239,7 @@ button.close:hover {
 }
 
 .boxaverage .rectangleaverage .title {
-    border-bottom: 1px #57932E solid;
+    border-bottom: 1px #9da9b3 solid;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     color: #333333;
@@ -1290,7 +1290,7 @@ button.close:hover {
     padding: 0;
 }
 .boxgraphtitle {
-    border-bottom: 1px #57932E solid;
+    border-bottom: 1px #9da9b3 solid;
     color: #333333;
     font-family: "Lato-Medium", Helvetica;
     font-size: 20px;
