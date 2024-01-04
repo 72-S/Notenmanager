@@ -1016,28 +1016,13 @@ function generateChartData(grades) {
     // Sortieren Sie die Noten nach Datum
     grades.sort((a, b) => a.date - b.date);
 
-    // Extrahieren Sie den Monat und das Jahr aus jedem Datum
-    const monthlyGrades = {};
-    grades.forEach((grade) => {
-        const monthYear = `${grade.date.getMonth() + 1}-${grade.date.getFullYear()}`;
-        if (!monthlyGrades[monthYear]) {
-            monthlyGrades[monthYear] = [];
-        }
-        monthlyGrades[monthYear].push(grade.value);
-    });
-
-    // Berechnen Sie den Durchschnitt für jeden Monat
-    const chartData = Object.keys(monthlyGrades).map((monthYear) => {
-        const monthlyValues = monthlyGrades[monthYear];
-        const average = monthlyValues.reduce((sum, current) => sum + current, 0) / monthlyValues.length;
+    // Konvertieren Sie jede Note in ein Objekt, das für das Diagramm verwendet werden kann
+    const chartData = grades.map((grade) => {
         return {
-            monthYear,
-            average
+            dateLabel: `${grade.date.getDate()}-${grade.date.getMonth() + 1}-${grade.date.getFullYear()}`,
+            value: grade.value
         };
     });
-
-    // Sortieren Sie die Daten nach Monat und Jahr für das Diagramm
-    chartData.sort((a, b) => new Date(a.monthYear) - new Date(b.monthYear));
 
     return chartData;
 }
@@ -1045,16 +1030,18 @@ function generateChartData(grades) {
 function createChart(chartData) {
     const ctx = document.getElementById('gradeChart').getContext('2d');
 
-    if (gradeChart) {
-        gradeChart.destroy();
+    // Wenn ein Chart bereits existiert, zerstören Sie es, bevor Sie ein neues erstellen
+    if (window.gradeChart instanceof Chart) {
+        window.gradeChart.destroy();
     }
-    gradeChart = new Chart(ctx, {
+
+    window.gradeChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: chartData.map(data => data.monthYear),
+            labels: chartData.map(data => data.dateLabel), // Verwenden Sie das Datum als Label
             datasets: [{
                 label: 'Notenentwicklung',
-                data: chartData.map(data => data.average),
+                data: chartData.map(data => data.value), // Verwenden Sie den Notenwert
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
@@ -1066,13 +1053,16 @@ function createChart(chartData) {
         options: {
             scales: {
                 y: {
-                    beginAtZero: false, // Falls Sie nicht bei 0 beginnen wollen
-                    reverse: true, // Hier kehren Sie die Richtung der y-Achse um
+                    beginAtZero: false,
+                    reverse: true, // Die Notenwerte umgekehrt darstellen (6 unten, 1 oben)
                     ticks: {
-                        stepSize: 1, // Schritte von 1 (zwischen den Noten)
-                        max: 6, // Maximalwert der Skala
-                        min: 1  // Minimalwert der Skala
+                        stepSize: 1,
+                        max: 6,
+                        min: 1
                     }
+                },
+                x: {
+                    // Hier können Sie zusätzliche Optionen für die x-Achse konfigurieren
                 }
             },
             responsive: true,
