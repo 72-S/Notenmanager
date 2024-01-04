@@ -22,6 +22,7 @@ let currentSubjectId;
 let gradesToDelete = [];
 let newCategoryName;
 let newWeight;
+let gradeChart;
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
     
@@ -220,6 +221,7 @@ function calculateOverallAverage() {
 
 
 function calculateSubjectAverage(subjectId) {
+    initializeChart();
     return new Promise((resolve, reject) => {
         // Überprüfen, ob der Durchschnitt bereits berechnet wurde
         if (localSubjects[subjectId] && localSubjects[subjectId].average !== null) {
@@ -266,6 +268,7 @@ function calculateSubjectAverage(subjectId) {
                 }
 
             calculateOverallAverage();
+            
             });
         });
     });
@@ -994,4 +997,99 @@ function saveChangesGradeEditPopup() {
 
 
 
-const ctx = document.getElementById('gradeChart').getContext('2d');
+
+function getAllGrades() {
+    return firebase.database().ref('grades').once('value').then((snapshot) => {
+        const grades = [];
+        snapshot.forEach((childSnapshot) => {
+            const grade = childSnapshot.val();
+            grades.push({
+                value: parseFloat(grade.value),
+                date: new Date(grade.date)
+            });
+        });
+        return grades;
+    });
+}
+
+function generateChartData(grades) {
+    // Sortieren Sie die Noten nach Datum
+    grades.sort((a, b) => a.date - b.date);
+
+    // Extrahieren Sie den Monat und das Jahr aus jedem Datum
+    const monthlyGrades = {};
+    grades.forEach((grade) => {
+        const monthYear = `${grade.date.getMonth() + 1}-${grade.date.getFullYear()}`;
+        if (!monthlyGrades[monthYear]) {
+            monthlyGrades[monthYear] = [];
+        }
+        monthlyGrades[monthYear].push(grade.value);
+    });
+
+    // Berechnen Sie den Durchschnitt für jeden Monat
+    const chartData = Object.keys(monthlyGrades).map((monthYear) => {
+        const monthlyValues = monthlyGrades[monthYear];
+        const average = monthlyValues.reduce((sum, current) => sum + current, 0) / monthlyValues.length;
+        return {
+            monthYear,
+            average
+        };
+    });
+
+    // Sortieren Sie die Daten nach Monat und Jahr für das Diagramm
+    chartData.sort((a, b) => new Date(a.monthYear) - new Date(b.monthYear));
+
+    return chartData;
+}
+
+function createChart(chartData) {
+    const ctx = document.getElementById('gradeChart').getContext('2d');
+
+    if (gradeChart) {
+        gradeChart.destroy();
+    }
+    gradeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.map(data => data.monthYear),
+            datasets: [{
+                label: 'Notenentwicklung',
+                data: chartData.map(data => data.average),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                fill: false,
+                pointRadius: 3,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false, // Falls Sie nicht bei 0 beginnen wollen
+                    reverse: true, // Hier kehren Sie die Richtung der y-Achse um
+                    ticks: {
+                        stepSize: 1, // Schritte von 1 (zwischen den Noten)
+                        max: 6, // Maximalwert der Skala
+                        min: 1  // Minimalwert der Skala
+                    }
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Die Funktion zum Starten des Prozesses
+function initializeChart() {
+    getAllGrades().then((grades) => {
+        console.log(grades); // Überprüfen Sie diese Ausgabe
+        const chartData = generateChartData(grades);
+        console.log(chartData); // Überprüfen Sie diese Ausgabe
+        createChart(chartData);
+    });
+    
+}
+
+

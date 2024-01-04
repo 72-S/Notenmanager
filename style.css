@@ -890,7 +890,7 @@ button.close:hover {
     top: 50%;
     transform: translate(-50%, -40%);
     width: 500px;
-    z-index: 1000;
+    z-index: 1009;
 }
 
 .Editpopup-content {
@@ -997,7 +997,7 @@ button.close:hover {
     top: 50%;
     transform: translate(-50%, -40%);
     width: 400px;
-    z-index: 1000;
+    z-index: 1010;
     height: auto;
 
 }
