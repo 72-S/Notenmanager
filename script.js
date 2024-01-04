@@ -814,11 +814,10 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
     const grades = getGradesForCategory(subjectId, categoryName);
     gradesListElement.innerHTML = '';
     for (let grade of grades) {
-        
-
         // Erstellen Sie einen Checkbox
         const deleteCheckbox = document.createElement('input');
         deleteCheckbox.type = 'checkbox';
+        deleteCheckbox.id = 'checkbox' + grade.id;
         deleteCheckbox.addEventListener('change', function() {
             if (deleteCheckbox.checked) {
                 // Wenn der Haken gesetzt ist, fügen Sie die ID der Note zu gradesToDelete hinzu
@@ -828,10 +827,39 @@ function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
                 gradesToDelete = gradesToDelete.filter(id => id !== grade.id);
             }
         });
+
+        const label = document.createElement('label');
+        label.htmlFor = 'checkbox' + grade.id;
+
+        // Erstellen Sie separate Elemente für das Datum und die Note
+        const dateElement = document.createElement('span');
+        dateElement.textContent = grade.date;
+        const gradeValueElement = document.createElement('span');
+        gradeValueElement.textContent = grade.value;
+
+        // Erstellen Sie ein div-Element für die Checkbox und das Datum
+        const checkboxAndDate = document.createElement('div');
+        checkboxAndDate.style.display = 'flex';
+        checkboxAndDate.style.justifyContent = 'flex-start';
+        
+        const customCheckbox = document.createElement('div');
+        customCheckbox.className = 'custom-checkbox';
+
+        // Fügen Sie die Checkbox und das Datum zum checkboxAndDate hinzu
+        checkboxAndDate.appendChild(deleteCheckbox);
+        checkboxAndDate.appendChild(label);
+
         const gradeElement = document.createElement('div');
-        gradeElement.textContent = `${grade.date} ${grade.value}`;
-        // Fügen Sie die Checkbox zum gradeElement hinzu
-        gradeElement.appendChild(deleteCheckbox);
+        gradeElement.style.display = 'flex';
+        gradeElement.style.justifyContent = 'space-between';
+
+
+        checkboxAndDate.appendChild(customCheckbox);
+        checkboxAndDate.appendChild(dateElement);
+
+        // Fügen Sie checkboxAndDate und die Note zum gradeElement hinzu
+        gradeElement.appendChild(checkboxAndDate);
+        gradeElement.appendChild(gradeValueElement);
 
         gradesListElement.appendChild(gradeElement);
     }

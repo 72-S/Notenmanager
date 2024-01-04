@@ -1121,3 +1121,42 @@ button.close:hover {
 #saveCategoryChanges:hover {
     background-color: #0056b3;
 }
+
+
+/* Verstecken Sie die Standard-Checkbox */
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+/* Erstellen Sie eine neue Box */
+.custom-checkbox input[type="checkbox"] + label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #000;
+    border-radius: 3px;
+}
+
+/* Überprüfen Sie die Box */
+.custom-checkbox input[type="checkbox"]:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 5px;
+    width: 8px;
+    height: 14px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+
