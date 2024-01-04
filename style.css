@@ -1302,6 +1302,8 @@ button.close:hover {
 
 #gradeChart {
     height: 350px;
+    width: 400px;
+    overflow-x: scroll;
     margin-left: 5px;
     margin-right: 5px;
 }
