@@ -1030,7 +1030,7 @@ function generateChartData(grades) {
 function createChart(chartData) {
     const canvas = document.getElementById('gradeChart');
     canvas.style.height = '350px';
-    canvas.style.width = `${chartData.length * 50}px`;
+    canvas.style.width = `400px`;
     const ctx = canvas.getContext('2d');
 
     // Wenn ein Chart bereits existiert, zerstören Sie es, bevor Sie ein neues erstellen
