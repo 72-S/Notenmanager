@@ -991,3 +991,7 @@ function saveChangesGradeEditPopup() {
     loadGradesForSubject(subjectId);
 
 }
+
+
+
+const ctx = document.getElementById('gradeChart').getContext('2d');
