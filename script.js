@@ -1038,10 +1038,10 @@ function createChart(chartData) {
     window.gradeChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: chartData.map(data => data.dateLabel), // Verwenden Sie das Datum als Label
+            labels: chartData.map(data => data.dateLabel),
             datasets: [{
-                label: 'Notenentwicklung',
-                data: chartData.map(data => data.value), // Verwenden Sie den Notenwert
+                label: 'Note',
+                data: chartData.map(data => data.value),
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
@@ -1051,10 +1051,15 @@ function createChart(chartData) {
             }]
         },
         options: {
+            plugins: {
+                legend: {
+                    display: false // Das blendet die Legende aus
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: false,
-                    reverse: true, // Die Notenwerte umgekehrt darstellen (6 unten, 1 oben)
+                    reverse: true,
                     ticks: {
                         stepSize: 1,
                         max: 6,
