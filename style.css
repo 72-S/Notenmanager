@@ -1262,12 +1262,12 @@ button.close:hover {
 .boxcontent {
     display: flex;
     justify-content: start;
-
+    flex-direction: row;
 }
 
 .boxgraph {
-
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
     margin-left: 20px;
     margin-top: 15px;
@@ -1277,7 +1277,31 @@ button.close:hover {
     background: #D1DCE5;
     border-radius: 10px;
     box-sizing: border-box;
-    height: 400px;
+    height: 405px;
     position: relative;
     width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.boxgraph .boxcontent .chart-wrapper {
+    width: 100%; /* Setzt die Breite auf 100% des Elternelements */
+    padding: 0;
+}
+.boxgraphtitle {
+    border-bottom: 1px #57932E solid;
+    color: #333333;
+    font-family: "Lato-Medium", Helvetica;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 13px;
+    text-align: center;
+    height: 23px;
+}
+
+#gradeChart {
+    height: 350px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
