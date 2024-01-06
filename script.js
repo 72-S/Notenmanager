@@ -482,8 +482,11 @@ function createSubjectBox(name, color, id) {
     }, 20); // Warten Sie einen kurzen Moment, bevor Sie die Opacity ändern, um sicherzustellen, dass die Transition funktioniert
 }
 
-function reloadSubjectPage() {                                                       //!reloadSubjectPage
-
+function reloadSubjectPage() {  
+    const subjectBoxes = document.getElementsByClassName('subjectBox');                                                     //!reloadSubjectPage
+    for (let box of subjectBoxes) {
+        box.remove(); // Remove each subject box
+    }
     // Subjects und deren Durchschnitt neu laden
     loadSubjects();
     initializeChart();
