@@ -23,12 +23,81 @@ let gradesToDelete = [];
 let newCategoryName;
 let newWeight;
 let gradeChart;
+
+
+
+
+function loadAllCategories() {
+    const dbRef = firebase.database().ref('categories');
+    dbRef.once('value', snapshot => {
+        snapshot.forEach(childSnapshot => {
+            const category = childSnapshot.val();
+            const categoryId = childSnapshot.key;
+            // Stellen Sie sicher, dass das `localCategories`-Objekt für jede subjectId initialisiert wird
+            if (!localCategories[category.subjectId]) {
+                localCategories[category.subjectId] = [];
+            }
+            localCategories[category.subjectId].push({
+                id: categoryId,
+                name: category.name,
+                weight: category.weight
+            
+            });
+        });
+    });
+}
+
+function loadAllGrades() {
+    const dbRef = firebase.database().ref('grades');
+    dbRef.once('value', snapshot => {
+        snapshot.forEach(childSnapshot => {
+            const grade = childSnapshot.val();
+            const gradeId = childSnapshot.key;
+            // Stellen Sie sicher, dass das `localGrades`-Objekt für jede subjectId initialisiert wird
+            if (!localGrades[grade.subjectId]) {
+                localGrades[grade.subjectId] = [];
+            }
+            localGrades[grade.subjectId].push({
+                id: gradeId,
+                value: grade.value,
+                date: grade.date,
+                categoryId: grade.categoryId,
+                categoryName: grade.categoryName
+            });
+        });
+        console.log('localGrades:', localGrades);
+    });
+}
+
+function loadSubjects() {
+    var dbRef = firebase.database().ref('subjects');
+    dbRef.once('value', function (snapshot) {
+        if (snapshot.exists()) {
+            document.getElementById('noSubjectsMessage').style.display = 'none';
+        }
+        else {
+            document.getElementById('noSubjectsMessage').style.display = 'block';
+        }
+        snapshot.forEach(function (childSnapshot) {
+            var childData = childSnapshot.val();
+            localSubjects[childSnapshot.key] = childData;
+            localSubjects[childSnapshot.key].average = null; // Durchschnitt initialisieren
+            createSubjectBox(childData.name, childData.color, childSnapshot.key);
+            // Durchschnitt neu berechnen
+            calculateSubjectAverage(childSnapshot.key);
+        });
+    });
+}
+
+
+
 // Event Listener für das Laden der Anwendung
 document.addEventListener('DOMContentLoaded', function () {
-    
+    loadAllCategories();
+    loadAllGrades();
     loadSubjects();
     setSubmitButtonState();
-
+    
 
 
     document.getElementById('newSubjectButton').addEventListener('click', function () {
@@ -130,8 +199,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
 function resetNewSubjectForm() {
     // Setzen Sie das Eingabefeld für den Fachnamen zurück
     const subjectNameInput = document.getElementById('subjectName');
@@ -222,6 +289,7 @@ function calculateOverallAverage() {
 
 function calculateSubjectAverage(subjectId) {
     initializeChart();
+    initializeRadarChart();
     return new Promise((resolve, reject) => {
         // Überprüfen, ob der Durchschnitt bereits berechnet wurde
         if (localSubjects[subjectId] && localSubjects[subjectId].average !== null) {
@@ -368,11 +436,13 @@ function createSubjectBox(name, color, id) {
                 });
             });
 
+            delete localSubjects[id]; // Entfernen Sie das Fach aus der lokalen Speicherung
             // Entfernen Sie das Fach aus der Benutzeroberfläche
             box.remove();
 
             // Schließen Sie das Kontextmenü
-            contextMenu.remove();
+            contextMenu.remove(); //!contextMenu.remove()
+            reloadSubjectPage();
         });
     
         // Fügen Sie die Menüpunkte zum Kontextmenü hinzu
@@ -412,27 +482,18 @@ function createSubjectBox(name, color, id) {
     }, 20); // Warten Sie einen kurzen Moment, bevor Sie die Opacity ändern, um sicherzustellen, dass die Transition funktioniert
 }
 
+function reloadSubjectPage() {                                                       //!reloadSubjectPage
 
-
-function loadSubjects() {
-    var dbRef = firebase.database().ref('subjects');
-    dbRef.once('value', function (snapshot) {
-        if (snapshot.exists()) {
-            document.getElementById('noSubjectsMessage').style.display = 'none';
-        }
-        else {
-            document.getElementById('noSubjectsMessage').style.display = 'block';
-        }
-        snapshot.forEach(function (childSnapshot) {
-            var childData = childSnapshot.val();
-            localSubjects[childSnapshot.key] = childData;
-            localSubjects[childSnapshot.key].average = null; // Durchschnitt initialisieren
-            createSubjectBox(childData.name, childData.color, childSnapshot.key);
-            // Durchschnitt neu berechnen
-            calculateSubjectAverage(childSnapshot.key);
-        });
-    });
+    // Subjects und deren Durchschnitt neu laden
+    loadSubjects();
+    initializeChart();
+    initializeRadarChart();
+    calculateOverallAverage();
 }
+
+
+
+
 function openSubjectPage(subjectName, subjectId) {
     
     document.getElementById('mainContent').style.display = 'none';
@@ -576,7 +637,7 @@ function createCategoryBar(name, weight, subjectId, categoryId) {
 }
 
 
-function closeSubjectPage() {
+function closeSubjectPage() {                                                       //!closeSubjectPage
     document.getElementById('mainContent').style.display = 'block';
     const subjectBoxes = document.getElementsByClassName('subjectBox');
     for (let box of subjectBoxes) {
@@ -593,7 +654,6 @@ function openGradeCreationPopup(categoryName, subjectId, categoryId) {
     window.currentCategoryName = categoryName;
     window.currentSubjectId = subjectId;
     window.currentCategoryId = categoryId;
-    console.log(categoryId);
 
     const gradePopup = document.getElementById('gradePopup');
     gradePopup.style.display = 'block';
@@ -1030,7 +1090,7 @@ function generateChartData(grades) {
 function createChart(chartData) {
     const canvas = document.getElementById('gradeChart');
     canvas.style.height = '350px';
-    canvas.style.width = `400px`;
+
     const ctx = canvas.getContext('2d');
 
     // Wenn ein Chart bereits existiert, zerstören Sie es, bevor Sie ein neues erstellen
@@ -1047,9 +1107,9 @@ function createChart(chartData) {
                 data: chartData.map(data => data.value),
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1,
+                borderWidth: 1.3,
                 fill: false,
-                pointRadius: 3,
+                pointRadius: 4,
                 tension: 0
             }]
         },
@@ -1059,6 +1119,16 @@ function createChart(chartData) {
                     display: false // Das blendet die Legende aus
                 }
             },
+
+            animations: {
+                tension: {
+                  duration: 1000,
+                  easing: 'linear',
+                  from: 0.7,
+                  to: 0,
+                  loop: false
+                }
+              },
             scales: {
                 y: {
                     beginAtZero: false,
@@ -1082,12 +1152,139 @@ function createChart(chartData) {
 // Die Funktion zum Starten des Prozesses
 function initializeChart() {
     getAllGrades().then((grades) => {
-        console.log(grades); // Überprüfen Sie diese Ausgabe
+
         const chartData = generateChartData(grades);
-        console.log(chartData); // Überprüfen Sie diese Ausgabe
+
         createChart(chartData);
     });
     
 }
+
+function extractCategoryNames() {
+    const categoryNames = new Set();
+    Object.values(localCategories).forEach(categories => {
+        categories.forEach(category => {
+            categoryNames.add(category.name);
+        });
+    });
+    console.log("labels", Array.from(categoryNames));
+    return Array.from(categoryNames);
+}
+
+
+function generateRadarChartData() {
+    const categoryNames = extractCategoryNames();
+    const radarChartData = {
+        labels: categoryNames,
+        datasets: []
+    };
+
+    // Durchlaufe alle Fächer und erzeuge für jedes Fach ein Dataset
+    Object.keys(localSubjects).forEach(subjectId => {
+        const subject = localSubjects[subjectId];
+
+        // Initialisiere ein Array für die Datenwerte des aktuellen Fachs
+        let dataValues = new Array(categoryNames.length).fill(0);
+
+        // Durchlaufe alle Noten des Faches
+        (localGrades[subjectId] || []).forEach(grade => {
+            // Finde den Index der Kategorie der aktuellen Note
+            const categoryIndex = categoryNames.indexOf(grade.categoryName);
+            if (categoryIndex !== -1) {
+                // Zähle die Note in der entsprechenden Kategorie
+                dataValues[categoryIndex]++;
+            }
+        });
+
+        // Füge das Dataset für das aktuelle Fach hinzu
+        radarChartData.datasets.push({
+            label: subject.name,
+            data: dataValues,
+            backgroundColor: hexToRGBA(subject.color, 0.2),
+            borderColor: subject.color,
+            pointBackgroundColor: subject.color
+        });
+    });
+    console.log("radarChartData", radarChartData);
+    return radarChartData;
+    
+}
+
+
+// Helferfunktion, um Hex-Farben in RGBA umzuwandeln
+function hexToRGBA(hex, opacity) {
+    let r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+
+    if (opacity) {
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    } else {
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+}
+
+
+
+
+function initializeRadarChart() {
+
+
+
+    const backgroundColorPlugin = {
+        id: 'backgroundColorPlugin',
+        beforeDraw: (chart, args, options) => {
+          const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = options.backgroundColor; // Hintergrundfarbe aus den Optionen
+          ctx.fillRect(left, top, width, height);
+          ctx.restore();
+        }
+      };
+    // Generiere die Daten für das Radar-Chart.
+    const radarChartData = generateRadarChartData();
+    const ctx = document.getElementById('gradedistributionchart').getContext('2d');
+
+    // Überprüfe, ob bereits ein Radar-Chart existiert, und zerstöre es, falls notwendig.
+    if (window.radarChart instanceof Chart) {
+        window.radarChart.destroy();
+    }
+
+    // Erstelle das neue Radar-Chart.
+    window.radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: radarChartData,
+        options: {
+            elements: {
+                line: {
+                    borderWidth: 3 // Stärke der Linien im Radar-Chart.
+                }
+            },
+            scales: {
+                r: { // 'r' bezieht sich auf die radiale Achse des Radar-Charts.
+                    angleLines: {
+                        display: true // Anzeige der Winkel-/Radiallinien.
+                    },
+                    suggestedMin: 1, // Vorgeschlagener minimaler Wert für die Skala.
+                    suggestedMax: 3, // Vorgeschlagener maximaler Wert für die Skala.
+                    ticks: {
+                        backdropColor: 'transparent',
+                        backdropPadding: 5 // Hintergrundfarbe der Skala.
+                    },
+
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true // Steuere die Anzeige der Legende.
+                }
+            },
+            responsive: true, // Sorgt dafür, dass das Chart auf die Containergröße reagiert.
+            maintainAspectRatio: false // Deaktiviert das Beibehalten des Aspektverhältnisses, sodass Sie die Höhe und Breite anpassen können.
+        }
+    });
+}
+
 
 

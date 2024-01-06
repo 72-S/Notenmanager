@@ -1263,6 +1263,9 @@ button.close:hover {
     display: flex;
     justify-content: start;
     flex-direction: row;
+    height: 550px;
+    width: auto;
+
 }
 
 .boxgraph {
@@ -1271,6 +1274,7 @@ button.close:hover {
     justify-content: flex-start;
     margin-left: 20px;
     margin-top: 15px;
+    width: 400px;
 }
 
 .boxgraph .boxcontent {
@@ -1279,7 +1283,6 @@ button.close:hover {
     box-sizing: border-box;
     height: 405px;
     position: relative;
-    width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -1302,7 +1305,6 @@ button.close:hover {
 
 #gradeChart {
     height: 350px;
-    width: 400px;
     overflow-x: scroll;
     margin-left: 5px;
     margin-right: 5px;
