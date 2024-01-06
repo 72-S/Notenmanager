@@ -1343,3 +1343,8 @@ button.close:hover {
     width: 520px;
     align-items: center;
 }
+
+.average-container {
+    display: flex;
+    justify-content: space-between;
+}
