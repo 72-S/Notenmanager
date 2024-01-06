@@ -1194,8 +1194,10 @@ function generateRadarChartData() {
             // Finde den Index der Kategorie der aktuellen Note
             const categoryIndex = categoryNames.indexOf(grade.categoryName);
             if (categoryIndex !== -1) {
+                const weight = localCategories[subjectId].find(category => category.name === grade.categoryName)?.weight || 1;
                 // Zähle die Note in der entsprechenden Kategorie
                 dataValues[categoryIndex]++;
+                dataValues[categoryIndex] *= weight;
             }
         });
 
