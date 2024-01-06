@@ -23,6 +23,7 @@ let gradesToDelete = [];
 let newCategoryName;
 let newWeight;
 let gradeChart;
+let subjectPercentageChart;
 
 
 
@@ -1177,17 +1178,34 @@ function extractCategoryNames() {
 
 function generateRadarChartData() {
     const categoryNames = extractCategoryNames();
+    let totalWeightedScores = 0;
+    let totalWeights = 0;
+    let subjectTotalWeights = 0;
     const radarChartData = {
         labels: categoryNames,
         datasets: []
     };
 
+    Object.keys(localSubjects).forEach(subjectId => {
+        const subjectGrades = localGrades[subjectId] || [];
+        subjectGrades.forEach(grade => {
+            const weight = localCategories[subjectId].find(category => category.name === grade.categoryName)?.weight || 1;
+            totalWeightedScores += grade.value * weight;
+            totalWeights += parseFloat(weight);
+        });
+    });
+
+    // Durchlaufe alle Fächer und erzeuge für jedes Fach ein Dataset
     // Durchlaufe alle Fächer und erzeuge für jedes Fach ein Dataset
     Object.keys(localSubjects).forEach(subjectId => {
         const subject = localSubjects[subjectId];
 
         // Initialisiere ein Array für die Datenwerte des aktuellen Fachs
         let dataValues = new Array(categoryNames.length).fill(0);
+
+        // Initialize subject total weighted scores and weights for each subject
+        let subjectTotalWeightedScores = 0;
+        let subjectTotalWeights = 0;
 
         // Durchlaufe alle Noten des Faches
         (localGrades[subjectId] || []).forEach(grade => {
@@ -1198,16 +1216,25 @@ function generateRadarChartData() {
                 // Zähle die Note in der entsprechenden Kategorie
                 dataValues[categoryIndex]++;
                 dataValues[categoryIndex] *= weight;
+
+                // Add the weighted score and weight to the subject totals
+                subjectTotalWeightedScores += grade.value * weight;
+                subjectTotalWeights += parseFloat(weight);
             }
         });
 
+        const subjectAverage = subjectTotalWeights ? subjectTotalWeightedScores / subjectTotalWeights : 0;
+        const subjectPercentage = totalWeights ? (subjectAverage / (totalWeightedScores / totalWeights) * 100).toFixed(2) : 0;
+        console.log("subjectPercentage", subjectPercentage);
         // Füge das Dataset für das aktuelle Fach hinzu
         radarChartData.datasets.push({
             label: subject.name,
             data: dataValues,
+            subjectPercentage: subjectPercentage,
             backgroundColor: hexToRGBA(subject.color, 0.2),
             borderColor: subject.color,
             pointBackgroundColor: subject.color
+            
         });
     });
     console.log("radarChartData", radarChartData);
@@ -1261,6 +1288,7 @@ function initializeRadarChart() {
         type: 'radar',
         data: radarChartData,
         options: {
+            
             elements: {
                 line: {
                     borderWidth: 3 // Stärke der Linien im Radar-Chart.
@@ -1283,7 +1311,18 @@ function initializeRadarChart() {
             plugins: {
                 legend: {
                     display: true // Steuere die Anzeige der Legende.
-                }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            // Zugriff auf die 'subjectPercentage' für das aktuelle Dataset
+                            var subjectPercentage = context.dataset.subjectPercentage;
+                            // Das Label und den prozentualen Anteil zurückgeben
+                            return `${context.dataset.label}: ${subjectPercentage}%`;
+                        }
+                    }
+
+                  }
             },
             responsive: true, // Sorgt dafür, dass das Chart auf die Containergröße reagiert.
             maintainAspectRatio: false // Deaktiviert das Beibehalten des Aspektverhältnisses, sodass Sie die Höhe und Breite anpassen können.
