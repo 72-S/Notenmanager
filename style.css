@@ -8,7 +8,6 @@ body {
 /* Breite der Scrollbar */
 body::-webkit-scrollbar {
     width: 8px;
-
 }
 
 /* Hintergrund der Scrollbar */
