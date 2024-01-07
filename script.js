@@ -484,7 +484,8 @@ function createSubjectBox(name, color, id) {
 }
 
 function reloadSubjectPage() {  
-    const subjectBoxes = document.getElementsByClassName('subjectBox');                                                     //!reloadSubjectPage
+    let subjectBoxes = document.getElementsByClassName('subjectBox');                                                     //!reloadSubjectPage
+    subjectBoxes = Array.from(subjectBoxes); // Convert HTMLCollection to array
     for (let box of subjectBoxes) {
         box.remove(); // Remove each subject box
     }
