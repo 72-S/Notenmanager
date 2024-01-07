@@ -1007,7 +1007,41 @@ function closeGradeEditPopup() {
 }
 
 
+function deleteCategoryAndGrades(subjectId, categoryId) {
+    // Überprüfen Sie, ob die Parameter nicht undefiniert sind
+    if (!subjectId || !categoryId) {
+        console.error('Ungültige Parameter:', subjectId, categoryId);
+        return;
+    }
 
+    // Erstellen Sie eine Referenz zur Datenbank
+    var dbRef = firebase.database().ref();
+
+    // Löschen Sie die Kategorie und alle Noten in dieser Kategorie aus der Firebase-Datenbank
+    dbRef.child('categories/' + categoryId).remove()
+        .then(function() {
+            console.log('Kategorie aus Firebase entfernt');
+        })
+        .catch(function(error) {
+            console.error('Fehler beim Entfernen der Kategorie aus Firebase:', error);
+        });
+
+    dbRef.child('grades').orderByChild('categoryId').equalTo(categoryId).once('value', snapshot => {
+        snapshot.forEach(childSnapshot => {
+            dbRef.child('grades/' + childSnapshot.key).remove();
+        });
+    }).then(function() {
+        console.log('Noten in dieser Kategorie aus Firebase entfernt');
+    }).catch(function(error) {
+        console.error('Fehler beim Entfernen der Noten aus Firebase:', error);
+    });
+
+    // Löschen Sie die Kategorie und alle Noten in dieser Kategorie aus dem lokalen Speicher
+    localCategories[subjectId] = localCategories[subjectId].filter(category => category.id !== categoryId);
+    localGrades[subjectId] = localGrades[subjectId].filter(grade => grade.categoryId !== categoryId);
+
+    console.log('Kategorie und Noten in dieser Kategorie aus dem lokalen Speicher entfernt');
+}
 
 
 
