@@ -1007,15 +1007,29 @@ function closeGradeEditPopup() {
 }
 
 
+
+
+
+
+
+
 function saveChangesGradeEditPopup() {
     const gradeEditPopup = document.getElementById('editGrades');
     const gradeDateElement = document.getElementById('gradeDate');
-    
+
+    const editCategoryCheckbox = document.getElementById('editCategoryCheckbox'); // Get the checkbox
+
     // Setzen Sie das Datum zurück
     gradeDateElement.value = '';
 
-    for (let gradeId of gradesToDelete) {
-        deleteGrade(window.currentSubjectId, window.currentCategoryId, gradeId);
+    // Überprüfen Sie, ob die Checkbox ausgewählt ist
+    if (editCategoryCheckbox && editCategoryCheckbox.checked) {
+        // Löschen Sie die Kategorie und alle Noten in dieser Kategorie
+        deleteCategoryAndGrades(window.currentSubjectId, window.currentCategoryId);
+    } else {
+        for (let gradeId of gradesToDelete) {
+            deleteGrade(window.currentSubjectId, window.currentCategoryId, gradeId);
+        }
     }
 
     
