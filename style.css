@@ -101,15 +101,14 @@ body::-webkit-scrollbar-thumb:hover {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     color: white;
-    display: none;
     left: 50%;
     padding: 20px;
     position: fixed;
     top: 50%;
-    transform: translate(-50%, -40%);
     width: 500px;
-    z-index: 1000;
+    z-index: 1009;
     opacity: 0;
+    transform: translate(-50%, -40%);
     transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
     
 }
@@ -502,7 +501,9 @@ button.close:hover {
     height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
     width:304px;
     border-radius: 10px;
-    transition: all 0.5s ease;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.1s, transform 0.1s;
 }
 
 
@@ -561,6 +562,7 @@ button.close:hover {
     overflow-x: hidden;
     margin-top: 10px;
     padding-right: 5px;
+    
 }
 #GradeCreationPopupButton:hover {
     background-color: #0056b3;
@@ -605,6 +607,7 @@ button.close:hover {
     height: 13px;
     margin-top: -2px;
     padding-bottom: 5px;
+    
 }
 
 .gradesContainer::-webkit-scrollbar {
@@ -916,10 +919,19 @@ button.close:hover {
     padding: 20px;
     position: fixed;
     top: 50%;
-    transform: translate(-50%, -40%);
     width: 500px;
     z-index: 1009;
+    opacity: 0;
+    transform: translate(-50%, -40%);
+    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
 }
+
+
+.editpopup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
 
 .Editpopup-content {
     text-align: center;
@@ -1208,6 +1220,9 @@ button.close:hover {
     border: none;
     display: flex; /* Definiert einen Flex-Container */
     flex-direction: column; /* Ordnet die Kinder in einer Spalte an */
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
 }
 #EditGradePopupButton {
     background-color: #007BFF;
@@ -1384,3 +1399,5 @@ button.close:hover {
     display: flex;
     justify-content: space-between;
 }
+
+

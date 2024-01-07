@@ -124,7 +124,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('EditPopup').addEventListener('click', function(event) {
         event.preventDefault();
         // Schließen Sie das Popup
-        document.getElementById('EditSubjectPopup').style.display = 'none';
+        const editPopup =document.getElementById('EditSubjectPopup');
+        editPopup.classList.remove('show'); // Entfernt die .show Klasse
+        setTimeout(function() {
+            editPopup.style.display = 'none';
+        }, 300);
+        
     });
     
     
@@ -386,6 +391,10 @@ function createSubjectBox(name, color, id) {
         contextMenu.style.position = 'absolute';
         contextMenu.style.top = `${event.clientY}px`;
         contextMenu.style.left = `${event.clientX}px`;
+        setTimeout(function() {
+            contextMenu.style.opacity = "1";
+            contextMenu.style.transform = "scale(1)";
+        }, 100);
         
         // Erstellen Sie die Menüpunkte
         
@@ -397,6 +406,10 @@ function createSubjectBox(name, color, id) {
             currentSubjectId = id;
             const editPopup = document.getElementById('EditSubjectPopup');
             editPopup.style.display = 'block';
+            setTimeout(function() {
+                editPopup.classList.add('show'); // Fügt die .show Klasse hinzu
+            }, 20);
+
 
             // Setzen Sie den Wert des Eingabefelds auf den Namen des Fachs
             const editSubjectNameInput = document.getElementById('EditsubjectName');
@@ -639,6 +652,10 @@ function createCategoryBar(name, weight, subjectId, categoryId) {
     const subjectPage = document.getElementById('subjectPage');
     const subjectContainer = subjectPage.querySelector('.categoriesContainer');
     subjectContainer.appendChild(categoryBar);
+    setTimeout(function() {
+        categoryBar.style.opacity = '1';
+        categoryBar.style.transform = 'scale(1)';
+    }, 100); // Warten Sie einen kurzen Moment, bevor Sie die Opacity ändern, um sicherzustellen, dass die Transition funktioniert
 }
 
 
