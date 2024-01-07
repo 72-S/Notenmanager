@@ -1024,10 +1024,17 @@ button.close:hover {
     position: fixed;
     top: 50%;
     transform: translate(-50%, -40%);
-    width: 400px;
+    width: 460px;
     z-index: 1010;
     height: auto;
 
+}
+
+#editCategoryCheckboxIMG {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+    margin-top: 5px;
 }
 
 
