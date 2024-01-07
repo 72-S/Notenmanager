@@ -1222,7 +1222,7 @@ button.close:hover {
     flex-direction: column; /* Ordnet die Kinder in einer Spalte an */
     opacity: 0;
     transform: scale(0.8);
-    transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.2s, transform 0.1s;
 }
 #EditGradePopupButton {
     background-color: #007BFF;
