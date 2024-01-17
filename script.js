@@ -1070,6 +1070,11 @@ function removeCategoriesFromUI() {
 function closeGradeEditPopup() {
     const gradeEditPopup = document.getElementById('editGrades');
     const gradeDateElement = document.getElementById('gradeDate');
+    const editCategoryCheckbox = document.getElementById('editCategoryCheckboxButton');
+
+if (editCategoryCheckbox.classList.contains('checked')) {
+    editCategoryCheckbox.classList.remove('checked');
+}
     
     // Setzen Sie das Datum zurück
     gradeDateElement.value = '';
