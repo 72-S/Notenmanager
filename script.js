@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
        
 
-    document.getElementById('subjectName').addEventListener('input', setSubmitButtonState);
+    
 
     document.getElementById('createFach').addEventListener('click', function (e) {
         e.preventDefault(); // Verhindert das Neuladen der Seite
@@ -267,6 +267,17 @@ function setSubmitButtonState() {
     const submitButton = document.getElementById('newSubjectForm').querySelector('button[type="submit"]');
     submitButton.disabled = !subjectName || !selectedColor;
 }
+
+function setEditSumbmitButtonState() {
+    const subjectName = document.getElementById('EditsubjectName').value.trim();
+    const submitButton = document.getElementById('EditFach');
+    submitButton.disabled = !subjectName;
+}
+
+
+document.getElementById('subjectName').addEventListener('input', setSubmitButtonState);
+
+document.getElementById('EditsubjectName').addEventListener('input', setEditSumbmitButtonState);
 
 
 function setAddGradeButtonState() {
