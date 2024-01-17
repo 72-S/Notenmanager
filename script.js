@@ -109,6 +109,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 10);
 
 
+            document.getElementById('editCategoryCheckboxButton').addEventListener('click', function(event) {
+                // Toggle der 'checked' Klasse beim Klick auf den Button
+                this.classList.toggle('checked');
+            });
+            
+
+
     document.getElementById('newSubjectButton').addEventListener('click', function () {
         const popup = document.getElementById('newSubjectPopup');
         popup.style.display = 'block';
@@ -935,6 +942,13 @@ function getGradesForCategory(subjectId, categoryName) {
     return gradesfilter;
 }
 
+
+
+
+
+
+
+
 function openGradeEditPopup(categoryName, subjectId, weight, categroyId) {
     // Speichern Sie categoryName und subjectId als globale Variablen oder als Attribute des Popups
     window.currentCategoryName = categoryName;
@@ -1111,19 +1125,24 @@ function saveChangesGradeEditPopup() {
     const gradeEditPopup = document.getElementById('editGrades');
     const gradeDateElement = document.getElementById('gradeDate');
 
-    const editCategoryCheckbox = document.getElementById('editCategoryCheckbox'); // Get the checkbox
+    const editCategoryCheckbox = document.getElementById('editCategoryCheckboxButton');
+    
 
     // Setzen Sie das Datum zurück
     gradeDateElement.value = '';
 
     // Überprüfen Sie, ob die Checkbox ausgewählt ist
-    if (editCategoryCheckbox && editCategoryCheckbox.checked) {
+    if (editCategoryCheckbox.classList.contains('checked')) {
         // Löschen Sie die Kategorie und alle Noten in dieser Kategorie
         deleteCategoryAndGrades(window.currentSubjectId, window.currentCategoryId);
     } else {
         for (let gradeId of gradesToDelete) {
             deleteGrade(window.currentSubjectId, window.currentCategoryId, gradeId);
         }
+    }
+
+    if (editCategoryCheckbox.classList.contains('checked')) {
+        editCategoryCheckbox.classList.remove('checked');
     }
 
     

@@ -1457,3 +1457,16 @@ button.close:hover {
 }
 
 
+.trashcan-button {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.trashcan-button.checked {
+    background-color: #ffcc80; /* Farbe, wenn ausgewählt */
+}
+
+
