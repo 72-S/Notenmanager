@@ -1149,6 +1149,7 @@ button.close:hover {
     flex-grow: 1;
     margin: 0 10px;
     transition: 0.2s ease;
+    font-weight: bold;
 }
 
 #closeEditCategoryPopup:hover {
@@ -1166,6 +1167,7 @@ button.close:hover {
     flex-grow: 1;
     margin: 0 10px;
     transition: 0.2s ease;
+    font-weight: bold;
 }
 
 #saveCategoryChanges:hover {
