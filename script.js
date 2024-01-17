@@ -100,6 +100,14 @@ document.addEventListener('DOMContentLoaded', function () {
     setSubmitButtonState();
     
 
+    var mainboxes = document.querySelectorAll('.boxmain, .boxaverage, .boxcalculator, .boxgraph, .boxgraph2');
+            setTimeout(function() {
+                mainboxes.forEach(function(mainboxes) {
+                mainboxes.style.opacity = '1';
+                mainboxes.style.transform = 'scale(1)';
+                });
+            }, 10);
+
 
     document.getElementById('newSubjectButton').addEventListener('click', function () {
         const popup = document.getElementById('newSubjectPopup');
@@ -158,6 +166,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function removeBoxes() {
             document.getElementById('mainContent').style.display = 'block';
+            var mainboxes = document.querySelectorAll('.boxmain, .boxaverage, .boxcalculator, .boxgraph, .boxgraph2');
+            setTimeout(function() {
+                mainboxes.forEach(function(mainboxes) {
+                mainboxes.style.opacity = '1';
+                mainboxes.style.transform = 'scale(1)';
+                });
+            }, 10);
             const subjectBoxes = Array.from(document.getElementsByClassName('subjectBox'));
             for (let box of subjectBoxes) {
                 box.remove(); // Remove each subject box
@@ -515,6 +530,13 @@ function reloadSubjectPage() {
 function openSubjectPage(subjectName, subjectId) {
     
     document.getElementById('mainContent').style.display = 'none';
+    var mainboxes = document.querySelectorAll('.boxmain, .boxaverage, .boxcalculator, .boxgraph, .boxgraph2');
+            setTimeout(function() {
+                mainboxes.forEach(function(mainboxes) {
+                mainboxes.style.opacity = '0';
+                mainboxes.style.transform = 'scale(0.8)';
+                });
+            }, 10);
     const subjectBoxes = document.getElementsByClassName('subjectBox');
     for (let box of subjectBoxes) {
         box.style.display = 'none';
@@ -661,6 +683,15 @@ function createCategoryBar(name, weight, subjectId, categoryId) {
 
 function closeSubjectPage() {                                                       //!closeSubjectPage
     document.getElementById('mainContent').style.display = 'block';
+
+    var mainboxes = document.querySelectorAll('.boxmain, .boxaverage, .boxcalculator, .boxgraph, .boxgraph2');
+            setTimeout(function() {
+                mainboxes.forEach(function(mainboxes) {
+                mainboxes.style.opacity = '1';
+                mainboxes.style.transform = 'scale(1)';
+                });
+            }, 10);
+
     const subjectBoxes = document.getElementsByClassName('subjectBox');
     for (let box of subjectBoxes) {
         box.remove(); // Remove each subject box
