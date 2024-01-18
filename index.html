@@ -1,200 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Manager</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="script.js"></script>
 </head>
-
 <body>
-    <h1 id="Notenmanager">NotenManager</h1>
+
+
+    <h1 class="MainTitle">Notenmanager</h1>
+
+
+
     <div id="mainContent">
+        <h1 class="SubTitle">Übersicht</h1>
+        <button class="neuesFachButton"><img src="assets/add.svg" alt="+" class="IMG"></button>
+
+        <section class="mainContentBox">
 
 
-
-        <h1 id="Übersicht">Übersicht</h1>
-        <button id="newSubjectButton">Neues Fach <img id="add" src="assets/add.svg" alt="+"></button>
-
-
-        <div id="boxencontenmain" style="display: block;">
-        <div class="boxcontent">
-            <div class="boxmain">
+            <div class="FächerBox">
                 <div class="rectangle">
-                    <div class="title">Fächer</div>
+                    <h1 class="miniTitle">Fächer</h1>
                     <div class="subjects-wrapper">
-                        <!-- Die subjectBox Elemente werden hier eingefügt -->
-                        <p id="noSubjectsMessage" style="display: none;">Du hast noch keine Fächer erstellt.</p>
-                    </div>
-                </div>
-            </div>
-    
-            <div>
-            <div class="average-container">
-                <div class="boxaverage">
-                    <div class="rectangleaverage">
-                        <div class="title">Durchschnitt</div>
-                        <div class="average-wrapper">
-                            <p id="overallAverage">0.00Ø</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="boxcalculator">
-                    <div class="rectangleaverage">
-                        <div class="title">Noten Rechner</div>
-                        <div class="average-wrapper">
-                            <p id="overallAve">test</p>
-                        </div>
+                        <p id="noSubjectMessage" style="display: none;">Du hast noch keine Fächer erstellt</p>
                     </div>
                 </div>
             </div>
 
-            <div class="boxgraph">
-                <div class="boxcontent">
-                    <div class="boxgraphtitle">Notenentwicklung</div>
+
+
+            <div class="DurschnittBox">
+                <div class="rectangle">
+                    <h1 class="miniTitle">Durchschnitt</h1>
+                    <div class="average-wrapper">
+                        <p id="averageMessage" >0.00Ø</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="RechnerBox">
+                <div class="rectangle">
+                    <h1 class="miniTitle">Noten Rechner</h1>
+                    <div class="calculator-wrapper">
+                        <p id="calculatorMessage">Test</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="NotenentwicklungBox">
+                <div class="rectangle">
+                    <h1 class="miniTitle">Notenentwicklung</h1>
                     <div class="chart-wrapper">
-                        <canvas id="gradeChart" ></canvas>
-                        <p id="noSubjectsMessagegraph" style="display: none;">Du hast noch keine Fächer erstellt.</p>
+                        <canvas id="gradeChart"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="boxgraph2">
-            <div class="boxcontent">
-                <div class="boxgraphtitle">Notenverteilung</div>
-                <div class="chart-wrapper">
-                    <canvas id="gradedistributionchart" ></canvas>
-                    <p id="noSubjectsMessagechart" style="display: none;">Du hast noch keine Fächer erstellt.</p>
+
+
+
+            <div class="NotenverteilungBox">
+                <div class="rectangle">
+                    <h1 class="miniTitle">Notenverteilung</h1>
+                    <div class="chart-wrapper">
+                        <canvas id="gradeDistributionChart"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
-        </div>
-
+        </section>
     </div>
 
-    </div>
+                                                <!-- Fächer Popups -->
 
-    
-
-
-    <div id="newSubjectPopup" class="popup" style="display: none;">
-        <div class="popup-content">
-
-
-            <input type="text" id="subjectName" placeholder="Fachname">
-            <form id="newSubjectForm">
-                
-                <!-- Ersetzen Sie den Farbwähler durch Radio-Buttons -->
-                <div id="colorOptions">
-                    <span class="color-choice" style="background-color: #993333;" data-color="#993333"></span>
-                    <span class="color-choice" style="background-color: #669966;" data-color="#669966"></span>
-                    <span class="color-choice" style="background-color: #333399;" data-color="#333399"></span>
-                    <span class="color-choice" style="background-color: #999933;" data-color="#999933"></span>
-                    <span class="color-choice" style="background-color: #993399;" data-color="#993399"></span>
-                    <span class="color-choice" style="background-color: #339999;" data-color="#339999"></span>
-                    <span class="color-choice" style="background-color: #666666;" data-color="#666666"></span>
-                    <span class="color-choice" style="background-color: #996633;" data-color="#996633"></span>
-                    <span class="color-choice" style="background-color: #336666;" data-color="#336666"></span>
-                    <span class="color-choice" style="background-color: #666699;" data-color="#666699"></span>
-                    <span class="color-choice" style="background-color: #999966;" data-color="#999966"></span>
-                    <span class="color-choice" style="background-color: #996699;" data-color="#996699"></span>
-                    <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
-                                        <!-- Weitere Farboptionen... -->
-
-                </div>
-                <div class="button-container">
-                    <button class="close" type="submit" id="createFach">Fach erstellen</button>
-                <button class="close" type="submit" id="closePopup">Schließen</button>
-                
-            </div>
+    <div id="neuesFachPopup" class="FachPopup" style="display: block;">
+         <div class="FachPopupContent">
+            <input type="text" id="neusFachPopup-input" class="FachPopupInput" placeholder="Fachname">
+            <form id="neusFachPopup-color" class="FachPopupColor">               
+                <span class="color-choice" style="background-color: #993333;" data-color="#993333"></span>
+                <span class="color-choice" style="background-color: #669966;" data-color="#669966"></span>
+                <span class="color-choice" style="background-color: #333399;" data-color="#333399"></span>
+                <span class="color-choice" style="background-color: #999933;" data-color="#999933"></span>
+                <span class="color-choice" style="background-color: #993399;" data-color="#993399"></span>
+                <span class="color-choice" style="background-color: #339999;" data-color="#339999"></span>
+                <span class="color-choice" style="background-color: #666666;" data-color="#666666"></span>
+                <span class="color-choice" style="background-color: #996633;" data-color="#996633"></span>
+                <span class="color-choice" style="background-color: #336666;" data-color="#336666"></span>
+                <span class="color-choice" style="background-color: #666699;" data-color="#666699"></span>
+                <span class="color-choice" style="background-color: #999966;" data-color="#999966"></span>
+                <span class="color-choice" style="background-color: #996699;" data-color="#996699"></span>
+                <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
             </form>
-        </div>
-    </div>
-    <div id="EditSubjectPopup" class="editpopup" style="display: none;">
-        <div class="Editpopup-content">
-
-
-            <input type="text" id="EditsubjectName" placeholder="Fachname">
-            <form id="EditSubjectForm">
-                
-                <!-- Ersetzen Sie den Farbwähler durch Radio-Buttons -->
-                <div id="EditcolorOptions">
-                    <span class="color-choice" style="background-color: #993333;" data-color="#993333"></span>
-                    <span class="color-choice" style="background-color: #669966;" data-color="#669966"></span>
-                    <span class="color-choice" style="background-color: #333399;" data-color="#333399"></span>
-                    <span class="color-choice" style="background-color: #999933;" data-color="#999933"></span>
-                    <span class="color-choice" style="background-color: #993399;" data-color="#993399"></span>
-                    <span class="color-choice" style="background-color: #339999;" data-color="#339999"></span>
-                    <span class="color-choice" style="background-color: #666666;" data-color="#666666"></span>
-                    <span class="color-choice" style="background-color: #996633;" data-color="#996633"></span>
-                    <span class="color-choice" style="background-color: #336666;" data-color="#336666"></span>
-                    <span class="color-choice" style="background-color: #666699;" data-color="#666699"></span>
-                    <span class="color-choice" style="background-color: #999966;" data-color="#999966"></span>
-                    <span class="color-choice" style="background-color: #996699;" data-color="#996699"></span>
-                    <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
-                                        <!-- Weitere Farboptionen... -->
-
-                </div>
-                <div class="button-container">
-                    <button class="close" type="button" id="EditFach">Fach bearbeiten</button>
-                <button class="close" type="button" id="EditPopup">Schließen</button>
-                
+            <div class="button-container">
+                <button class="button-container-buttons" type="submit" id="neuesFachPopup-create">Fach erstellen</button>
+                <button class="button-container-buttons" type="submit" id="neuesFachPopup-cancel">Schließen</button>
             </div>
+         </div>
+    </div>
+
+
+
+    <div id="editFachPopup" class="FachPopup" style="display: block;">
+        <div class="FachPopupContent">
+            <input type="text" id="editFachPopup-input" class="FachPopupInput" placeholder="Fachname">
+            <form id="editFachPopup-input" class="FachPopupColor">               
+                <span class="color-choice" style="background-color: #993333;" data-color="#993333"></span>
+                <span class="color-choice" style="background-color: #669966;" data-color="#669966"></span>
+                <span class="color-choice" style="background-color: #333399;" data-color="#333399"></span>
+                <span class="color-choice" style="background-color: #999933;" data-color="#999933"></span>
+                <span class="color-choice" style="background-color: #993399;" data-color="#993399"></span>
+                <span class="color-choice" style="background-color: #339999;" data-color="#339999"></span>
+                <span class="color-choice" style="background-color: #666666;" data-color="#666666"></span>
+                <span class="color-choice" style="background-color: #996633;" data-color="#996633"></span>
+                <span class="color-choice" style="background-color: #336666;" data-color="#336666"></span>
+                <span class="color-choice" style="background-color: #666699;" data-color="#666699"></span>
+                <span class="color-choice" style="background-color: #999966;" data-color="#999966"></span>
+                <span class="color-choice" style="background-color: #996699;" data-color="#996699"></span>
+                <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
             </form>
-        </div>
-    </div>
-
-    <div id="categoryCreationForm" style="display: none;">
-        <!-- New form for creating categories -->
-        <input type="text" id="newCategoryName" placeholder="Category Name">
-        <button onclick="createCategory()">Create Category</button>
-    </div>
-    <div id="subjectsContainer">
-        <!-- Subjects will be displayed here -->
-    </div>
-
-    <div id="subjectPageContainer" style="display: none;">
-        <!-- Hier werden die Inhalte des ausgewählten Faches angezeigt -->
-        <div id="categoryBarsContainer">
-            <!-- Category bars will be displayed here -->
-        </div>
-    </div>
-
-    <div id="gradePopup" class="popup3" style="display: none;">
-        <div class="popup-content3">
-        <input type="date" id="gradeDate" class="gradeDateInput" >
-        <select id="gradeValue" class="gradeInput">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-        </select>
-        <div class="category-popup-buttons3">
-        <button id="createNote" onclick="addGrade()">Note hinzufügen</button>
-        <button id="cancelNote" onclick="closeGradePopup()">Schließen</button>
-        </div>
+            <div class="button-container">
+                <button class="button-container-buttons" type="submit" id="editFachPopup-save">Speichern</button>
+                <button class="button-container-buttons" type="submit" id="editFachPopup-cancel">Schließen</button>
+            </div>
         </div>
     </div>
 
 
+                                                <!-- Kategorie Popups -->
 
-
-    <!-- Grade Edit Popup-->
-    <div id="editGrades" class="popup5" style="display: none;">
-        <div class="popup-content">
-            <input type="text" id="editCategoryName" placeholder="Kategoriename"></input>
-            
-            <select id="EditgradeWeight">
+    <div id="neueKategoriePopup" class="KategoriePopup">
+        <div class="KategoriePopupContent">
+            <input type="text" id="KategoriePopup-input" class="neueKategoriePopupInput" placeholder="Kategoriename">
+            <select id="neueKategoriePopup-select" class="KategoriePopupSelect">
                 <option value="0.25">0.25</option>
                 <option value="0.5">0.5</option>
                 <option value="0.75">0.75</option>
@@ -204,30 +151,53 @@
                 <option value="1.75">1.75</option>
                 <option value="2">2</option>
             </select>
-            
-            
-            <button id="editCategoryCheckboxButton" class="trashcan-button">
-                <img id="editCategoryCheckboxIMG" src="assets/trashcan.svg" alt="Löschen">
-            </button>
-        </div>
-        <div id="gradesList">
-            <!-- Grades will be displayed here -->
-        </div>
-        <div class="Edit-category-popup-buttons">
-            <button id="saveCategoryChanges" onclick="saveChangesGradeEditPopup()">Änderungen speichern</button>
-            <button id="closeEditCategoryPopup" onclick="closeGradeEditPopup()">Schließen</button>
+            <div class="button-container">
+                <button class="button-container-buttons" type="submit" id="neueKategoriePopup-create">Kategorie erstellen</button>
+                <button class="button-container-buttons" type="submit" id="neueKategoriePopup-cancel">Schließen</button>
             </div>
         </div>
-        
-    
-
-        
+    </div>
 
 
-    <script src="script.js"></script>
+                                                <!-- Noten Popups -->
+    <div id="neueNotePopup" class="NotePopup">
+        <div class="NotePopupContent">
+            <input type="date" id="NotePopup-input" class="NotePopupInput">
+            <select id="NotePopup-select" class="NotePopupSelect">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            <div class="button-container">
+                <button class="button-container-buttons" type="submit" id="neueNotePopup-create">Note hinzufügen</button>
+                <button class="button-container-buttons" type="submit" id="neueNotePopup-cancel">Schließen</button>
+            </div>
+        </div>
+    </div>
 
+
+    <div id="editNotePopup" class="NotePopup">
+        <div class="NotePopupContent">
+            <input type="text" id="editNotePopup-input" class="NotePopupInput" placeholder="Kategoriename">
+            <select id="editNotePopup-select" class="NotePopupSelect">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6" >6</option>
+            </select>
+            <button class="trashcan-button" id="Notetrashcan-button"><img src="assets/trashcan.svg" alt="Löschen" class="trashcan-button-img"></button>
+            <div id="editNotePopupList"></div>
+            <div class="button-container">
+                <button class="button-container-buttons" type="submit" id="editNotePopup-save">Speichern</button>
+                <button class="button-container-buttons" type="submit" id="editNotePopup-cancel">Schließen</button>
+            </div>
+        </div>
+    </div>
 
 </body>
-
 </html>
-
