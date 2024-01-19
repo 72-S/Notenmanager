@@ -380,13 +380,19 @@ body {
     text-align: center;
 }
 
+.NotePopupContentSelector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
 .NotePopupInput {
     background-color: #f7f7f7;
     border: 1px solid #ccc;
     border-radius: var(--BorderRadius);
     width: 64%;
     height: 40px;
-    margin-top: 15px;
     padding-left: 10px;
     padding-right: 10px;
     box-sizing: border-box;
@@ -401,9 +407,8 @@ body {
 .NotePopupSelect {
     border: 1px solid #ccc;
     border-radius: var(--BorderRadius);
-    width: 15%;
+    width: 20%;
     height: 40px;
-    margin-top: 15px;
     padding-left: 10px;
     padding-right: 10px;
     box-sizing: border-box;
@@ -423,11 +428,10 @@ body {
 /* editNotePopup */
 .trashcan-button {
     background-color: #f7f7f7;
+    height: 40px; /* Gleiche Höhe für alle */
+    padding: 0 10px; /* Gleiche padding für alle */
     border: 1px solid #ccc;
     border-radius: var(--BorderRadius);
-    width: 10%; 
-    height: 40px;
-    box-sizing: border-box;
     transition: var(--transition);
 }
 
@@ -441,11 +445,12 @@ body {
 }
 
 .trashcan-button:active {
-    background-color: #d9d9d9;
+    background-color: #ffad33;
 }
 
 .trashcan-button-img {
     width: 20px;
     height: 20px;
-    vertical-align: middle;
+    display: block;
+    margin: 0 auto;
 }
