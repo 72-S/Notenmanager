@@ -15,64 +15,65 @@
 <body>
 
 
-    <h1 class="MainTitle">Notenmanager</h1>
+    <h1 class="MainTitle">NotenManager</h1>
 
 
 
     <div id="mainContent">
         <h1 class="SubTitle">Übersicht</h1>
-        <button class="neuesFachButton"><img src="assets/add.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton">Neues Fach <img src="assets/add.svg" alt="+" class="IMG"></button>
 
         <section class="mainContentBox">
 
 
             <div class="FächerBox">
                 <div class="rectangle">
-                    <h1 class="miniTitle">Fächer</h1>
+                    <div class="miniTitle">Fächer</div>
                     <div class="subjects-wrapper">
-                        <p id="noSubjectMessage" style="display: none;">Du hast noch keine Fächer erstellt</p>
+                        <p id="noSubjectMessage" style="display: block;">Du hast noch keine Fächer erstellt</p>
                     </div>
                 </div>
             </div>
 
 
+            <div class="boxgroup">
+                <div class="miniboxgroup">
+                    <div class="DurschnittBox">
+                        <div class="rectangle">
+                            <div class="miniTitle">Durchschnitt</div>
+                            <div class="average-wrapper">
+                                <p id="averageMessage" >0.00Ø</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="DurschnittBox">
-                <div class="rectangle">
-                    <h1 class="miniTitle">Durchschnitt</h1>
-                    <div class="average-wrapper">
-                        <p id="averageMessage" >0.00Ø</p>
+
+
+                    <div class="RechnerBox">
+                        <div class="rectangle">
+                            <div class="miniTitle">Noten Rechner</div>
+                            <div class="calculator-wrapper">
+                                <p id="calculatorMessage">Test</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="NotenentwicklungBox">
+                    <div class="rectangle">
+                        <div class="miniTitle">Notenentwicklung</div>
+                        <div class="chart-wrapper">
+                            <canvas id="gradeChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
-            <div class="RechnerBox">
-                <div class="rectangle">
-                    <h1 class="miniTitle">Noten Rechner</h1>
-                    <div class="calculator-wrapper">
-                        <p id="calculatorMessage">Test</p>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="NotenentwicklungBox">
-                <div class="rectangle">
-                    <h1 class="miniTitle">Notenentwicklung</h1>
-                    <div class="chart-wrapper">
-                        <canvas id="gradeChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
 
 
             <div class="NotenverteilungBox">
                 <div class="rectangle">
-                    <h1 class="miniTitle">Notenverteilung</h1>
+                    <div class="miniTitle">Notenverteilung</div>
                     <div class="chart-wrapper">
                         <canvas id="gradeDistributionChart"></canvas>
                     </div>

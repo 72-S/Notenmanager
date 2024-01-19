@@ -1,69 +1,63 @@
+:root {
+    --Schriftfarbe: #333;
+    --ButtonSchriftfarbe: rgb(0, 0, 0);
+    --ButtonBackground: #007bff;
+    --ButtonBackgroundHover: #0056b3;
+    --LightBlue: #D1DCE5;
+    --ButtonHeight: 35px;
+}
+
+.IMG {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
 body {
-    font-family: 'Lato', sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: 'Lato' , sans-serif;
+    font-size: 16px;
     background-color: #F3F4F6;
 }
 
-/* Breite der Scrollbar */
-body::-webkit-scrollbar {
-    width: 8px;
-}
-
-/* Hintergrund der Scrollbar */
-body::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 5px;
-}
-
-/* Farbe der Scrollbar */
-body::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border: 2px solid transparent;
-    border-radius: 5px;
-}
-
-/* Farbe der Scrollbar beim Überfahren mit der Maus */
-body::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    border-radius: 5px;
-    width: 12px;
-}
-
-
-
-
 #mainContent {
     padding: 20px;
-    text-align: left;
 }
 
-#newSubjectButton {
-    background-color: #007BFF;
+
+/* Buttons */
+
+.neuesFachButton {
+    background-color: var(--ButtonBackground);
     border: none;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: black;
+    color: var(--ButtonSchriftfarbe);
     cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
+    font-family: 'Lato-Medium' , sans-serif;
+    font-weight: bold;
     font-size: 16px;
-    font-weight: 600;
-    margin-left: 20px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.2s ease;
     margin-top: 20px;
-    outline: none;
-    padding-bottom: 7px;
-    padding-right: 35px;
-    padding-top: 7px;
-    text-align: left;
-    transition: 0.2s ease;
+    height: var(--ButtonHeight);
 }
 
-#newSubjectButton:hover {
-    background-color: #0056b3;
+.neuesFachButton:hover {
+    background-color: var(--ButtonBackgroundHover);
 }
 
-#Notenmanager {
-    color: #333;
+
+
+
+
+/* Titles */
+.MainTitle {
+    color: var(--Schriftfarbe);
     font-family: "Architects Daughter", Helvetica, sans-serif;
     font-size: 24px;
     margin: 0;
@@ -73,1413 +67,114 @@ body::-webkit-scrollbar-thumb:hover {
     top: 20px;
 }
 
-#add {
-    height: 1em;
-    margin-left: 8px;
-    position: absolute;
-    width: auto;
-}
-
-#back {
-    height: 1em;
-    margin-left: 8px;
-    position: absolute;
-    width: auto;
-}
-
-
-#Übersicht {
-    color: #000000;
+.SubTitle {
+    color: var(--Schriftfarbe);
     font-size: 46px;
     margin: 0;
-    padding-left: 20px;
-    padding-top: 20px;
 }
 
-.popup {
-    background-color: #dbebfa;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
-    left: 50%;
-    padding: 20px;
-    position: fixed;
-    top: 50%;
-    width: 500px;
-    z-index: 1009;
-    opacity: 0;
-    transform: translate(-50%, -40%);
-    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
-    
-}
-
-
-.popup.show {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-}
-
-.popup-content {
-    text-align: center;
-}
-
-
-.popup-content button {
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-h2 {
+.miniTitle {
     color: #333;
-    margin: 10px 0;
-}
-
-#newSubjectForm #createFach:disabled {
-  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-#newSubjectForm #createFach:disabled:hover {
-    background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-    color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Container for the form buttons */
-#newSubjectForm .button-container {
-    display: flex;
-    justify-content: space-between; /* This will place the buttons apart */
-    margin-top: 20px; /* Space above the buttons */
-}
-
-/* Styles for the buttons */
-#newSubjectForm .button-container button {
-    border: none;
-    border-radius: 10px;
-    color: black;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px; /* Adjust padding as needed */
-    flex-grow: 1; /* This will make buttons grow to fill the container */
-    margin: 0 10px; /* Space between buttons */
-    transition: 0.2s ease;
-}
-
-/* Hover effect for buttons */
-#newSubjectForm .button-container button:hover {
-    background-color: #575757;
-}
-
-/* Specifically target the 'Fach erstellen' button for its unique color */
-#newSubjectForm #createFach {
-    background-color: #007BFF; /* Adjust color as needed */
-}
-
-
-/* Hover effect for 'Fach erstellen' button */
-#newSubjectForm #createFach:hover {
-    background-color: #0056b3;
-}
-
-/* Specifically target the 'Schließen' button for its unique color */
-#newSubjectForm #closePopup {
-    background-color: #6c757d; /* Adjust color as needed */
-}
-
-/* Hover effect for 'Schließen' button */
-#newSubjectForm #closePopup:hover {
-    background-color: #545b62;
-}
-
-
-#CreateCategory {
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: black;
-    cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    margin-left: 20px;
-    margin-top: 20px;
-    outline: none;
-    padding-bottom: 7px;
-    padding-right: 35px;
-    padding-top: 7px;
-    
-    text-align: left;
-    transition: 0.2s ease;
-}
-
-#CreateCategory:hover {
-    background-color: #0056b3;
-}
-
-#BacktoMain {
-    background-color: #ffcc80 ;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: #333333;
-    cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    margin-left: 5px;
-    margin-top: 20px;
-    outline: none;
-    padding-bottom: 7px;
-    padding-right: 35px;
-    padding-top: 7px;
-    text-align: left;
-    transition: 0.2s ease;
-}
-
-#BacktoMain:hover {
-    background-color: #ffad33;
-
-}
-
-#subjectName {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 460px;
-}
-
-#subjectName:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-.popup-content label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.popup-content input[type="text"] {
-    background-color: #f7f7f7;
-    border: none;
-    border-radius: 10px;
-    color: #333333;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 100%;
-    transition: 0.2s ease;
-}
-
-.color-options {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.color-choice {
-    border: 1px solid #5a5959;
-    border-radius: 50%;
-    cursor: pointer;
-    display: inline-block;
-    height: 30px;
-    transition: transform 0.3s ease;
-    width: 30px;
-    margin-right: 1px;
-    margin-left: 1px;
-}
-
-.color-choice.selected {
-    transform: scale(1.2);
-    border-color: #424242;
-}
-
-.color-choice:hover {
-    transform: scale(1.2);
-}
-
-.popup-buttons {
-    display: flex;
-    justify-content: center;
-    
-}
-
-.popup-buttons button {
-    background-color: #404040;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    margin: 0 10px;
-    
-}
-
-button.close {
-    background-color: blue;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
-    padding: 10px;
-    width: 150px;
-}
-
-button.close:hover {
-    background-color: darkblue;
-}
-
-.popup-buttons button:hover {
-    background-color: #575757;
-}
-
-.close {
-    cursor: pointer;
-    float: right;
-    font-size: 20px;
-    margin: 0;
-}
-.boxmain {
-    align-items: center;
-    display: flex;
-    justify-content: flex-start;
-    margin-left: 20px;
-    margin-top: 15px;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.3s, transform 0.1s;
-}
-
-.boxmain .rectangle {
-    background: #D1DCE5;
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 540px;
-    position: relative;
-    width: 400px;
-}
-
-.boxmain .rectangle .title {
-    border-bottom: 1px #9da9b3 solid;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    color: #333333;
-    font-family: "Lato-Medium", Helvetica;
+    font-family: Arial, sans-serif;
+    border-bottom:  1px #9da9b3 solid;
+    text-align: center;
+    vertical-align: middle;
     font-size: 20px;
     font-weight: bold;
-    padding: 13px;
-    text-align: center;
-}
-
-.boxmain .rectangle .subjects-wrapper {
-    bottom: 0;
-    left: 0;
-    overflow-y: auto;
-    position: absolute;
-    right: 0;
-    top: 50px;
-}
-
-.boxmain .rectangle .subjects-wrapper::-webkit-scrollbar {
-    width: 8px;
-}
-
-.boxmain .rectangle .subjects-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 5px;
-}
-
-.boxmain .rectangle .subjects-wrapper::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border: 2px solid transparent;
-    border-radius: 5px;
-}
-
-.boxmain .rectangle .subjects-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    border-radius: 5px;
-    width: 12px;
-}
-
-.boxmain .rectangle .subjects-wrapper {
-    scrollbar-color: #888 transparent;
-    scrollbar-width: thin;
-}
-
-.boxmain .rectangle .subjects-wrapper:hover {
-    scrollbar-width: auto;
-}
-
-#categoryCreationForm {
-    display: none;
-}
-
-.category {
-    background-color: #f0f0f0;
-    margin-top: 5px;
-    padding: 5px;
-}
-
-.subjectBox {
-    align-items: center;
-    background-color: #4CAF50;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    box-sizing: border-box;
-    color: white;
-    cursor: pointer;
-    display: flex;
     height: 50px;
-    justify-content: space-between;
-    margin: 10px;
-    padding: 10px;
-    width: calc(100% - 20px);
-    border-radius: 10px;
-    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
-    opacity: 0;
-    transform: translateX(-100%);
-}
-.subjectBox.show {
-    opacity: 1;
-    transform: translateX(0);
-}
+    line-height: 50px;
+} 
 
-.subjectBox:hover {
-    background-color: #369c3b;
-}
 
-#subjectsContainer {
-    display: none;
-}
 
-
-
-
-#subjectPageContainer {
-    display: none;
-}
-
-#subjectPage {
-    padding-left: 20px;
-    padding-top: 20px;
-}
-
-
-
-.categoriesContainer {
-    width: 100%; /* Füllt die gesamte Breite der Seite aus */
-    height: 100vh; /* Füllt die gesamte Höhe der Seite aus */
-    display: grid; /* Stellt die Kategorien in einem Grid dar */
-    grid-template-columns: repeat(auto-fit, 304px); /* Erstellt Spalten mit einer festen Breite von 250px */
-    grid-auto-rows: 220px; /* Setzt eine feste Höhe für jede Zeile */
-    gap: 40px; /* Legt den Abstand zwischen den Kategorien fest */
-    transition: all 0.5s ease;
-}
-
-
-
-
-.titleContainer {
-    /* Ihre vorhandenen Stile... */
-    display: flex;
-    justify-content: space-between;
-    width: 98%;
-    padding-bottom: 10px;
-}
-
-.categoryBar {
-    align-items: center;
-    background-color: #d1dce5;
-    display: flex;
-    flex-direction: column;
-    margin-left: 20px;
-    margin-top: 15px;
-    padding: 10px;
-    height: 200px; /* Passen Sie diesen Wert an, um die Höhe zu ändern */
-    width:304px;
-    border-radius: 10px;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.1s, transform 0.1s;
-}
-
-
-#GradeCreationPopupButton {
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: black;
-    cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    outline: none;
-    padding-bottom: 7px;
-    padding-top: 7px;
-    padding-right: 35px;
-    text-align: center;
-    transition: 0.2s ease;
-    width: auto;
-}
-
-
-#GradeEditPopupButton {
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: black;
-    cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    outline: none;
-    padding-bottom: 7px;
-    padding-top: 7px;
-    padding-right: 35px;
-    text-align: center;
-    transition: 0.2s ease;
-    width: auto;
-}
-
-
-.buttonsContainerKategorie {
-    display: flex;
-    justify-content: space-between;
-    width: 98%;
-    padding-bottom: 10px;
-}
-
-.gradesContainer {
-    overflow-y: auto;
-    max-height: 200px; 
-    width: 98%;
-    padding-bottom: 10px;
-    overflow-x: hidden;
-    margin-top: 10px;
-    padding-right: 5px;
-    
-}
-#GradeCreationPopupButton:hover {
-    background-color: #0056b3;
-}
-
-#GradeEditPopupButton:hover {
-    background-color: #0056b3;
-}
-
-
-#CategoriNameTitle {
-    color: #333333;
-    font-size: 20px;
-    text-align: left;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 180px;
-}
-
-
-#GewichtNameTitle {
-    color: #333333;
-    font-size: 20px;
-    text-align: right;
-    font-weight: bold;
-    
-}
-
-.categoryBar button {
-    height: 2em;
-    width: 100%;
-}
-
-.gradeElement {
-    display: flex;
-    margin: 5px;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 98%;
-    height: 13px;
-    margin-top: -2px;
-    padding-bottom: 5px;
-    
-}
-
-.gradesContainer::-webkit-scrollbar {
-    width: 8px; /* Breite der Scrollbar */
-    
-}
-
-.gradesContainer::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 5px;
-}
-
-
-.gradesContainer::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border: 2px solid transparent;
-    border-radius: 5px;
-}
-
-.gradesContainer::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    border-radius: 5px;
-    width: 12px; /* Farbe des beweglichen Teils der Scrollbar beim Überfahren mit der Maus */
-}
-
-
-#gradeDate {
-    color: #333333;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: left;
-
-}
-
-#gradeValue {
-    color: #333333;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: right;
-
-}
-
-.color-circle {
-    border-radius: 50%;
-    display: inline-block;
-    height: 20px;
-    width: 20px;
-}
-
-#noSubjectsMessage {
-    margin-top: 20px;
-    text-align: center;
-}
-
-
-
-
-
-
-
-.popup2 {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #dbebfa;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1002; /* Stellen Sie sicher, dass es über anderen Elementen liegt */
-    display: none; /* Standardmäßig nicht sichtbar */
-    width: 80%; /* Oder eine spezifische Breite */
-    max-width: 400px; /* Maximum Breite */
-}
-
-.popup-content2 {
-    text-align: center;
-}
-
-.popup-content2 button {
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.category-popup-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-#createCategory {
-    border: none;
-    border-radius: 10px;
-    color: #333333;
-    background-color: #007BFF;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    flex-grow: 1;
-    margin: 0 10px;
-    transition: 0.2s ease;
-}
-
-#createCategory:hover {
-    background-color: #0056b3;
-}
-
-#cancelCategory {
-    border: none;
-    border-radius: 10px;
-    color: #333333;
-    background-color: #6c757d;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    flex-grow: 1;
-    margin: 0 10px;
-    transition: 0.2s ease;
-}
-
-#cancelCategory:hover {
-    background-color: #545b62;
-}
-
-#categoryInput {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
-
-#weightInput {
-    border: 1px solid #ccc;
-    background-color: #ffffff !important;
-    border-radius: 10px;
-    width: 77px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    appearance: none; /* Entfernt den Standardpfeil */
-    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
-    background-position: 75% center;
-    background-size: 15px;
-}
-
-#categoryInput:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-#weightInput:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-#createCategory:disabled {
-  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-#createCategory:disabled:hover {
-    background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-    color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-#Fachname {
-    color: #000000;
-    font-size: 46px;
-    margin: 0;
-    padding-left: 20px;
-    padding-top: 20px;
-}
-
-
-
-.popup3 {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #dbebfa;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1005; /* Stellen Sie sicher, dass es über anderen Elementen liegt */
-    display: none; /* Standardmäßig nicht sichtbar */
-    width: 80%; /* Oder eine spezifische Breite */
-    max-width: 400px; /* Maximum Breite */
-}
-
-.popup-content3 {
-    text-align: center;
-}
-
-.popup-content3 button {
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.category-popup-buttons3 {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-#createNote {
-    border: none;
-    border-radius: 10px;
-    color: #333333;
-    background-color: #007BFF;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    flex-grow: 1;
-    margin: 0 10px;
-    transition: 0.2s ease;
-}
-
-#createNote:hover {
-    background-color: #0056b3;
-}
-
-#createNote:disabled{
-  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-#cancelNote {
-    border: none;
-    border-radius: 10px;
-    color: #333333;
-    background-color: #6c757d;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    flex-grow: 1;
-    margin: 0 10px;
-    transition: 0.2s ease;
-}
-
-#cancelNote:hover {
-    background-color: #545b62;
-}
-
-.gradeDateInput {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    font-weight: 500 !important;
-    color: #757575 !important;
-    font-size: 16px !important;
-}
-
-.gradeInput {
-    border: 1px solid #ccc;
-    background-color: #ffffff !important;
-    border-radius: 10px;
-    width: 77px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    appearance: none; /* Entfernt den Standardpfeil */
-    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
-    background-position: 75% center;
-    background-size: 15px;
-    color: #757575 !important;
-    font-size: 16px !important;
-    padding-right: 45px; /* Vergrößern Sie den Padding auf der rechten Seite */
-    text-align: left; /* Stellt sicher, dass der Text links ausgerichtet ist */
-    direction: rtl;
-    
-}
-
-.gradeDateInput:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-.gradeInpu:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-
-
-
-.editpopup {
-    background-color: #dbebfa;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
-    left: 50%;
-    padding: 20px;
-    position: fixed;
-    top: 50%;
-    width: 500px;
-    z-index: 1009;
-    opacity: 0;
-    transform: translate(-50%, -40%);
-    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
-}
-
-
-.editpopup.show {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-}
-
-
-.Editpopup-content {
-    text-align: center;
-}
-
-.Editpopup-content button {
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-#EditSubjectForm #EditFach:disabled {
-  background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-  color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-  border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-#EditSubjectForm #EditFach:disabled:hover {
-    background-color: #a6b8d4; /* Farbe für deaktivierten Zustand */
-    color: #6c757d; /* Farbe für den Text, der ebenfalls gedämpft erscheinen sollte */
-    border: 0px solid #a6b8d4; /* Optional: Anpassen der Border-Farbe */
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-#EditSubjectForm .button-container {
-    display: flex;
-    justify-content: space-between; /* This will place the buttons apart */
-    margin-top: 20px; /* Space above the buttons */
-}
-
-#EditSubjectForm .button-container button {
-    border: none;
-    border-radius: 10px;
-    color: black;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px; /* Adjust padding as needed */
-    flex-grow: 1; /* This will make buttons grow to fill the container */
-    margin: 0 10px; /* Space between buttons */
-    transition: 0.2s ease;
-}
-
-#EditSubjectForm .button-container button:hover {
-    background-color: #575757;
-}
-
-#EditSubjectForm #EditFach {
-    background-color: #007BFF; /* Adjust color as needed */
-}
-
-#EditSubjectForm #EditFach:hover {
-    background-color: #0056b3;
-}
-
-#EditSubjectForm #EditPopup {
-    background-color: #6c757d; /* Adjust color as needed */
-}
-
-#EditSubjectForm #EditPopup:hover {
-    background-color: #545b62;
-}
-
-
-#EditsubjectName {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 460px;
-}
-
-#EditsubjectName:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-.Editpopup-content label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.Editpopup-content input[type="text"] {
-    background-color: #f7f7f7;
-    border: none;
-    border-radius: 10px;
-    color: #333333;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 100%;
-    transition: 0.2s ease;
-}
-
-
-.popup5 {
-    background-color: #dbebfa;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
-    left: 50%;
-    padding: 20px;
-    position: fixed;
-    top: 50%;
-    transform: translate(-50%, -40%);
-    width: 460px;
-    z-index: 1010;
-    height: auto;
-
-}
-
-#editCategoryCheckboxIMG {
-    height: 20px;
-    width: 20px;
-    margin-right: 10px;
-    margin-top: 5px;
-}
-
-
-
-#editCategoryName {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
-
-#EditgradeWeight {
-    border: 1px solid #ccc;
-    background-color: #f7f7f7 !important;
-    border-radius: 10px;
-    width: 77px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    appearance: none; /* Entfernt den Standardpfeil */
-    background: url('assets/arrow.svg') no-repeat; /* Fügt Ihren benutzerdefinierten Pfeil hinzu */
-    background-position: 75% center;
-    background-size: 15px;
-    margin-right: 45px;
-}
-
-
-#EditgradeWeight:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-#editCategoryName:focus {
-    outline: none;
-    background-color: #ffffff;
-}
-
-#gradesList {
-    overflow-y: auto;
-    max-height: 100px; 
-    width: 98%;
-    padding-bottom: 10px;
-    overflow-x: hidden;
-    margin-top: 10px;
-    padding-right: 5px;
-    color: #333333;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    
-}
-
-#gradesList::-webkit-scrollbar {
-    width: 8px; /* Breite der Scrollbar */
-    
-}
-
-#gradesList::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 5px;
-}
-
-#gradesList::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border: 2px solid transparent;
-    border-radius: 5px;
-}
-
-#gradesList::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    border-radius: 5px;
-    width: 12px; /* Farbe des beweglichen Teils der Scrollbar beim Überfahren mit der Maus */
-}
-
-#gradesList::-webkit-scrollbar-track {
-    scrollbar-color: #888 transparent;
-    scrollbar-width: thin;
-}
-
-
-
-.Edit-category-popup-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-#closeEditCategoryPopup {
-    border: none;
-    align-self: flex-end;
-    border-radius: 10px;
-    color: black;
-    background-color: #6c757d;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    flex-grow: 1;
-    margin: 0 10px;
-    transition: 0.2s ease;
-    font-weight: bold;
-}
-
-#closeEditCategoryPopup:hover {
-    background-color: #545b62;
-}
-
-#saveCategoryChanges {
-    border: none;
-    border-radius: 10px;
-    color: black;
-    background-color: #007BFF;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    flex-grow: 1;
-    margin: 0 10px;
-    transition: 0.2s ease;
-    font-weight: bold;
-}
-
-#saveCategoryChanges:hover {
-    background-color: #0056b3;
-}
-
-
-/* Verstecken Sie die Standard-Checkbox */
-.custom-checkbox input[type="checkbox"] {
-    display: none;
-}
-
-/* Erstellen Sie eine neue Box */
-.custom-checkbox input[type="checkbox"] + label {
-    position: relative;
-    padding-left: 35px;
-    cursor: pointer;
-}
-
-.custom-checkbox input[type="checkbox"] + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 25px;
-    height: 25px;
-    border: 2px solid #000;
-    border-radius: 3px;
-}
-
-/* Überprüfen Sie die Box */
-.custom-checkbox input[type="checkbox"]:checked + label:after {
-    content: '';
-    position: absolute;
-    left: 9px;
-    top: 5px;
-    width: 8px;
-    height: 14px;
-    border: solid #000;
-    border-width: 0 3px 3px 0;
-    transform: rotate(45deg);
-}
-
-
-.context-menu {
-    background-color: #dbebfa;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    color: #333333;
-    left: 0;
-    padding: 10px;
-    position: absolute;
-    top: 0;
-    z-index: 1001;
-    border: none;
-    display: flex; /* Definiert einen Flex-Container */
-    flex-direction: column; /* Ordnet die Kinder in einer Spalte an */
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.2s, transform 0.1s;
-}
-#EditGradePopupButton {
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: black;
-    cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    outline: none;
-    padding-bottom: 7px;
-    padding-right: 35px;
-    padding-top: 7px;
-    text-align: left;
-    transition: 0.2s ease;
-}
-
-#EditGradePopupButton:hover {
-    background-color: #0056b3;
-}
-
-#DeleteGradePopupButton {
-    background-color: #ffcc80 ;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: #333333;
-    cursor: pointer;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 5px;
-    outline: none;
-    padding-bottom: 7px;
-    padding-right: 35px;
-    padding-top: 7px;
-    text-align: left;
-    transition: 0.2s ease;
-}
-
-#DeleteGradePopupButton:hover {
-    background-color: #ffad33;
-}
-
-
-.boxaverage {
-    align-items: top;
-    display: flex;
-    justify-content: flex-start;
-    margin-left: 20px;
-    margin-top: 15px;
-    flex-grow: 1;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.3s, transform 0.1s;
-}
-
-.boxcalculator {
-    align-items: top;
-    display: flex;
-    justify-content: flex-start;
-    margin-left: 20px;
-    margin-top: 15px;
-    flex-grow: 1;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.3s, transform 0.1s;
-}
-
-.boxcalculator .rectangleaverage {
-    background: #D1DCE5;
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 120px;
-    position: relative;
-    width: 100%;
-}
-
-.boxcalculator .rectangleaverage .title {
-    border-bottom: 1px #9da9b3 solid;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    color: #333333;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 13px;
-    text-align: center;
-}
-
-.boxcalculator .rectangleaverage .average-wrapper #overallAverage{
-    color: #333333;
-    font-size: 26px;
-    font-family: "Lato-Medium", Helvetica;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.boxaverage .rectangleaverage {
-    background: #D1DCE5;
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 120px;
-    position: relative;
-    width: 100%;
-}
-
-.boxaverage .rectangleaverage .title {
-    border-bottom: 1px #9da9b3 solid;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    color: #333333;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 13px;
-    text-align: center;
-}
-
-.boxaverage .rectangleaverage .average-wrapper #overallAverage{
-    color: #333333;
-    font-size: 26px;
-    font-family: "Lato-Medium", Helvetica;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.boxcontent {
+/* MainContentBoxStyles */
+.mainContentBox { 
     display: flex;
     justify-content: start;
     flex-direction: row;
     height: 555px;
     width: auto;
-
 }
 
-.boxgraph {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-left: 20px;
-    margin-top: 15px;
-    width: 400px;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.3s, transform 0.1s;
-}
-
-.boxgraph .boxcontent {
-    background: #D1DCE5;
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 405px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.boxgraph .boxcontent .chart-wrapper {
-    width: 100%; /* Setzt die Breite auf 100% des Elternelements */
-    padding: 0;
-}
-.boxgraphtitle {
-    border-bottom: 1px #9da9b3 solid;
-    color: #333333;
-    font-family: "Lato-Medium", Helvetica;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 13px;
-    text-align: center;
-    height: 23px;
-}
-
-#gradeChart {
-    overflow-x: scroll;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.boxgraph2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin-left: 20px;
-    margin-top: 15px;
-    width: 540px;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.3s, transform 0.1s;
-}
-
-.boxgraph2 .boxcontent {
-    background: #D1DCE5;
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 540px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.boxgraph2 .boxcontent .chart-wrapper {
-    width: 100%; /* Setzt die Breite auf 100% des Elternelements */
-    padding: 0;
-}
-
-
-#gradedistributionchart {
-    overflow-x: scroll;
-    margin-left: 5px;
-    margin-right: 5px;
-    height: 470px;
-    width: 520px;
-    align-items: center;
-}
-
-.average-container {
+.miniboxgroup {
     display: flex;
     justify-content: space-between;
-    
+}
+
+.rectangle {
+    background-color: var(--LightBlue); 
+    border-radius: 8px;  
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+ 
+
+.subjects-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 
-.trashcan-button {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    cursor: pointer;
-    position: absolute;
-    transition: all 0.2s ease-out;
-    height: 36.5px;
-    width: 40px;
-    margin-left: -42px;
+
+
+
+/* Einzelne Boxen */
+
+.FächerBox {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 550px;
+    min-width: 400px;
+}
+
+.DurschnittBox {
+    padding-top: 20px;
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    min-width: 200px;
+    text-align: center;
+}
+
+.RechnerBox {
+    padding-top: 20px;
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    min-width: 200px;
+    text-align: center;
+}
+
+.NotenentwicklungBox {
+    padding-top: 20px;
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 410px;
+    min-width: 420px;
+    text-align: center;
+}
+
+.NotenverteilungBox {
+    padding-top: 20px;
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 550px;
+    min-width: 420px;
+    text-align: center;
 }
 
 
-.trashcan-button.checked {
-    background-color: #ffad33; /* Farbe, wenn ausgewählt */
-}
-
-#editCategoryCheckboxIMG {
-align-items: center;    
-margin-left: 3px;
-margin-bottom: 1px;
-
-}
-
-
+/* POPUPS */
