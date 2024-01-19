@@ -103,15 +103,15 @@
                 <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
             </form>
             <div class="button-container">
-                <button class="button-container-buttons" type="submit" id="neuesFachPopup-create">Fach erstellen</button>
-                <button class="button-container-buttons" type="submit" id="neuesFachPopup-cancel">Schließen</button>
+                <button class="button-container-buttons button-container-buttons-save" type="submit" id="neuesFachPopup-create">Fach erstellen</button>
+                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="neuesFachPopup-cancel">Schließen</button>
             </div>
          </div>
     </div>
 
 
 
-    <div id="editFachPopup" class="FachPopup" style="display: block;">
+    <div id="editFachPopup" class="FachPopup" style="display: none;">
         <div class="FachPopupContent">
             <input type="text" id="editFachPopup-input" class="FachPopupInput" placeholder="Fachname">
             <form id="editFachPopup-input" class="FachPopupColor">               
@@ -130,8 +130,8 @@
                 <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
             </form>
             <div class="button-container">
-                <button class="button-container-buttons" type="submit" id="editFachPopup-save">Speichern</button>
-                <button class="button-container-buttons" type="submit" id="editFachPopup-cancel">Schließen</button>
+                <button class="button-container-buttons button-container-buttons-save" type="submit" id="editFachPopup-save">Speichern</button>
+                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="editFachPopup-cancel">Schließen</button>
             </div>
         </div>
     </div>
@@ -139,7 +139,7 @@
 
                                                 <!-- Kategorie Popups -->
 
-    <div id="neueKategoriePopup" class="KategoriePopup">
+    <div id="neueKategoriePopup" class="KategoriePopup" style="display: none;">
         <div class="KategoriePopupContent">
             <input type="text" id="KategoriePopup-input" class="neueKategoriePopupInput" placeholder="Kategoriename">
             <select id="neueKategoriePopup-select" class="KategoriePopupSelect">
@@ -153,15 +153,15 @@
                 <option value="2">2</option>
             </select>
             <div class="button-container">
-                <button class="button-container-buttons" type="submit" id="neueKategoriePopup-create">Kategorie erstellen</button>
-                <button class="button-container-buttons" type="submit" id="neueKategoriePopup-cancel">Schließen</button>
+                <button class="button-container-buttons button-container-buttons-save" type="submit" id="neueKategoriePopup-create">Kategorie erstellen</button>
+                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="neueKategoriePopup-cancel">Schließen</button>
             </div>
         </div>
     </div>
 
 
                                                 <!-- Noten Popups -->
-    <div id="neueNotePopup" class="NotePopup">
+    <div id="neueNotePopup" class="NotePopup" style="display: none;">
         <div class="NotePopupContent">
             <input type="date" id="NotePopup-input" class="NotePopupInput">
             <select id="NotePopup-select" class="NotePopupSelect">
@@ -173,14 +173,14 @@
                 <option value="6">6</option>
             </select>
             <div class="button-container">
-                <button class="button-container-buttons" type="submit" id="neueNotePopup-create">Note hinzufügen</button>
-                <button class="button-container-buttons" type="submit" id="neueNotePopup-cancel">Schließen</button>
+                <button class="button-container-buttons button-container-buttons-save" type="submit" id="neueNotePopup-create">Note hinzufügen</button>
+                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="neueNotePopup-cancel">Schließen</button>
             </div>
         </div>
     </div>
 
 
-    <div id="editNotePopup" class="NotePopup">
+    <div id="editNotePopup" class="NotePopup" style="display: none;">
         <div class="NotePopupContent">
             <input type="text" id="editNotePopup-input" class="NotePopupInput" placeholder="Kategoriename">
             <select id="editNotePopup-select" class="NotePopupSelect">
@@ -194,8 +194,8 @@
             <button class="trashcan-button" id="Notetrashcan-button"><img src="assets/trashcan.svg" alt="Löschen" class="trashcan-button-img"></button>
             <div id="editNotePopupList"></div>
             <div class="button-container">
-                <button class="button-container-buttons" type="submit" id="editNotePopup-save">Speichern</button>
-                <button class="button-container-buttons" type="submit" id="editNotePopup-cancel">Schließen</button>
+                <button class="button-container-buttons button-container-buttons-save" type="submit" id="editNotePopup-save">Speichern</button>
+                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="editNotePopup-cancel">Schließen</button>
             </div>
         </div>
     </div>
