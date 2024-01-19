@@ -278,9 +278,14 @@ body {
     border: 1px solid #ccc;
     border-radius: var(--BorderRadius);
     width: 90%;
-    height: 35px;
+    height: 40px;
     margin-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    transition: var(--transition);
 }
+
 
 .FachPopupInput:focus {
     outline: none;
@@ -295,4 +300,152 @@ body {
     margin: 0 auto;
     width: 90%; 
     padding: 15px 0;
+}
+
+/* KategoriePopup */
+.KategoriePopup {
+    background-color: var(--PopupBackground);
+    border-radius: var(--BorderRadius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    min-width: 350px;
+    max-width: 610px;
+    z-index: 1000;
+}
+
+.KategoriePopupContent {
+    text-align: center;
+}
+
+.KategoriePopupInput {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: var(--BorderRadius);
+    width: 75%;
+    height: 40px;
+    margin-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.KategoriePopupInput:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+.KategoriePopupSelect {
+    border: 1px solid #ccc;
+    border-radius: var(--BorderRadius);
+    width: 15%;
+    height: 40px;
+    margin-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    transition: var(--transition);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('assets/arrow.svg') no-repeat 75% center, #f7f7f7;
+    background-size: 13px;
+}
+.KategoriePopupSelect:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* NotePopup */
+.NotePopup {
+    background-color: var(--PopupBackground);
+    border-radius: var(--BorderRadius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    min-width: 350px;
+    max-width: 610px;
+    z-index: 1000;
+    height: auto;
+}
+
+.NotePopupContent {
+    text-align: center;
+}
+
+.NotePopupInput {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: var(--BorderRadius);
+    width: 64%;
+    height: 40px;
+    margin-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.NotePopupInput:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+.NotePopupSelect {
+    border: 1px solid #ccc;
+    border-radius: var(--BorderRadius);
+    width: 15%;
+    height: 40px;
+    margin-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    transition: var(--transition);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('assets/arrow.svg') no-repeat 75% center, #f7f7f7;
+    background-size: 13px;
+}
+
+.NotePopupSelect:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* editNotePopup */
+.trashcan-button {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: var(--BorderRadius);
+    width: 10%; 
+    height: 40px;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.trashcan-button:focus {
+    outline: none;
+    background-color: #ffffff;
+}
+
+.trashcan-button:hover {
+    background-color: #e6e6e6;
+}
+
+.trashcan-button:active {
+    background-color: #d9d9d9;
+}
+
+.trashcan-button-img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
 }
