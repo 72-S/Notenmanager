@@ -428,8 +428,8 @@ body {
 /* editNotePopup */
 .trashcan-button {
     background-color: #f7f7f7;
-    height: 40px; /* Gleiche Höhe für alle */
-    padding: 0 10px; /* Gleiche padding für alle */
+    height: 40px; 
+    padding: 0 10px;
     border: 1px solid #ccc;
     border-radius: var(--BorderRadius);
     transition: var(--transition);
