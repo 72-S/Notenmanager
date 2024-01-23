@@ -113,7 +113,6 @@ class PushLocalDataToDB {
                         addSubjectToUI(subject.name, subject.color, newId);
                     });
                 } else if (subject.action === "overwrite") {
-                    console.log("overwrite");
                     const subjectRef = db.child(subject.id);
                     subjectRef.update({
                         name: subject.name,
@@ -159,8 +158,8 @@ class PushLocalDataToDB {
                 } else if (category.action === "overwrite") {
                     const categoryRef = db.child(category.id);
                     categoryRef.update({
-                        name: category.name,
-                        color: category.color
+                        name: category.name, 
+                        weight: category.weight
                     });
                     category.action = "get";
                 } else if (category.action === "delete") {
@@ -211,12 +210,20 @@ class PushLocalDataToDB {
 function openSubjectPage(id, name) {
     document.getElementById("mainContent").style.display = "none";
     document.getElementById("subjectContent").style.display = "block";
-
+    document.getElementById("neueKategoriePopup").setAttribute("category-data-subject-id", id);
+    document.getElementById("FachName").textContent = name;
+    Object.values(localCategories).forEach(categoryArray => {
+        categoryArray.forEach(category => {
+            if (category.subjectId === id) {
+                addCategoryToUI(category.name, category.weight, category.id, category.subjectId);
+            }
+        });
+    });
 }
 
 
 //function to add Category to UI
-function addCategoryToUI(name, weight, id) {
+function addCategoryToUI(name, weight, id, subjectId, categoryId) {
     const container = document.getElementsByClassName("categoriesContainer")[0];
     if (!container) {
         return console.error("Container not found");
@@ -225,17 +232,21 @@ function addCategoryToUI(name, weight, id) {
     box.classList.add("category-box");
     box.id = id;
 
-    const categoryName = document.createElement("p");
-    categoryName.classList.add("category-name");
-    categoryName.textContent = name;
+    box.innerHTML = `
+        <div class="titleContainer">
+            <span id="category-name">${name}</span>
+            <span id="category-weight">x ${weight}</span>
+        </div>
+        <div class="buttonsContainerKategorie">
+        <button class="neuesFachButton" onclick="openGradeCreationPopup('${name}', '${subjectId}', '${categoryId}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" onclick="openGradeEditPopup('${name}', '${subjectId}', '${weight}', '${categoryId}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
+        </div>
+        <div class="gradesContainer"></div>
+        `;
 
-    const categoryWeight = document.createElement("p");
-    categoryWeight.classList.add("category-weight");
-    categoryWeight.textContent = weight;
+
 
     container.appendChild(box);
-    box.appendChild(categoryName);
-    box.appendChild(categoryWeight);
 }
 
 
@@ -318,6 +329,13 @@ function removeAllSubjectsFromUI() {
     const subjectBoxes = document.getElementsByClassName("subject-box");
     while (subjectBoxes.length > 0) {
         subjectBoxes[0].parentNode.removeChild(subjectBoxes[0]);
+    }
+}
+
+function removeAllCategoriesFromUI() {
+    const categoryBoxes = document.getElementsByClassName("category-box");
+    while (categoryBoxes.length > 0) {
+        categoryBoxes[0].parentNode.removeChild(categoryBoxes[0]);
     }
 }
 
@@ -420,14 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
-    saveLocalData.loadCategories(function () {
-        Object.values(localCategories).forEach(categoryArray => {
-            categoryArray.forEach(category => {
-                addCategoryToUI(category.name, category.weight, category.id);
-            });
-        });
-    
-    });
+    saveLocalData.loadCategories();
     saveLocalData.loadGrades();
 
     
@@ -494,14 +505,27 @@ document.getElementById("neueKategorieButtonClick").addEventListener("click", fu
     popup.style.display = "block";
 });
 
+document.getElementById("zurückZurMainPage").addEventListener("click", function () {
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("subjectContent").style.display = "none";
+    removeAllCategoriesFromUI();
+});
+
 document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neueKategoriePopup');
     popup.style.display = "none";
 });
 
-document.getElementById("zurückZurMainPage").addEventListener("click", function () {
-    document.getElementById("mainContent").style.display = "block";
-    document.getElementById("subjectContent").style.display = "none";
+document.getElementById("neueKategoriePopup-create").addEventListener("click", function () {
+    const popup = document.getElementById('neueKategoriePopup');
+    const name = document.getElementById("neueKategoriePopup-input").value;
+    const weight = document.getElementById("neueKategoriePopup-select").value;
+    const subjectId = popup.getAttribute('category-data-subject-id');
+    if (name === "") {
+        return;
+    }
+    pushCategoryClass("", name, weight, subjectId, "push");
+    popup.style.display = "none";
 });
 
 });
