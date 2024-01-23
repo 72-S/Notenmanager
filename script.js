@@ -205,8 +205,12 @@ function addSubjectToUI(name, color, id) {
     }
     const box = document.createElement("div");
     box.classList.add("subject-box");
+    box.id = id;
     box.style.backgroundColor = color;
-    box.textContent = name;
+
+    const subjectName = document.createElement("p");
+    subjectName.classList.add("subject-name");
+    subjectName.textContent = name;
 
     const average = document.createElement("p");
     average.classList.add("subject-average");
@@ -231,12 +235,16 @@ function addSubjectToUI(name, color, id) {
         document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
     });
     container.appendChild(box);
+    box.appendChild(subjectName);
     box.appendChild(average);
 }
 
 
 editSubject = (id) => {
     const popup = document.getElementById('editFachPopup');
+    const contextMenu = document.querySelector('.context-menu');
+    contextMenu.remove();
+    popup.setAttribute('data-subject-id', id);
     popup.style.display = "block";
 }
 
@@ -363,6 +371,27 @@ document.getElementById("neuesFachPopup-create").addEventListener("click", funct
     }
     pushSubjectClass("", name, color, "push");
     popup.style.display = "none";
+    resetFachPopup();
+});
+
+document.getElementById("editFachPopup-cancel").addEventListener("click", function () {
+    const popup = document.getElementById('editFachPopup');
+    popup.style.display = "none";
+});
+
+document.getElementById("editFachPopup-save").addEventListener("click", function () {
+    const popup = document.getElementById('editFachPopup');
+    const name = document.getElementById("editFachPopup-input").value;
+    const color = selectedColor;
+    const id = popup.getAttribute('data-subject-id');
+    const subjectBox = document.getElementById(id);
+    if (name === "") {
+        return;
+    }
+    pushSubjectClass(id, name, color, "overwrite");
+    popup.style.display = "none";
+    subjectBox.style.backgroundColor = color;
+    subjectBox.getElementsByClassName("subject-name")[0].textContent = name;
     resetFachPopup();
 });
 });
