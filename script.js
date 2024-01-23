@@ -340,16 +340,15 @@ function addGradeToUI(value, date, categoryId, id) {
     if (!container) {
         return console.error("Grade Container not found");
     }
-    const gradeValue = document.createElement("p");
-    gradeValue.classList.add("grade-value");
-    gradeValue.textContent = value;
 
-    const gradeDate = document.createElement("p");
-    gradeDate.classList.add("grade-date");
-    gradeDate.textContent = date;
-
-    container.appendChild(gradeValue);
-    container.appendChild(gradeDate);
+    const gradeElement = document.createElement('div');
+    gradeElement.className = 'gradeElement';
+    gradeElement.innerHTML = ` 
+        <span id="gradeDate" class="grade">${date}</span>
+        <span id="gradeValue" class="grade">${value}</span>
+        
+    `;
+    container.appendChild(gradeElement);
 }
 
 
@@ -565,6 +564,7 @@ document.getElementById("neuesFachPopup-cancel").addEventListener("click", funct
 
 document.getElementById("neuesFachPopup-create").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
+    const noSubjectMessage = document.getElementById("noSubjectMessage");
     const name = document.getElementById("neusFachPopup-input").value;
     const color = selectedColor;
     if (name === "") {
@@ -572,6 +572,7 @@ document.getElementById("neuesFachPopup-create").addEventListener("click", funct
     }
     pushSubjectClass("", name, color, "push");
     popup.style.display = "none";
+    noSubjectMessage.style.display = "none";
     resetFachPopup();
 });
 
