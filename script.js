@@ -138,12 +138,24 @@ class PushLocalDataToDB {
         Object.values(localCategories).forEach(categoryArray => {
             categoryArray.forEach(category => {
                 if (category.action === "push") {
-                    db.push({
+                    const newRef = db.push();
+                    newRef.set({
                         name: category.name,
                         weight: category.weight,
                         subjectId: category.subjectId
                     });
-                    category.action = "get";
+                    newRef.then((ref) => {
+                        const newId = ref.key;
+                        localCategories[newId] = [{
+                            id: newId, 
+                            name: category.name, 
+                            weight: category.weight,
+                            subjectId: category.subjectId,
+                            action: "get"
+                        }];
+                        delete localCategories[category.id];
+                        addCategoryToUI(category.name, category.weight, newId);
+                    });
                 } else if (category.action === "overwrite") {
                     const categoryRef = db.child(category.id);
                     categoryRef.update({
@@ -153,7 +165,11 @@ class PushLocalDataToDB {
                     category.action = "get";
                 } else if (category.action === "delete") {
                     const categoryRef = db.child(category.id);
-                    categoryRef.remove();
+                    categoryRef.remove().then(() => {
+                        if (localCategories[category.id]) {
+                            delete localCategories[category.id];
+                        }
+                    });
                     category.action = "get";
                 }
             });
@@ -216,10 +232,6 @@ function addCategoryToUI(name, weight, id) {
     const categoryWeight = document.createElement("p");
     categoryWeight.classList.add("category-weight");
     categoryWeight.textContent = weight;
-
-    box.addEventListener("click", function () {
-        openCategoryPage(id, name);
-    });
 
     container.appendChild(box);
     box.appendChild(categoryName);
@@ -354,6 +366,44 @@ function pushSubjectClass(id, name, color, action) {
 }
 
 
+function pushCategoryClass(id, name, weight, subjectId, action) {
+    const tempId = Date.now();
+    if (action === "overwrite") {
+        const existingCategoryIndex = localCategories[id].findIndex(category => category.id === id);
+        if (existingCategoryIndex !== -1) {
+            localCategories[id][existingCategoryIndex] = {
+                id: id,
+                name: name,
+                weight: weight,
+                subjectId: subjectId,
+                action: "overwrite"
+            };
+        }
+    } 
+    else if (action === "delete") {
+        localCategories[id] = [{
+            id: id, 
+            name: name, 
+            weight: weight, 
+            subjectId: subjectId,
+            action: "delete" 
+        }]
+    }
+    else if (action === "push") {
+        localCategories[tempId] = [{ 
+            id: tempId, 
+            name: name, 
+            weight: weight, 
+            subjectId: subjectId,
+            action: "push" 
+        }];
+    }
+    if (action === "push" || action === "overwrite" || action === "delete") {
+        const pushData = new PushLocalDataToDB();
+        pushData.pushCategories();
+    }
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const saveLocalData = new SaveLocalDataFromDB();
@@ -370,7 +420,14 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
-    saveLocalData.loadCategories();
+    saveLocalData.loadCategories(function () {
+        Object.values(localCategories).forEach(categoryArray => {
+            categoryArray.forEach(category => {
+                addCategoryToUI(category.name, category.weight, category.id);
+            });
+        });
+    
+    });
     saveLocalData.loadGrades();
 
     
