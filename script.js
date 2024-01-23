@@ -287,8 +287,8 @@ function editGrades(name, subjectId, weight, categoryId) {
     popup.style.display = "block";
     popup.setAttribute('data-category-subject-id', subjectId);
     popup.setAttribute('data-category-category-id', categoryId);
-    document.getElementById("editKategoriePopup-input").value = name;
-    document.getElementById("editKategoriePopup-select").value = weight;
+    document.getElementById("editNotePopup-input").value = name;
+    document.getElementById("editNotePopup-select").value = weight;
 }
 
 //funktion to add Subject to UI
@@ -332,7 +332,7 @@ function addSubjectToUI(name, color, id) {
     
         document.body.insertAdjacentHTML('beforeend', contextMenuHTML);
     
-        document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id));
+        document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, color, name));
         document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
     });
     container.appendChild(box);
@@ -359,11 +359,22 @@ function addGradeToUI(value, date, categoryId, id) {
 }
 
 
-editSubject = (id) => {
+editSubject = (id, color, name) => {
     const popup = document.getElementById('editFachPopup');
     const contextMenu = document.querySelector('.context-menu');
     contextMenu.remove();
     popup.setAttribute('data-subject-id', id);
+    document.getElementById("editFachPopup-input").value = name;
+    const colorChoices = document.querySelectorAll('.color-choice');
+    colorChoices.forEach(colorChoice => {
+        colorChoice.classList.remove('selected');
+    });  
+    colorChoices.forEach(colorChoice => {
+        if (colorChoice.getAttribute('data-color') === color) {
+            colorChoice.classList.add('selected');
+        }
+    });
+    
     popup.style.display = "block";
 }
 
