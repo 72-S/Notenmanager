@@ -153,7 +153,7 @@ class PushLocalDataToDB {
                             action: "get"
                         }];
                         delete localCategories[category.id];
-                        addCategoryToUI(category.name, category.weight, newId);
+                        addCategoryToUI(category.name, category.weight, newId, category.subjectId);
                     });
                 } else if (category.action === "overwrite") {
                     const categoryRef = db.child(category.id);
