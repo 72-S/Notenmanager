@@ -8,5 +8,4 @@ const firebaseConfig = {
     appId: "1:21273119934:web:8448400bde5c124f1aa2ef",
     measurementId: "G-Q7YMZ047F0"
 };
-
-firebaseConfig.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
