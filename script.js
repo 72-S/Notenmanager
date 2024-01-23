@@ -184,6 +184,7 @@ class PushLocalDataToDB {
                     newRef.set({
                         value: grade.value,
                         date: grade.date,
+                        subjectId: grade.subjectId,
                         categoryId: grade.categoryId
                     });
                     newRef.then((ref) => {
@@ -192,11 +193,12 @@ class PushLocalDataToDB {
                             id: newId, 
                             value: grade.value,
                             date: grade.date,
+                            subjectId: grade.subjectId,
                             categoryId: grade.categoryId,
                             action: "get"
                         }];
                         delete localGrades[grade.id];
-                        addGradeToUI(grade.value, grade.date, grade.subjectId, grade.categoryId, newId);
+                        addGradeToUI(grade.value, grade.date, grade.categoryId, newId);
                     });
                 } else if (grade.action === "overwrite") {
                     const gradeRef = db.child(grade.id);
@@ -247,7 +249,7 @@ function openSubjectPage(id, name) {
 function addCategoryToUI(name, weight, id, subjectId) {
     const container = document.getElementsByClassName("categoriesContainer")[0];
     if (!container) {
-        return console.error("Container not found");
+        return console.error("Category Container not found");
     }
     const box = document.createElement("div");
     box.classList.add("category-box");
@@ -259,7 +261,7 @@ function addCategoryToUI(name, weight, id, subjectId) {
             <span id="category-weight">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
-        <button class="neuesFachButton" onclick="createGrade('${name}', '${subjectId}', '${id}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" onclick="createGrade('${subjectId}', '${id}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
         <button class="neuesFachButton" onclick="editGrades('${name}', '${subjectId}', '${weight}', '${id}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
         </div>
         <div id="gradesContainer${id}" class="gradesContainer"></div>
@@ -272,7 +274,7 @@ function addCategoryToUI(name, weight, id, subjectId) {
 
 
 
-function createGrade(name, subjectId, categoryId) {
+function createGrade(subjectId, categoryId) {
     const popup = document.getElementById('neueNotePopup');
     popup.style.display = "block";
     popup.setAttribute('data-grade-subject-id', subjectId);
@@ -288,7 +290,7 @@ function addSubjectToUI(name, color, id) {
 
     const container = document.getElementsByClassName("subjects-wrapper")[0];
     if (!container) {
-        return console.error("Container not found");
+        return console.error("Subject Container not found");
     }
     const box = document.createElement("div");
     box.classList.add("subject-box");
@@ -333,9 +335,10 @@ function addSubjectToUI(name, color, id) {
 
 
 function addGradeToUI(value, date, categoryId, id) {
+    console.log(value, date, categoryId, id);
     const container = document.getElementById("gradesContainer" + categoryId);
     if (!container) {
-        return console.error("Container not found");
+        return console.error("Grade Container not found");
     }
     const gradeValue = document.createElement("p");
     gradeValue.classList.add("grade-value");
@@ -345,8 +348,8 @@ function addGradeToUI(value, date, categoryId, id) {
     gradeDate.classList.add("grade-date");
     gradeDate.textContent = date;
 
-    box.appendChild(gradeValue);
-    box.appendChild(gradeDate);
+    container.appendChild(gradeValue);
+    container.appendChild(gradeDate);
 }
 
 
@@ -473,7 +476,7 @@ function pushCategoryClass(id, name, weight, subjectId, action) {
 }
 
 
-function pushGradeClass(id, value, date, categoryId, action) {
+function pushGradeClass(id, value, date, subjectId, categoryId, action) {
     const tempId = Date.now();
     if (action === "overwrite") {
         const existingGradeIndex = localGrades[id].findIndex(grade => grade.id === id);
@@ -482,6 +485,7 @@ function pushGradeClass(id, value, date, categoryId, action) {
                 id: id,
                 value: value,
                 date: date,
+                subjectId: subjectId,
                 categoryId: categoryId,
                 action: "overwrite"
             };
@@ -492,6 +496,7 @@ function pushGradeClass(id, value, date, categoryId, action) {
             id: id, 
             value: value, 
             date: date, 
+            subjectId: subjectId,
             categoryId: categoryId,
             action: "delete" 
         }]
@@ -501,6 +506,7 @@ function pushGradeClass(id, value, date, categoryId, action) {
             id: tempId, 
             value: value, 
             date: date, 
+            subjectId: subjectId,
             categoryId: categoryId,
             action: "push" 
         }];
@@ -633,7 +639,7 @@ document.getElementById("neueNotePopup-create").addEventListener("click", functi
     if (date === "") {
         return;
     }
-    pushGradeClass("", value, date, categoryId, "push");
+    pushGradeClass("", value, date, subjectId, categoryId, "push");
     popup.style.display = "none";
 });
 
