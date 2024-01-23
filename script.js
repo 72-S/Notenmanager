@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 let localSubjects = {};
 let localCategories = {};
 let localGrades = {};
-
+let selectedColor = '';
 
 
 class SaveLocalDataFromDB {
@@ -110,6 +110,7 @@ class PushLocalDataToDB {
                             action: "get"
                         }];
                         delete localSubjects[subject.id];
+                        addSubjectToUI(subject.name, subject.color, newId);
                     });
                 } else if (subject.action === "overwrite") {
                     console.log("overwrite");
@@ -241,6 +242,10 @@ editSubject = (id) => {
 
 
 deleteSubject = (id, box) => {
+    const contextMenu = document.querySelector('.context-menu');
+    contextMenu.remove();
+    box.remove();
+    pushSubjectClass(id, "", "", "delete");
 }
 
 
@@ -324,6 +329,17 @@ document.getElementById("neuesFachButtonClick").addEventListener("click", functi
  
 document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
+    popup.style.display = "none";
+});
+
+document.getElementById("neuesFachPopup-create").addEventListener("click", function () {
+    const popup = document.getElementById('neuesFachPopup');
+    const name = document.getElementById("neusFachPopup-input").value;
+    const color = "#000000";
+    if (name === "") {
+        return;
+    }
+    pushSubjectClass("", name, color, "push");
     popup.style.display = "none";
 });
 
