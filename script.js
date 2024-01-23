@@ -17,7 +17,7 @@ let localGrades = {};
 
 
 
-class SaveLocalData {
+class SaveLocalDataFromDB {
     loadSubjects(callback) {
         const db = firebase.database().ref("subjects");
         db.once('value', snapshot => {
@@ -90,16 +90,37 @@ class SaveLocalData {
 }
 
 
-class PushLocalData {
+class PushLocalDataToDB {
     pushSubjects() {
         const db = firebase.database().ref("subjects");
         Object.values(localSubjects).forEach(subjectArray => {
             subjectArray.forEach(subject => {
                 if (subject.action === "push") {
-                    db.push({
+                    const newRef = db.push();
+                    newRef.set({
                         name: subject.name,
                         color: subject.color
                     });
+                    newRef.then((ref) => {
+                        const newId = ref.key;
+                        localSubjects[newId] = [{
+                            id: newId, 
+                            name: subject.name, 
+                            color: subject.color,
+                            action: "get"
+                        }];
+                        delete localSubjects[subject.id];
+                    });
+                } else if (subject.action === "overwrite") {
+                    const subjectRef = db.child(subject.id);
+                    subjectRef.update({
+                        name: subject.name,
+                        color: subject.color
+                    });
+                    subject.action = "get";
+                } else if (subject.action === "delete") {
+                    const subjectRef = db.child(subject.id);
+                    subjectRef.remove();
                     subject.action = "get";
                 }
             });
@@ -116,6 +137,17 @@ class PushLocalData {
                         weight: category.weight,
                         subjectId: category.subjectId
                     });
+                    category.action = "get";
+                } else if (category.action === "overwrite") {
+                    const categoryRef = db.child(category.id);
+                    categoryRef.update({
+                        name: category.name,
+                        color: category.color
+                    });
+                    category.action = "get";
+                } else if (category.action === "delete") {
+                    const categoryRef = db.child(category.id);
+                    categoryRef.remove();
                     category.action = "get";
                 }
             });
@@ -135,11 +167,24 @@ class PushLocalData {
                         categoryId: grade.categoryId
                     });
                     grade.action = "get";
+                } else if (grade.action === "overwrite") {
+                    const gradeRef = db.child(grade.id);
+                    gradeRef.update({
+                        name: grade.name,
+                        color: grade.color
+                    });
+                    subject.action = "get";
+                } else if (grade.action === "delete") {
+                    const gradeRef = db.child(grade.id);
+                    gradeRef.remove();
+                    grade.action = "get";
                 }
             });
         });
     }
 }
+
+
 
 
 
@@ -191,8 +236,7 @@ editSubject = (id) => {
 
 
 deleteSubject = (id, box) => {
-
-
+    pushSubjectClass('TEST_ID', 'PENIS', '#ff0000', 'push');
 }
 
 
@@ -204,24 +248,52 @@ function removeAllSubjectsFromUI() {
     }
 }
 
-function UploadSubject(id, name, color, action) {
-    if (!localSubjects[id]) {
-        localSubjects[id] = [];
+function pushSubjectClass(id, name, color, action) {
+    const tempId = Date.now();
+    if (action === "overwrite") {
+        const existingSubjectIndex = localSubjects[id].findIndex(subject => subject.id === id);
+        if (existingSubjectIndex !== -1) {
+            localSubjects[id][existingSubjectIndex] = {
+                id: id,
+                name: name,
+                color: color,
+                action: "overwrite"
+            };
+        } else {
+            localSubjects[id].push({
+                id: id,
+                name: name,
+                color: color,
+                action: "overwrite"
+            });
+        }
+    } 
+    else if (action === "delete") {
+        if (localSubjects[id]) {
+            localSubjects[id] = localSubjects[id].filter(subject => subject.id !== id);
+            if (localSubjects[id].length === 0) {
+                delete localSubjects[id];
+            }
+        }
     }
-    localSubjects[id].push({
-        id: id,
-        name: name,
-        color: color,
-        action: action
-    });
+    else if (action === "push") {
+        localSubjects[tempId] = [{ 
+            id: tempId, 
+            name: name, 
+            color: color, 
+            action: "push" 
+        }];
+    }
+    if (action === "push" || action === "overwrite" || action === "delete") {
+        const pushData = new PushLocalDataToDB();
+        pushData.pushSubjects();
+    }
 }
 
 
+
 document.addEventListener("DOMContentLoaded", function () {
-    const pushLocalData = new PushLocalData();
-    UploadSubject('subject1', 'Mathematik', '#ff0000', 'get');
-    pushLocalData.pushSubjects();
-    const saveLocalData = new SaveLocalData();
+    const saveLocalData = new SaveLocalDataFromDB();
     saveLocalData.loadSubjects(function () {
         const noSubjectMessage = document.getElementById("noSubjectMessage");
         if (Object.keys(localSubjects).length === 0) {
