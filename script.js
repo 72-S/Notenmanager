@@ -39,7 +39,7 @@ class SaveLocalData {
         });
     }
 
-    loadCategories() {
+    loadCategories(callback) {
         const db = firebase.database().ref("categories");
         db.once('value', snapshot => {
             snapshot.forEach(childSnapshot => {
@@ -55,10 +55,13 @@ class SaveLocalData {
                     subjectId: category.subjectId
                 });
             });
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
         });
     }
 
-    loadGrades() {
+    loadGrades(callback) {
         const db = firebase.database().ref("grades");
         db.once('value', snapshot => {
             snapshot.forEach(childSnapshot => {
@@ -76,6 +79,9 @@ class SaveLocalData {
                     categoryId: grade.categoryId
                 });
             });
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
         });
     }
 }
@@ -143,7 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
             Object.values(localSubjects).forEach(subjectArray => {
                 subjectArray.forEach(subject => {
                     addSubjectToUI(subject.name, subject.color, subject.id);
-                    console.log(subject.name, subject.color, subject.id);
                 });
             });
         }
