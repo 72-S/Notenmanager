@@ -191,7 +191,13 @@ class PushLocalDataToDB {
 }
 
 
-//STYLE BLOCK FUNKTIONS
+//function to open subject page
+function openSubjectPage(id, name) {
+    document.getElementById("mainContent").style.display = "none";
+    
+}
+
+
 
 
 
@@ -215,6 +221,11 @@ function addSubjectToUI(name, color, id) {
     const average = document.createElement("p");
     average.classList.add("subject-average");
     average.textContent = "0.0";
+
+
+    box.addEventListener("click", function () {
+        openSubjectPage(id, name);
+    });
 
     box.addEventListener("contextmenu", function (event) {
         event.preventDefault();
