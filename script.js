@@ -248,6 +248,13 @@ deleteSubject = (id, box) => {
     pushSubjectClass(id, "", "", "delete");
 }
 
+function selectColor(element) {
+    document.querySelectorAll('.color-choice').forEach(colorElement => {
+        colorElement.classList.remove('selected');
+    });
+    element.classList.add('selected');
+    selectedColor = element.getAttribute('data-color');
+}
 
 //funktion to remove Subject from UI
 function removeAllSubjectsFromUI() {
@@ -255,6 +262,15 @@ function removeAllSubjectsFromUI() {
     while (subjectBoxes.length > 0) {
         subjectBoxes[0].parentNode.removeChild(subjectBoxes[0]);
     }
+}
+
+function resetFachPopup() {
+    document.getElementsByClassName("FachPopupInput")[0].value = "";
+    const colorChoices = document.querySelectorAll('.color-choice');
+    colorChoices.forEach(colorChoice => {
+        colorChoice.classList.remove('selected');
+    });
+    selectedColor = '';
 }
 
 function pushSubjectClass(id, name, color, action) {
@@ -322,6 +338,11 @@ document.addEventListener('click', function (event) {
     }
 });
 
+document.querySelectorAll('.color-choice').forEach(span => {
+    span.addEventListener('click', () => selectColor(span));
+
+});
+
 document.getElementById("neuesFachButtonClick").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
     popup.style.display = "block";
@@ -330,17 +351,18 @@ document.getElementById("neuesFachButtonClick").addEventListener("click", functi
 document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
     popup.style.display = "none";
+    resetFachPopup();
 });
 
 document.getElementById("neuesFachPopup-create").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
     const name = document.getElementById("neusFachPopup-input").value;
-    const color = "#000000";
+    const color = selectedColor;
     if (name === "") {
         return;
     }
     pushSubjectClass("", name, color, "push");
     popup.style.display = "none";
+    resetFachPopup();
 });
-
 });
