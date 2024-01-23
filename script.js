@@ -112,6 +112,7 @@ class PushLocalDataToDB {
                         delete localSubjects[subject.id];
                     });
                 } else if (subject.action === "overwrite") {
+                    console.log("overwrite");
                     const subjectRef = db.child(subject.id);
                     subjectRef.update({
                         name: subject.name,
@@ -120,7 +121,11 @@ class PushLocalDataToDB {
                     subject.action = "get";
                 } else if (subject.action === "delete") {
                     const subjectRef = db.child(subject.id);
-                    subjectRef.remove();
+                    subjectRef.remove().then(() => {
+                        if (localSubjects[subject.id]) {
+                            delete localSubjects[subject.id];
+                        }
+                    });
                     subject.action = "get";
                 }
             });
@@ -185,7 +190,7 @@ class PushLocalDataToDB {
 }
 
 
-
+//STYLE BLOCK FUNKTIONS
 
 
 
@@ -236,7 +241,6 @@ editSubject = (id) => {
 
 
 deleteSubject = (id, box) => {
-    pushSubjectClass('TEST_ID', 'PENIS', '#ff0000', 'push');
 }
 
 
@@ -259,22 +263,15 @@ function pushSubjectClass(id, name, color, action) {
                 color: color,
                 action: "overwrite"
             };
-        } else {
-            localSubjects[id].push({
-                id: id,
-                name: name,
-                color: color,
-                action: "overwrite"
-            });
         }
     } 
     else if (action === "delete") {
-        if (localSubjects[id]) {
-            localSubjects[id] = localSubjects[id].filter(subject => subject.id !== id);
-            if (localSubjects[id].length === 0) {
-                delete localSubjects[id];
-            }
-        }
+        localSubjects[id] = [{
+            id: id, 
+            name: name, 
+            color: color, 
+            action: "delete" 
+        }]
     }
     else if (action === "push") {
         localSubjects[tempId] = [{ 
@@ -320,7 +317,14 @@ document.addEventListener('click', function (event) {
     }
 });
 
-
-
+document.getElementById("neuesFachButtonClick").addEventListener("click", function () {
+    const popup = document.getElementById('neuesFachPopup');
+    popup.style.display = "block";
+});
+ 
+document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
+    const popup = document.getElementById('neuesFachPopup');
+    popup.style.display = "none";
+});
 
 });
