@@ -436,9 +436,10 @@ body {
 
 .NotePopupContentSelector {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
+    padding-left: 16px;
+    padding-right: 17px;
+    padding-top: 15px;
+    gap: 3px;
 }
 
 .NotePopupInput {
@@ -449,9 +450,12 @@ body {
     height: 40px;
     padding-left: 10px;
     padding-right: 10px;
-    margin-top: 15px;
     box-sizing: border-box;
     transition: var(--transition);
+}
+
+#neueNotePopup-input {
+    margin-top: 15px;
 }
 
 .NotePopupInput:focus {
@@ -488,6 +492,7 @@ body {
     border: 1px solid #ccc;
     border-radius: var(--BorderRadius);
     transition: var(--transition);
+    cursor: pointer;
 }
 
 .trashcan-button:focus {
@@ -523,10 +528,10 @@ body {
     display: flex;
     height: 50px;
     justify-content: space-between;
-    margin: 10px;
+    margin: 4px;
     padding: 10px;
     width: calc(100% - 20px);
-    border-radius: 10px;
+    border-radius: var(--BorderRadius);
 }
 
 
@@ -538,7 +543,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 340px));
     grid-auto-rows: 220px;
-    gap: 40px;
+    gap: 20px;
 }
 
 /* KategorieBoxen */

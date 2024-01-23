@@ -282,7 +282,14 @@ function createGrade(subjectId, categoryId) {
 
 }
 
-
+function editGrades(name, subjectId, weight, categoryId) {
+    const popup = document.getElementById('editNotePopup');
+    popup.style.display = "block";
+    popup.setAttribute('data-category-subject-id', subjectId);
+    popup.setAttribute('data-category-category-id', categoryId);
+    document.getElementById("editKategoriePopup-input").value = name;
+    document.getElementById("editKategoriePopup-select").value = weight;
+}
 
 //funktion to add Subject to UI
 
@@ -641,6 +648,12 @@ document.getElementById("neueNotePopup-create").addEventListener("click", functi
         return;
     }
     pushGradeClass("", value, date, subjectId, categoryId, "push");
+    popup.style.display = "none";
+});
+
+
+document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
+    const popup = document.getElementById('editNotePopup');
     popup.style.display = "none";
 });
 
