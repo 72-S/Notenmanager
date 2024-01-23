@@ -130,7 +130,9 @@ body {
     background-color: var(--ButtonBackgroundHover);
 }
 
-
+#zurückZurMainPage {
+    margin-left: 5px;
+}
 
 
 

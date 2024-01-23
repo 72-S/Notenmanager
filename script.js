@@ -194,11 +194,37 @@ class PushLocalDataToDB {
 //function to open subject page
 function openSubjectPage(id, name) {
     document.getElementById("mainContent").style.display = "none";
-    
+    document.getElementById("subjectContent").style.display = "block";
+
 }
 
 
+//function to add Category to UI
+function addCategoryToUI(name, weight, id) {
+    const container = document.getElementsByClassName("categoriesContainer")[0];
+    if (!container) {
+        return console.error("Container not found");
+    }
+    const box = document.createElement("div");
+    box.classList.add("category-box");
+    box.id = id;
 
+    const categoryName = document.createElement("p");
+    categoryName.classList.add("category-name");
+    categoryName.textContent = name;
+
+    const categoryWeight = document.createElement("p");
+    categoryWeight.classList.add("category-weight");
+    categoryWeight.textContent = weight;
+
+    box.addEventListener("click", function () {
+        openCategoryPage(id, name);
+    });
+
+    container.appendChild(box);
+    box.appendChild(categoryName);
+    box.appendChild(categoryWeight);
+}
 
 
 //funktion to add Subject to UI
@@ -405,4 +431,20 @@ document.getElementById("editFachPopup-save").addEventListener("click", function
     subjectBox.getElementsByClassName("subject-name")[0].textContent = name;
     resetFachPopup();
 });
+
+document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
+    const popup = document.getElementById('neueKategoriePopup');
+    popup.style.display = "block";
+});
+
+document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
+    const popup = document.getElementById('neueKategoriePopup');
+    popup.style.display = "none";
+});
+
+document.getElementById("zurückZurMainPage").addEventListener("click", function () {
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("subjectContent").style.display = "none";
+});
+
 });
