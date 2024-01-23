@@ -180,24 +180,38 @@ class PushLocalDataToDB {
         Object.values(localGrades).forEach(gradeArray => {
             gradeArray.forEach(grade => {
                 if (grade.action === "push") {
-                    db.push({
-                        name: grade.name,
+                    const newRef = db.push();
+                    newRef.set({
                         value: grade.value,
                         date: grade.date,
-                        subjectId: grade.subjectId,
                         categoryId: grade.categoryId
                     });
-                    grade.action = "get";
+                    newRef.then((ref) => {
+                        const newId = ref.key;
+                        localGrades[newId] = [{
+                            id: newId, 
+                            value: grade.value,
+                            date: grade.date,
+                            categoryId: grade.categoryId,
+                            action: "get"
+                        }];
+                        delete localGrades[grade.id];
+                        addGradeToUI(grade.value, grade.date, grade.subjectId, grade.categoryId, newId);
+                    });
                 } else if (grade.action === "overwrite") {
                     const gradeRef = db.child(grade.id);
                     gradeRef.update({
-                        name: grade.name,
-                        color: grade.color
+                        value: grade.value,
+                        date: grade.date
                     });
                     subject.action = "get";
                 } else if (grade.action === "delete") {
                     const gradeRef = db.child(grade.id);
-                    gradeRef.remove();
+                    gradeRef.remove().then(() => {
+                        if (localGrades[grade.id]) {
+                            delete localGrades[grade.id];
+                        }
+                    });
                     grade.action = "get";
                 }
             });
@@ -219,11 +233,18 @@ function openSubjectPage(id, name) {
             }
         });
     });
+    Object.values(localGrades).forEach(gradeArray => {
+        gradeArray.forEach(grade => {
+            if (grade.subjectId === id) {
+                addGradeToUI(grade.value, grade.date, grade.categoryId, grade.id);
+            }
+        });
+    });
 }
 
 
 //function to add Category to UI
-function addCategoryToUI(name, weight, id, subjectId, categoryId) {
+function addCategoryToUI(name, weight, id, subjectId) {
     const container = document.getElementsByClassName("categoriesContainer")[0];
     if (!container) {
         return console.error("Container not found");
@@ -238,16 +259,27 @@ function addCategoryToUI(name, weight, id, subjectId, categoryId) {
             <span id="category-weight">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
-        <button class="neuesFachButton" onclick="openGradeCreationPopup('${name}', '${subjectId}', '${categoryId}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
-        <button class="neuesFachButton" onclick="openGradeEditPopup('${name}', '${subjectId}', '${weight}', '${categoryId}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" onclick="createGrade('${name}', '${subjectId}', '${id}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" onclick="editGrades('${name}', '${subjectId}', '${weight}', '${id}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
         </div>
-        <div class="gradesContainer"></div>
+        <div id="gradesContainer${id}" class="gradesContainer"></div>
         `;
 
-
+    console.log(name, weight, id, subjectId);
 
     container.appendChild(box);
 }
+
+
+
+function createGrade(name, subjectId, categoryId) {
+    const popup = document.getElementById('neueNotePopup');
+    popup.style.display = "block";
+    popup.setAttribute('data-grade-subject-id', subjectId);
+    popup.setAttribute('data-grade-category-id', categoryId);
+
+}
+
 
 
 //funktion to add Subject to UI
@@ -297,6 +329,24 @@ function addSubjectToUI(name, color, id) {
     container.appendChild(box);
     box.appendChild(subjectName);
     box.appendChild(average);
+}
+
+
+function addGradeToUI(value, date, categoryId, id) {
+    const container = document.getElementById("gradesContainer" + categoryId);
+    if (!container) {
+        return console.error("Container not found");
+    }
+    const gradeValue = document.createElement("p");
+    gradeValue.classList.add("grade-value");
+    gradeValue.textContent = value;
+
+    const gradeDate = document.createElement("p");
+    gradeDate.classList.add("grade-date");
+    gradeDate.textContent = date;
+
+    box.appendChild(gradeValue);
+    box.appendChild(gradeDate);
 }
 
 
@@ -423,6 +473,46 @@ function pushCategoryClass(id, name, weight, subjectId, action) {
 }
 
 
+function pushGradeClass(id, value, date, categoryId, action) {
+    const tempId = Date.now();
+    if (action === "overwrite") {
+        const existingGradeIndex = localGrades[id].findIndex(grade => grade.id === id);
+        if (existingGradeIndex !== -1) {
+            localGrades[id][existingGradeIndex] = {
+                id: id,
+                value: value,
+                date: date,
+                categoryId: categoryId,
+                action: "overwrite"
+            };
+        }
+    } 
+    else if (action === "delete") {
+        localGrades[id] = [{
+            id: id, 
+            value: value, 
+            date: date, 
+            categoryId: categoryId,
+            action: "delete" 
+        }]
+    }
+    else if (action === "push") {
+        localGrades[tempId] = [{ 
+            id: tempId, 
+            value: value, 
+            date: date, 
+            categoryId: categoryId,
+            action: "push" 
+        }];
+    }
+    if (action === "push" || action === "overwrite" || action === "delete") {
+        const pushData = new PushLocalDataToDB();
+        pushData.pushGrades();
+    }
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const saveLocalData = new SaveLocalDataFromDB();
     saveLocalData.loadSubjects(function () {
@@ -525,6 +615,25 @@ document.getElementById("neueKategoriePopup-create").addEventListener("click", f
         return;
     }
     pushCategoryClass("", name, weight, subjectId, "push");
+    popup.style.display = "none";
+});
+
+
+document.getElementById("neueNotePopup-cancel").addEventListener("click", function () {
+    const popup = document.getElementById('neueNotePopup');
+    popup.style.display = "none";
+});
+
+document.getElementById("neueNotePopup-create").addEventListener("click", function () {
+    const popup = document.getElementById('neueNotePopup');
+    const value = document.getElementById("neueNotePopup-select").value;
+    const date = document.getElementById("neueNotePopup-input").value;
+    const subjectId = popup.getAttribute('data-grade-subject-id');
+    const categoryId = popup.getAttribute('data-grade-category-id');
+    if (date === "") {
+        return;
+    }
+    pushGradeClass("", value, date, categoryId, "push");
     popup.style.display = "none";
 });
 
