@@ -30,7 +30,8 @@ class SaveLocalData {
                 localSubjects[subjectId].push({
                     id: subjectId,
                     name: subject.name,
-                    color: subject.color
+                    color: subject.color,
+                    action: "get"
                 });
             });
             if (callback && typeof callback === 'function') {
@@ -52,7 +53,8 @@ class SaveLocalData {
                     id: categoryId,
                     name: category.name,
                     weight: category.weight,
-                    subjectId: category.subjectId
+                    subjectId: category.subjectId,
+                    action: "get"
                 });
             });
             if (callback && typeof callback === 'function') {
@@ -76,7 +78,8 @@ class SaveLocalData {
                     value: grade.value,
                     date: grade.date,
                     subjectId: grade.subjectId,
-                    categoryId: grade.categoryId
+                    categoryId: grade.categoryId,
+                    action: "get"
                 });
             });
             if (callback && typeof callback === 'function') {
@@ -85,6 +88,59 @@ class SaveLocalData {
         });
     }
 }
+
+
+class PushLocalData {
+    pushSubjects() {
+        const db = firebase.database().ref("subjects");
+        Object.values(localSubjects).forEach(subjectArray => {
+            subjectArray.forEach(subject => {
+                if (subject.action === "push") {
+                    db.push({
+                        name: subject.name,
+                        color: subject.color
+                    });
+                    subject.action = "get";
+                }
+            });
+        });
+    }
+
+    pushCategories() {
+        const db = firebase.database().ref("categories");
+        Object.values(localCategories).forEach(categoryArray => {
+            categoryArray.forEach(category => {
+                if (category.action === "push") {
+                    db.push({
+                        name: category.name,
+                        weight: category.weight,
+                        subjectId: category.subjectId
+                    });
+                    category.action = "get";
+                }
+            });
+        });
+    }
+
+    pushGrades() {
+        const db = firebase.database().ref("grades");
+        Object.values(localGrades).forEach(gradeArray => {
+            gradeArray.forEach(grade => {
+                if (grade.action === "push") {
+                    db.push({
+                        name: grade.name,
+                        value: grade.value,
+                        date: grade.date,
+                        subjectId: grade.subjectId,
+                        categoryId: grade.categoryId
+                    });
+                    grade.action = "get";
+                }
+            });
+        });
+    }
+}
+
 
 
 
@@ -135,10 +191,36 @@ editSubject = (id) => {
 
 
 deleteSubject = (id, box) => {
-    return;
+
+
 }
 
+
+//funktion to remove Subject from UI
+function removeAllSubjectsFromUI() {
+    const subjectBoxes = document.getElementsByClassName("subject-box");
+    while (subjectBoxes.length > 0) {
+        subjectBoxes[0].parentNode.removeChild(subjectBoxes[0]);
+    }
+}
+
+function UploadSubject(id, name, color, action) {
+    if (!localSubjects[id]) {
+        localSubjects[id] = [];
+    }
+    localSubjects[id].push({
+        id: id,
+        name: name,
+        color: color,
+        action: action
+    });
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
+    const pushLocalData = new PushLocalData();
+    UploadSubject('subject1', 'Mathematik', '#ff0000', 'get');
+    pushLocalData.pushSubjects();
     const saveLocalData = new SaveLocalData();
     saveLocalData.loadSubjects(function () {
         const noSubjectMessage = document.getElementById("noSubjectMessage");
@@ -153,8 +235,20 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
-
-
     saveLocalData.loadCategories();
     saveLocalData.loadGrades();
+
+    
+
+//EVENT LISTENER
+document.addEventListener('click', function (event) {
+    const contextMenu = document.querySelector('.context-menu');
+    if (contextMenu && !contextMenu.contains(event.target)) {
+        contextMenu.remove();
+    }
+});
+
+
+
+
 });
