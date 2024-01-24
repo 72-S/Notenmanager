@@ -384,7 +384,7 @@ editSubject = (id, color, name) => {
             colorChoice.classList.add('selected');
         }
     });
-    
+    selectedColor = color;
     popup.style.display = "block";
 }
 
@@ -554,6 +554,14 @@ function setButtonStateneuesFachPopup() {
     createButton.disabled = !(nameInput && isColorSelected);
 }
 
+function setButtonStateEditFachPopup() {
+    const nameInput = document.getElementById('editFachPopup-input').value;
+    const isColorSelected = selectedColor !== '';
+
+    const saveButton = document.getElementById('editFachPopup-save');
+    saveButton.disabled = !(nameInput && isColorSelected);
+}
+
 
 function disableAllButtons() {
     const buttons = document.querySelectorAll('.popup-buttons');
@@ -600,12 +608,14 @@ document.getElementById("neuesFachButtonClick").addEventListener("click", functi
     closeAllPopups();
     const popup = document.getElementById('neuesFachPopup');
     popup.style.display = "block";
+    disableAllButtons();
 });
  
 document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
     popup.style.display = "none";
     resetFachPopup();
+    disableAllButtons();
 });
 
 document.getElementById("neuesFachPopup-create").addEventListener("click", function () {
@@ -620,11 +630,14 @@ document.getElementById("neuesFachPopup-create").addEventListener("click", funct
     popup.style.display = "none";
     noSubjectMessage.style.display = "none";
     resetFachPopup();
+    disableAllButtons();
 });
 
 document.getElementById("editFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('editFachPopup');
     popup.style.display = "none";
+    disableAllButtons();
+    selectedColor = '';
 });
 
 document.getElementById("editFachPopup-save").addEventListener("click", function () {
@@ -641,12 +654,15 @@ document.getElementById("editFachPopup-save").addEventListener("click", function
     subjectBox.style.backgroundColor = color;
     subjectBox.getElementsByClassName("subject-name")[0].textContent = name;
     resetFachPopup();
+    disableAllButtons();
+    selectedColor = '';
 });
 
 document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
     closeAllPopups();
     const popup = document.getElementById('neueKategoriePopup');
     popup.style.display = "block";
+    disableAllButtons();
 });
 
 document.getElementById("zurückZurMainPage").addEventListener("click", function () {
@@ -654,11 +670,13 @@ document.getElementById("zurückZurMainPage").addEventListener("click", function
     document.getElementById("mainContent").style.display = "block";
     document.getElementById("subjectContent").style.display = "none";
     removeAllCategoriesFromUI();
+    disableAllButtons();
 });
 
 document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neueKategoriePopup');
     popup.style.display = "none";
+    disableAllButtons();
 });
 
 document.getElementById("neueKategoriePopup-create").addEventListener("click", function () {
@@ -671,12 +689,14 @@ document.getElementById("neueKategoriePopup-create").addEventListener("click", f
     }
     pushCategoryClass("", name, weight, subjectId, "push");
     popup.style.display = "none";
+    disableAllButtons();
 });
 
 
 document.getElementById("neueNotePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neueNotePopup');
     popup.style.display = "none";
+    disableAllButtons();
 });
 
 document.getElementById("neueNotePopup-create").addEventListener("click", function () {
@@ -690,12 +710,14 @@ document.getElementById("neueNotePopup-create").addEventListener("click", functi
     }
     pushGradeClass("", value, date, subjectId, categoryId, "push");
     popup.style.display = "none";
+    disableAllButtons();
 });
 
 
 document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('editNotePopup');
     popup.style.display = "none";
+    disableAllButtons();
 });
 
 
@@ -703,11 +725,7 @@ document.getElementById("editNotePopup-cancel").addEventListener("click", functi
 
 //Button deactivate listeners
 document.getElementById('neusFachPopup-input').addEventListener('input', setButtonStateneuesFachPopup);
-document.getElementById('editFachPopup-input').addEventListener('input', function () {
-    const button = document.getElementById('editFachPopup-save');
-    const nameInput = document.getElementById('editFachPopup-input').value;
-    button.disabled = !(nameInput);
-});
+document.getElementById('editFachPopup-input').addEventListener('input', setButtonStateEditFachPopup);
 document.getElementById('neueKategoriePopup-input').addEventListener('input', function () {
     const button = document.getElementById('neueKategoriePopup-create');
     const nameInput = document.getElementById('neueKategoriePopup-input').value;
