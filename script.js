@@ -121,6 +121,7 @@ class PushLocalDataToDB {
                     });
                     subject.action = "get";
                 } else if (subject.action === "delete") {
+                    this.deleteCategoriesAndGradesBySubjectId(subject.id);
                     const subjectRef = db.child(subject.id);
                     subjectRef.remove().then(() => {
                         if (localSubjects[subject.id]) {
@@ -164,6 +165,7 @@ class PushLocalDataToDB {
                     });
                     category.action = "get";
                 } else if (category.action === "delete") {
+                    this.deleteGradesByCategoryId(category.id);
                     const categoryRef = db.child(category.id);
                     categoryRef.remove().then(() => {
                         if (localCategories[category.id]) {
@@ -218,6 +220,39 @@ class PushLocalDataToDB {
                     grade.action = "get";
                 }
             });
+        });
+    }
+
+    deleteCategoriesAndGradesBySubjectId(subjectId) {
+        Object.keys(localCategories).forEach(categoryKey => {
+            const categories = localCategories[categoryKey];
+            categories.forEach((category, index) => {
+                if (category.subjectId === subjectId) {
+                    this.deleteGradesByCategoryId(category.id);
+                    const categoryRef = firebase.database().ref(`categories/${categoryKey}`);
+                    categoryRef.remove();
+                    categories.splice(index, 1);
+                }
+            });
+            if (categories.length === 0) {
+                delete localCategories[categoryKey];
+            }
+        });
+    }
+
+    deleteGradesByCategoryId(categoryId) {
+        Object.keys(localGrades).forEach(gradeKey => {
+            const grades = localGrades[gradeKey];
+            grades.forEach((grade, index) => {
+                if (grade.categoryId === categoryId) {
+                    const gradeRef = firebase.database().ref(`grades/${gradeKey}`);
+                    gradeRef.remove();
+                    grades.splice(index, 1);
+                }
+            });
+            if (grades.length === 0) {
+                delete localGrades[gradeKey];
+            }
         });
     }
 }
