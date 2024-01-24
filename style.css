@@ -129,6 +129,22 @@ body {
     transition: var(--transition);
 }
 
+.button-container-buttons:disabled {
+    background-color: #a6b8d4;
+    color: #6c757d;
+    border: 0px solid #a6b8d4;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button-container-buttons:disabled:hover {
+    background-color: #a6b8d4;
+    color: #6c757d;
+    border: 0px solid #a6b8d4;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .button-container-buttons:first-child {
     margin-left: 0;
 }

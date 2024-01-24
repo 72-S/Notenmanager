@@ -402,6 +402,7 @@ function selectColor(element) {
     });
     element.classList.add('selected');
     selectedColor = element.getAttribute('data-color');
+    setButtonStateneuesFachPopup()
 }
 
 //funktion to remove Subject from UI
@@ -544,6 +545,23 @@ function pushGradeClass(id, value, date, subjectId, categoryId, action) {
     }
 }
 
+//BUTTON STATE FUNCTIONS
+function setButtonStateneuesFachPopup() {
+    const nameInput = document.getElementById('neusFachPopup-input').value;
+    const isColorSelected = selectedColor !== '';
+
+    const createButton = document.getElementById('neuesFachPopup-create');
+    createButton.disabled = !(nameInput && isColorSelected);
+}
+
+
+function disableAllButtons() {
+    const buttons = document.querySelectorAll('.popup-buttons');
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+}
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -563,8 +581,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     saveLocalData.loadCategories();
     saveLocalData.loadGrades();
-
-    
+    setButtonStateneuesFachPopup();
+    disableAllButtons();
 
 //EVENT LISTENER
 document.addEventListener('click', function (event) {
@@ -684,6 +702,25 @@ document.getElementById("editNotePopup-cancel").addEventListener("click", functi
 
 
 //Button deactivate listeners
-
-
+document.getElementById('neusFachPopup-input').addEventListener('input', setButtonStateneuesFachPopup);
+document.getElementById('editFachPopup-input').addEventListener('input', function () {
+    const button = document.getElementById('editFachPopup-save');
+    const nameInput = document.getElementById('editFachPopup-input').value;
+    button.disabled = !(nameInput);
+});
+document.getElementById('neueKategoriePopup-input').addEventListener('input', function () {
+    const button = document.getElementById('neueKategoriePopup-create');
+    const nameInput = document.getElementById('neueKategoriePopup-input').value;
+    button.disabled = !(nameInput);
+});
+document.getElementById('neueNotePopup-input').addEventListener('input', function () {
+    const button = document.getElementById('neueNotePopup-create');
+    const nameInput = document.getElementById('neueNotePopup-input').value;
+    button.disabled = !(nameInput);
+});
+document.getElementById('editNotePopup-input').addEventListener('input', function () {
+    const button = document.getElementById('editNotePopup-save');
+    const nameInput = document.getElementById('editNotePopup-input').value;
+    button.disabled = !(nameInput);
+});
 });
