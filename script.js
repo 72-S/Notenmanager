@@ -319,14 +319,18 @@ function addGradeToPopupUI(value, date, id) {
     if (!container) {
         return console.error("Grade Container not found");
     }
+    
     const gradeElement = document.createElement('div');
     gradeElement.className = 'gradePopupElement';
     gradeElement.id = id;
 
     gradeElement.innerHTML = ` 
         <div class="gradePopupContainer">
-        <span class="grade"><input type="checkbox" class="gradeCheckbox" name="gradeCheckbox">${date}</span>
-        <span id="gradePopupValue" class="grade">${value}</span>
+            <label class="gradePopup">
+                <input type="checkbox" class="gradeCheckbox" id="checkbox-${id}" name="gradeCheckbox">
+                ${date}
+            </label>
+            <span id="gradePopupValue" class="grade">${value}</span>
         </div>
     `;
 
@@ -336,7 +340,9 @@ function addGradeToPopupUI(value, date, id) {
     checkbox.addEventListener('change', function() {
         if (this.checked) {
             gradeElement.classList.add('selectedGrade');
-            gradesToDelete.push(id);
+            if (!gradesToDelete.includes(id)) {
+                gradesToDelete.push(id);
+            }
         } else {
             gradeElement.classList.remove('selectedGrade');
             const index = gradesToDelete.indexOf(id);
@@ -345,7 +351,16 @@ function addGradeToPopupUI(value, date, id) {
             }
         }
     });
+
+    const gradePopupContainer = gradeElement.querySelector('.gradePopupContainer');
+    gradePopupContainer.addEventListener('click', function(event) {
+        if (event.target !== checkbox && event.target !== gradePopupContainer.querySelector('label')) {
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change'));
+        }
+    });
 }
+
 
 
 
@@ -409,6 +424,7 @@ function addGradeToUI(value, date, categoryId, id) {
 
     const gradeElement = document.createElement('div');
     gradeElement.className = 'gradeElement';
+    gradeElement.id = id;
     gradeElement.innerHTML = ` 
         <span id="gradeDate" class="grade">${date}</span>
         <span id="gradeValue" class="grade">${value}</span>
@@ -477,6 +493,27 @@ function resetFachPopup() {
     });
     selectedColor = '';
 }
+
+function saveChanges(categoryId, subjectId) {
+    const input = document.getElementById("editNotePopup-input").value;
+    const select = document.getElementById("editNotePopup-select").value;
+    const CheckedButton = document.getElementById("Notetrashcan-button");
+    if (gradesToDelete.length > 0) {
+        gradesToDelete.forEach(gradeId => {
+            const gradeElement = document.getElementById(gradeId);
+            gradeElement.remove();
+            pushGradeClass(gradeId, "", "", "", "", "delete");
+        });
+    }
+    if (CheckedButton.classList.contains('checked')) {
+        const categoryElement = document.getElementById(categoryId);
+        categoryElement.remove();
+        pushCategoryClass(categoryId, "", "", "", "delete");
+    } else {
+    pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
+    }
+}
+
 
 function pushSubjectClass(id, name, color, action) {
     const tempId = Date.now();
@@ -765,14 +802,27 @@ document.getElementById("neueNotePopup-create").addEventListener("click", functi
 
 document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('editNotePopup');
+    const CheckedButton = document.getElementById("Notetrashcan-button");
     popup.style.display = "none";
+    CheckedButton.classList.remove('checked');
+    gradesToDelete = [];
     disableAllButtons();
 });
 
 
 document.getElementById("editNotePopup-save").addEventListener("click", function () {
-    const selectedGrades = document.querySelectorAll('.selectedGrade');
-
+    const popup = document.getElementById('editNotePopup');
+    const name = document.getElementById("editNotePopup-input").value;
+    const subjectId = popup.getAttribute('data-category-subject-id');
+    const categoryId = popup.getAttribute('data-category-category-id');
+    const CheckedButton = document.getElementById("Notetrashcan-button");
+    if (name === "") {
+        return;
+    }
+    saveChanges(categoryId, subjectId);
+    popup.style.display = "none";
+    CheckedButton.classList.remove('checked');
+    disableAllButtons();
 });
 
 

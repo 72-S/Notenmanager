@@ -648,6 +648,7 @@ body {
     justify-content: space-between;
     width: 100%;
     height: 13px;
+    margin-bottom: 7px;
 }
 
 #editNotePopupList {
@@ -693,6 +694,7 @@ body {
     margin-bottom: 2px;
     transition: var(--transition);
     margin-left: 3px;
+    cursor: pointer;
 }
 
 .gradePopupContainer {
@@ -707,6 +709,13 @@ body {
     font-size: 16px;
     font-weight: bold;
     margin-right: 5px;
+}
+
+.gradePopup{
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 5px;
+    cursor: pointer;
 }
 
 .selectedGrade {
