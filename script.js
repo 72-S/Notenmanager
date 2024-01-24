@@ -224,6 +224,7 @@ class PushLocalDataToDB {
 
 //function to open subject page
 function openSubjectPage(id, name) {
+    closeAllPopups();
     document.getElementById("mainContent").style.display = "none";
     document.getElementById("subjectContent").style.display = "block";
     document.getElementById("neueKategoriePopup").setAttribute("category-data-subject-id", id);
@@ -273,8 +274,16 @@ function addCategoryToUI(name, weight, id, subjectId) {
 }
 
 
+function closeAllPopups() {
+    const popups = document.querySelectorAll('.popup');
+    popups.forEach(popup => {
+        popup.style.display = "none";
+    });
+}
+
 
 function createGrade(subjectId, categoryId) {
+    closeAllPopups();
     const popup = document.getElementById('neueNotePopup');
     popup.style.display = "block";
     popup.setAttribute('data-grade-subject-id', subjectId);
@@ -283,6 +292,7 @@ function createGrade(subjectId, categoryId) {
 }
 
 function editGrades(name, subjectId, weight, categoryId) {
+    closeAllPopups();
     const popup = document.getElementById('editNotePopup');
     popup.style.display = "block";
     popup.setAttribute('data-category-subject-id', subjectId);
@@ -566,10 +576,10 @@ document.addEventListener('click', function (event) {
 
 document.querySelectorAll('.color-choice').forEach(span => {
     span.addEventListener('click', () => selectColor(span));
-
 });
 
 document.getElementById("neuesFachButtonClick").addEventListener("click", function () {
+    closeAllPopups();
     const popup = document.getElementById('neuesFachPopup');
     popup.style.display = "block";
 });
@@ -616,11 +626,13 @@ document.getElementById("editFachPopup-save").addEventListener("click", function
 });
 
 document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
+    closeAllPopups();
     const popup = document.getElementById('neueKategoriePopup');
     popup.style.display = "block";
 });
 
 document.getElementById("zurückZurMainPage").addEventListener("click", function () {
+    closeAllPopups();
     document.getElementById("mainContent").style.display = "block";
     document.getElementById("subjectContent").style.display = "none";
     removeAllCategoriesFromUI();
@@ -667,5 +679,11 @@ document.getElementById("editNotePopup-cancel").addEventListener("click", functi
     const popup = document.getElementById('editNotePopup');
     popup.style.display = "none";
 });
+
+
+
+
+//Button deactivate listeners
+
 
 });
