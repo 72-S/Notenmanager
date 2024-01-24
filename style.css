@@ -534,14 +534,14 @@ body {
 
 .trashcan-button:focus {
     outline: none;
-    background-color: #ffffff;
+    background-color: #f7f7f7;
 }
 
 .trashcan-button:hover {
     background-color: #e6e6e6;
 }
 
-.trashcan-button:active {
+.trashcan-button.checked {
     background-color: #ffad33;
 }
 
@@ -605,12 +605,14 @@ body {
 
 .gradesContainer {
     overflow-y: auto;
-    max-height: 200px; 
+    max-height: 150px; 
     width: 98%;
     padding-bottom: 10px;
     overflow-x: hidden;
     margin-top: 10px;
     padding-right: 5px;
+    display: grid;
+    place-items: center;
 }
 
 .gradesContainer::-webkit-scrollbar {
@@ -632,7 +634,7 @@ body {
 .gradesContainer::-webkit-scrollbar-thumb:hover {
     background-color: #555;
     border-radius: 5px;
-    width: 12px; /* Farbe des beweglichen Teils der Scrollbar beim Überfahren mit der Maus */
+    width: 12px;
 }
 
 
@@ -643,16 +645,59 @@ body {
     margin: 5px;
     flex-direction: row;
     justify-content: space-between;
-    width: 98%;
+    width: 100%;
     height: 13px;
-    margin-top: -2px;
-    padding-bottom: 5px;
 }
 
+#editNotePopupList {
+    overflow-y: auto;
+    max-height: 150px; 
+    padding-bottom: 10px;
+    overflow-x: hidden;
+    margin-top: 10px;
+    padding-right: 5px;
+    display: grid;
+    place-items: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
 
+#editNotePopupList::-webkit-scrollbar {
+    width: 8px;
+}
+
+#editNotePopupList::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+}
+
+#editNotePopupList::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+#editNotePopupList::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    border-radius: 5px;
+    width: 12px;
+}
+
+.gradePopupElement {
+    display: flex;
+    margin: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 13px;
+}
 
 .grade{ 
     font-size: 16px;
     font-weight: bold;
     padding-bottom: 5px;
+}
+
+.selectedGrade {
+    color: red;
 }

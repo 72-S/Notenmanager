@@ -15,6 +15,7 @@ let localSubjects = {};
 let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
+let gradesToDelete = [];
 
 
 class SaveLocalDataFromDB {
@@ -268,8 +269,6 @@ function addCategoryToUI(name, weight, id, subjectId) {
         <div id="gradesContainer${id}" class="gradesContainer"></div>
         `;
 
-    console.log(name, weight, id, subjectId);
-
     container.appendChild(box);
 }
 
@@ -299,7 +298,56 @@ function editGrades(name, subjectId, weight, categoryId) {
     popup.setAttribute('data-category-category-id', categoryId);
     document.getElementById("editNotePopup-input").value = name;
     document.getElementById("editNotePopup-select").value = weight;
+    const container = document.getElementById("editNotePopupList");
+    if (!container) {
+        return console.error("Grade Container not found");
+    }
+    container.innerHTML = "";
+    Object.values(localGrades).forEach(gradeArray => {
+        gradeArray.forEach(grade => {
+            if (grade.subjectId === subjectId) {
+                if (grade.categoryId === categoryId) {
+                addGradeToPopupUI(grade.value, grade.date, grade.id);
+                }
+            }
+        });
+    });
 }
+
+function addGradeToPopupUI(value, date, id) {
+    const container = document.getElementById("editNotePopupList");
+    if (!container) {
+        return console.error("Grade Container not found");
+    }
+    const gradeElement = document.createElement('div');
+    gradeElement.className = 'gradePopupElement';
+    gradeElement.id = id;
+
+    gradeElement.innerHTML = ` 
+        <span class="grade"><input type="checkbox" class="gradeCheckbox" name="gradeCheckbox">${date}</span>
+        <span id="gradePopupValue" class="grade">${value}</span>
+    `;
+
+    container.appendChild(gradeElement);
+
+    const checkbox = gradeElement.querySelector('.gradeCheckbox');
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            gradeElement.classList.add('selectedGrade');
+            gradesToDelete.push(id);
+        } else {
+            gradeElement.classList.remove('selectedGrade');
+            const index = gradesToDelete.indexOf(id);
+            if (index > -1) {
+                gradesToDelete.splice(index, 1);
+            }
+        }
+    });
+}
+
+
+
+
 
 //funktion to add Subject to UI
 
@@ -352,7 +400,6 @@ function addSubjectToUI(name, color, id) {
 
 
 function addGradeToUI(value, date, categoryId, id) {
-    console.log(value, date, categoryId, id);
     const container = document.getElementById("gradesContainer" + categoryId);
     if (!container) {
         return console.error("Grade Container not found");
@@ -721,6 +768,11 @@ document.getElementById("editNotePopup-cancel").addEventListener("click", functi
 });
 
 
+document.getElementById("editNotePopup-save").addEventListener("click", function () {
+    const selectedGrades = document.querySelectorAll('.selectedGrade');
+
+});
+
 
 
 //Button deactivate listeners
@@ -740,5 +792,8 @@ document.getElementById('editNotePopup-input').addEventListener('input', functio
     const button = document.getElementById('editNotePopup-save');
     const nameInput = document.getElementById('editNotePopup-input').value;
     button.disabled = !(nameInput);
+});
+document.getElementById('Notetrashcan-button').addEventListener('click', function(event) {
+    this.classList.toggle('checked');
 });
 });
