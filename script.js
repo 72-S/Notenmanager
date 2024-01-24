@@ -319,6 +319,10 @@ function closeAllPopups() {
 function createGrade(subjectId, categoryId) {
     closeAllPopups();
     const popup = document.getElementById('neueNotePopup');
+    const input = document.getElementById("neueNotePopup-input");
+    const select = document.getElementById("neueNotePopup-select");
+    input.value = "";
+    select.value = 3;
     popup.style.display = "block";
     popup.setAttribute('data-grade-subject-id', subjectId);
     popup.setAttribute('data-grade-category-id', categoryId);
@@ -728,6 +732,8 @@ document.querySelectorAll('.color-choice').forEach(span => {
 document.getElementById("neuesFachButtonClick").addEventListener("click", function () {
     closeAllPopups();
     const popup = document.getElementById('neuesFachPopup');
+    const input = document.getElementById("neusFachPopup-input");
+    input.value = "";
     popup.style.display = "block";
     disableAllButtons();
 });
@@ -782,6 +788,10 @@ document.getElementById("editFachPopup-save").addEventListener("click", function
 document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
     closeAllPopups();
     const popup = document.getElementById('neueKategoriePopup');
+    const input = document.getElementById("neueKategoriePopup-input");
+    const select = document.getElementById("neueKategoriePopup-select");
+    input.value = "";
+    select.value = 1;
     popup.style.display = "block";
     disableAllButtons();
 });
