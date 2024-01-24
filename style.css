@@ -4,6 +4,7 @@
     --ButtonBackground: #007bff;
     --ButtonBackgroundHover: #0056b3;
     --LightBlue: #D1DCE5;
+    --RED: #ffad33;
     --ButtonHeight: 35px;
     --PopupBackground: #dbebfa;
     --BorderRadius: 10px;
@@ -542,7 +543,7 @@ body {
 }
 
 .trashcan-button.checked {
-    background-color: #ffad33;
+    background-color: var(--RED);
 }
 
 .trashcan-button-img {
@@ -685,19 +686,30 @@ body {
 
 .gradePopupElement {
     display: flex;
-    margin: 5px;
-    flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    height: 13px;
+    align-items: center;
+    border-radius: 5px;
+    margin-bottom: 2px;
+    transition: var(--transition);
+    margin-left: 3px;
+}
+
+.gradePopupContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: 25px;
 }
 
 .grade{ 
     font-size: 16px;
     font-weight: bold;
-    padding-bottom: 5px;
+    margin-right: 5px;
 }
 
 .selectedGrade {
-    color: red;
+    background-color: var(--RED);
+    transform: scale(1.01);
 }

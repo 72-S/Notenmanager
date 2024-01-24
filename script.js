@@ -324,8 +324,10 @@ function addGradeToPopupUI(value, date, id) {
     gradeElement.id = id;
 
     gradeElement.innerHTML = ` 
+        <div class="gradePopupContainer">
         <span class="grade"><input type="checkbox" class="gradeCheckbox" name="gradeCheckbox">${date}</span>
         <span id="gradePopupValue" class="grade">${value}</span>
+        </div>
     `;
 
     container.appendChild(gradeElement);
