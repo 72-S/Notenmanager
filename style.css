@@ -738,3 +738,12 @@ body {
     background-color: var(--RED);
     transform: scale(1.01);
 }
+
+/* CHARTS */
+.chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 50px);
+    width: 100%;
+}

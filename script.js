@@ -16,7 +16,6 @@ let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
 let gradesToDelete = [];
-let subjectAveraes = [];
 
 class SaveLocalDataFromDB {
     loadSubjects(callback) {
@@ -258,6 +257,112 @@ class PushLocalDataToDB {
 }
 
 
+function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+    return d.getUTCFullYear().toString().substring(2) + "-W" + weekNo.toString().padStart(2, '0');
+}
+
+function generateChartData() {
+    const grades = [];
+    Object.values(localGrades).forEach(subjectArray => {
+        subjectArray.forEach(grade => {
+            grades.push({
+                value: parseFloat(grade.value),
+                week: getWeekNumber(new Date(grade.date))
+            });
+        });
+    });
+
+    // Gruppieren der Noten nach Wochen
+    const gradesByWeek = grades.reduce((acc, grade) => {
+        acc[grade.week] = acc[grade.week] || [];
+        acc[grade.week].push(grade.value);
+        return acc;
+    }, {});
+
+    // Berechnung des Durchschnitts für jede Woche
+    const chartData = Object.entries(gradesByWeek).map(([week, values]) => {
+        const average = values.reduce((a, b) => a + b, 0) / values.length;
+        return {
+            x: week,
+            y: average.toFixed(1)
+        };
+    });
+
+    // Sortierung der Daten nach Wochen
+    chartData.sort((a, b) => a.x.localeCompare(b.x));
+    return chartData;
+}
+
+
+
+
+function generateChart() {
+    const chartData = generateChartData();
+    const canvas = document.getElementById('gradeChart');
+    const ctx = canvas.getContext('2d');
+
+    if (window.gradeChart instanceof Chart) {
+        window.gradeChart.destroy();
+    }
+    window.gradeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.map(data => data.x),
+            datasets: [{
+                label: 'Note',
+                data: chartData.map(data => data.y),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1.3,
+                fill: false,
+                pointRadius: 3,
+                tension: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            animations: {
+                tension: {
+                  duration: 1000,
+                  easing: 'linear',
+                  from: 0.7,
+                  to: 0,
+                  loop: false
+                }
+              },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    reverse: true,
+                    ticks: {
+                        stepSize: 1,
+                        max: 6,
+                        min: 1
+                    }
+                },
+                x: {
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+
+function generategradeDistributionChartData() {
+}
+
+
 function calculateAverageForSubject(subjectId) {
     let sum = 0;
     let count = 0;
@@ -277,19 +382,36 @@ function calculateAverageForSubject(subjectId) {
     if (count === 0) {
         return 0.0;
     }
-
     const average = sum / count;
-    subjectAveraes = subjectAveraes.filter(subjectAverage => subjectAverage !== average);
-    subjectAveraes.push(average);
-    calculateAverageForAllSubjects();
+    const container = document.getElementById(subjectId);
+    container.setAttribute("data-subject-average", average);
     return average.toFixed(2);
 }
 
 function calculateAverageForAllSubjects() {
-    const average = subjectAveraes.reduce((a, b) => a + b, 0) / subjectAveraes.length;
-    const averageElement = document.getElementById('averageMessage');
-    averageElement.textContent = "Ø " + average.toFixed(2);
+    let subjectSum = [];
+    let count = 0;
+    Object.values(localSubjects).forEach(subjectArray => {
+        subjectArray.forEach(subject => {
+            const element = document.getElementById(subject.id);
+            if (element) {
+                const average = element.getAttribute("data-subject-average");
+                const averageNumber = Number(average);
+                if (averageNumber !== 0) {
+                    subjectSum.push(averageNumber);
+                    count++;
+                }
+            }
+        });
+    });
+
+    const allAverage = count > 0 
+        ? subjectSum.reduce((a, b) => a + b, 0) / count 
+        : 0;
+    document.getElementById("averageMessage").textContent = "Ø " + allAverage.toFixed(2);
 }
+
+
 
 //function to open subject page
 function openSubjectPage(id, name) {
@@ -533,6 +655,8 @@ deleteSubject = (id, box) => {
     contextMenu.remove();
     box.remove();
     pushSubjectClass(id, "", "", "delete");
+    generateChart();
+    calculateAverageForAllSubjects();
 }
 
 function selectColor(element) {
@@ -541,8 +665,11 @@ function selectColor(element) {
     });
     element.classList.add('selected');
     selectedColor = element.getAttribute('data-color');
-    setButtonStateneuesFachPopup()
+    setButtonStateneuesFachPopup();
 }
+
+
+
 
 //funktion to remove Subject from UI
 function removeAllSubjectsFromUI() {
@@ -754,6 +881,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("subject-average" + subject.id).textContent = average;
                 });
             });
+            generateChart();
+            calculateAverageForAllSubjects();
         }
     });
     setButtonStateneuesFachPopup();
@@ -845,8 +974,10 @@ document.getElementById("zurückZurMainPage").addEventListener("click", function
     document.getElementById("subjectContent").style.display = "none";
     removeAllCategoriesFromUI();
     disableAllButtons();
+    generateChart();
     const average = calculateAverageForSubject(subjectId);
     document.getElementById("subject-average" + subjectId).textContent = average;
+    calculateAverageForAllSubjects();
 });
 
 document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
