@@ -261,6 +261,7 @@ class PushLocalDataToDB {
 //function to open subject page
 function openSubjectPage(id, name) {
     closeAllPopups();
+    document.getElementById("zurückZurMainPage").setAttribute("category-data-subject-id", id);
     document.getElementById("mainContent").style.display = "none";
     document.getElementById("subjectContent").style.display = "block";
     document.getElementById("neueKategoriePopup").setAttribute("category-data-subject-id", id);
@@ -424,6 +425,7 @@ function addSubjectToUI(name, color, id) {
 
     const average = document.createElement("p");
     average.classList.add("subject-average");
+    average.id = "subject-average" + id;
     average.textContent = "0.0";
 
 
@@ -552,6 +554,33 @@ function saveChanges(categoryId, subjectId) {
     pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
     }
 }
+
+function calculateAverageForSubject(subjectId) {
+    let sum = 0;
+    let count = 0;
+    Object.values(localGrades).forEach(gradeArray => {
+        gradeArray.forEach(grade => {
+            if (grade.subjectId === subjectId) {
+                const category = localCategories[grade.categoryId][0];
+                const categoryWeight = category ? parseFloat(category.weight) : 1; 
+                let gradeValue = parseFloat(grade.value);
+                if (!isNaN(gradeValue) && !isNaN(categoryWeight)) {
+                    sum += gradeValue * categoryWeight;
+                    count += categoryWeight;
+                }
+            }
+        });
+    });
+    if (count === 0) {
+        return 0.0;
+    }
+
+    const average = sum / count;
+    return average.toFixed(2);
+}
+
+
+
 
 
 function pushSubjectClass(id, name, color, action) {
@@ -797,11 +826,14 @@ document.getElementById("neueKategorieButtonClick").addEventListener("click", fu
 });
 
 document.getElementById("zurückZurMainPage").addEventListener("click", function () {
+    const subjectId = this.getAttribute('category-data-subject-id');
     closeAllPopups();
     document.getElementById("mainContent").style.display = "block";
     document.getElementById("subjectContent").style.display = "none";
     removeAllCategoriesFromUI();
     disableAllButtons();
+    const average = calculateAverageForSubject(subjectId);
+    document.getElementById("subject-average" + subjectId).textContent = average;
 });
 
 document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
