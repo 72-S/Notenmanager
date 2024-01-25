@@ -16,7 +16,7 @@ let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
 let gradesToDelete = [];
-
+let subjectAveraes = [];
 
 class SaveLocalDataFromDB {
     loadSubjects(callback) {
@@ -257,6 +257,39 @@ class PushLocalDataToDB {
     }
 }
 
+
+function calculateAverageForSubject(subjectId) {
+    let sum = 0;
+    let count = 0;
+    Object.values(localGrades).forEach(gradeArray => {
+        gradeArray.forEach(grade => {
+            if (grade.subjectId === subjectId) {
+                const category = localCategories[grade.categoryId][0];
+                const categoryWeight = category ? parseFloat(category.weight) : 1; 
+                let gradeValue = parseFloat(grade.value);
+                if (!isNaN(gradeValue) && !isNaN(categoryWeight)) {
+                    sum += gradeValue * categoryWeight;
+                    count += categoryWeight;
+                }
+            }
+        });
+    });
+    if (count === 0) {
+        return 0.0;
+    }
+
+    const average = sum / count;
+    subjectAveraes = subjectAveraes.filter(subjectAverage => subjectAverage !== average);
+    subjectAveraes.push(average);
+    calculateAverageForAllSubjects();
+    return average.toFixed(2);
+}
+
+function calculateAverageForAllSubjects() {
+    const average = subjectAveraes.reduce((a, b) => a + b, 0) / subjectAveraes.length;
+    const averageElement = document.getElementById('averageMessage');
+    averageElement.textContent = "Ø " + average.toFixed(2);
+}
 
 //function to open subject page
 function openSubjectPage(id, name) {
@@ -555,29 +588,7 @@ function saveChanges(categoryId, subjectId) {
     }
 }
 
-function calculateAverageForSubject(subjectId) {
-    let sum = 0;
-    let count = 0;
-    Object.values(localGrades).forEach(gradeArray => {
-        gradeArray.forEach(grade => {
-            if (grade.subjectId === subjectId) {
-                const category = localCategories[grade.categoryId][0];
-                const categoryWeight = category ? parseFloat(category.weight) : 1; 
-                let gradeValue = parseFloat(grade.value);
-                if (!isNaN(gradeValue) && !isNaN(categoryWeight)) {
-                    sum += gradeValue * categoryWeight;
-                    count += categoryWeight;
-                }
-            }
-        });
-    });
-    if (count === 0) {
-        return 0.0;
-    }
 
-    const average = sum / count;
-    return average.toFixed(2);
-}
 
 
 
@@ -728,6 +739,8 @@ function disableAllButtons() {
 
 document.addEventListener("DOMContentLoaded", function () {
     const saveLocalData = new SaveLocalDataFromDB();
+    saveLocalData.loadCategories();
+    saveLocalData.loadGrades();
     saveLocalData.loadSubjects(function () {
         const noSubjectMessage = document.getElementById("noSubjectMessage");
         if (Object.keys(localSubjects).length === 0) {
@@ -737,12 +750,12 @@ document.addEventListener("DOMContentLoaded", function () {
             Object.values(localSubjects).forEach(subjectArray => {
                 subjectArray.forEach(subject => {
                     addSubjectToUI(subject.name, subject.color, subject.id);
+                    const average = calculateAverageForSubject(subject.id);
+                    document.getElementById("subject-average" + subject.id).textContent = average;
                 });
             });
         }
     });
-    saveLocalData.loadCategories();
-    saveLocalData.loadGrades();
     setButtonStateneuesFachPopup();
     disableAllButtons();
 
