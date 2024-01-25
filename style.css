@@ -34,6 +34,22 @@ body {
     padding: 20px;
 }
 
+.average-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+}
+
+#averageMessage {
+    font-family: 'Lato-Medium' , sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #333;
+}
+
 .IMG {
     width: 20px;
     height: 20px;
