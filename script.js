@@ -380,7 +380,7 @@ function calculateAverageForSubject(subjectId) {
         });
     });
     if (count === 0) {
-        return 0.0;
+        return "0.00";
     }
     const average = sum / count;
     const container = document.getElementById(subjectId);
