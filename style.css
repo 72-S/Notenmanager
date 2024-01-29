@@ -721,6 +721,31 @@ body {
     margin-bottom: 7px;
 }
 
+
+
+#gradeDate {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: var(--transition);
+}
+
+#gradeDate.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#gradeValue {
+    opacity: 0;
+    transform: translateX(300%);
+    transition: var(--transition);
+}
+
+#gradeValue.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
 #editNotePopupList {
     overflow-y: auto;
     max-height: 150px; 

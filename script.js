@@ -749,11 +749,22 @@ function addGradeToUI(value, date, categoryId, id) {
     gradeElement.className = 'gradeElement';
     gradeElement.id = id;
     gradeElement.innerHTML = ` 
-        <span id="gradeDate" class="grade">${date}</span>
-        <span id="gradeValue" class="grade">${value}</span>
+        <span id="gradeDate" class="gradeDate grade">${date}</span>
+        <span id="gradeValue" class="gradeValue grade">${value}</span>
         
     `;
     container.appendChild(gradeElement);
+    setTimeout(function () {
+        const gradeDates = document.getElementsByClassName("gradeDate");
+        const gradeValues = document.getElementsByClassName("gradeValue");
+        
+        for (let i = 0; i < gradeDates.length; i++) {
+            gradeDates[i].classList.add("show");
+        }
+        for (let i = 0; i < gradeValues.length; i++) {
+            gradeValues[i].classList.add("show");
+        }
+    }, 20);
 }
 
 
@@ -856,7 +867,10 @@ function saveChanges(categoryId, subjectId) {
     }
     if (CheckedButton.classList.contains('checked')) {
         const categoryElement = document.getElementById(categoryId);
+        categoryElement.classList.remove("show");
+        setTimeout(function () {
         categoryElement.remove();
+        }, 100);
         pushCategoryClass(categoryId, "", "", "", "delete");
     } else {
     pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
