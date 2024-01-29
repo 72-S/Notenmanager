@@ -421,7 +421,14 @@ function generateChartDistribution() {
         options: {
             plugins: {
                 legend: {
-                    display: false
+                    display: true
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return "Gewichtung" + ': ' + context.formattedValue + '%';
+                        }
+                    }
                 }
             },
 
@@ -437,7 +444,7 @@ function generateChartDistribution() {
             scales: {
                 r: {
                     ticks: {
-                        backdropColor: 'transparent',
+                        backdropColor: 'transparent'
                     }
                 }
             },
@@ -537,12 +544,12 @@ function addCategoryToUI(name, weight, id, subjectId) {
 
     box.innerHTML = `
         <div class="titleContainer">
-            <span id="category-name">${name}</span>
-            <span id="category-weight">x ${weight}</span>
+            <span id="category-name${id}">${name}</span>
+            <span id="category-weight${id}">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
         <button class="neuesFachButton" onclick="createGrade('${subjectId}', '${id}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
-        <button class="neuesFachButton" onclick="editGrades('${name}', '${subjectId}', '${weight}', '${id}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" onclick="editGrades('${subjectId}', '${id}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
         </div>
         <div id="gradesContainer${id}" class="gradesContainer"></div>
         `;
@@ -572,7 +579,10 @@ function createGrade(subjectId, categoryId) {
 
 }
 
-function editGrades(name, subjectId, weight, categoryId) {
+function editGrades(subjectId, categoryId) {
+    const name = document.getElementById("category-name" + categoryId).textContent;
+    let weight = document.getElementById("category-weight" + categoryId).textContent;
+    weight = weight.substring(2);
     closeAllPopups();
     const popup = document.getElementById('editNotePopup');
     popup.style.display = "block";
@@ -668,7 +678,7 @@ function addSubjectToUI(name, color, id) {
     const average = document.createElement("p");
     average.classList.add("subject-average");
     average.id = "subject-average" + id;
-    average.textContent = "0.0";
+    average.textContent = "0.00";
 
 
     box.addEventListener("click", function () {
@@ -743,8 +753,8 @@ deleteSubject = (id, box) => {
     box.remove();
     pushSubjectClass(id, "", "", "delete");
     generateChart();
-    generateChartDistribution();
     calculateAverageForAllSubjects();
+    generateChartDistribution();
 }
 
 function selectColor(element) {
@@ -787,6 +797,10 @@ function saveChanges(categoryId, subjectId) {
     const input = document.getElementById("editNotePopup-input").value;
     const select = document.getElementById("editNotePopup-select").value;
     const CheckedButton = document.getElementById("Notetrashcan-button");
+    const categoryName = document.getElementById("category-name" + categoryId);
+    const categoryWeight = document.getElementById("category-weight" + categoryId);
+    categoryName.textContent = input;
+    categoryWeight.textContent = "x " + select;
     if (gradesToDelete.length > 0) {
         gradesToDelete.forEach(gradeId => {
             const gradeElement = document.getElementById(gradeId);
@@ -970,8 +984,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
             generateChart();
-            generateChartDistribution();
             calculateAverageForAllSubjects();
+            generateChartDistribution();
         }
     });
     setButtonStateneuesFachPopup();
@@ -1023,8 +1037,8 @@ document.getElementById("neuesFachPopup-create").addEventListener("click", funct
 document.getElementById("editFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('editFachPopup');
     popup.style.display = "none";
+    resetFachPopup();
     disableAllButtons();
-    selectedColor = '';
 });
 
 document.getElementById("editFachPopup-save").addEventListener("click", function () {
@@ -1064,10 +1078,10 @@ document.getElementById("zurückZurMainPage").addEventListener("click", function
     removeAllCategoriesFromUI();
     disableAllButtons();
     generateChart();
-    generateChartDistribution();
     const average = calculateAverageForSubject(subjectId);
     document.getElementById("subject-average" + subjectId).textContent = average;
     calculateAverageForAllSubjects();
+    generateChartDistribution();
 });
 
 document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
