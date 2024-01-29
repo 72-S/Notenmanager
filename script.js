@@ -367,7 +367,7 @@ function generateChart() {
         data: {
             labels: chartData.map(data => data.x),
             datasets: [{
-                label: 'Note',
+                label: 'Notedurchschnitt der Woche',
                 data: chartData.map(data => data.y),
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
