@@ -265,6 +265,19 @@ function getWeekNumber(d) {
     return d.getUTCFullYear().toString().substring(2) + "-W" + weekNo.toString().padStart(2, '0');
 }
 
+
+function hexToRGBA(hex, opacity) {
+    let r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+
+    if (opacity) {
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    } else {
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+}
+
 function generateChartData() {
     const grades = [];
     Object.values(localGrades).forEach(subjectArray => {
@@ -275,15 +288,11 @@ function generateChartData() {
             });
         });
     });
-
-    // Gruppieren der Noten nach Wochen
     const gradesByWeek = grades.reduce((acc, grade) => {
         acc[grade.week] = acc[grade.week] || [];
         acc[grade.week].push(grade.value);
         return acc;
     }, {});
-
-    // Berechnung des Durchschnitts für jede Woche
     const chartData = Object.entries(gradesByWeek).map(([week, values]) => {
         const average = values.reduce((a, b) => a + b, 0) / values.length;
         return {
@@ -291,10 +300,37 @@ function generateChartData() {
             y: average.toFixed(1)
         };
     });
-
-    // Sortierung der Daten nach Wochen
     chartData.sort((a, b) => a.x.localeCompare(b.x));
     return chartData;
+}
+
+
+
+function generategradeDistributionChartData() {
+    let subjectAverages = [];
+    let totalAverage = 0;
+    Object.values(localSubjects).forEach(subjectArray => {
+        subjectArray.forEach(subject => {
+            const element = document.getElementById(subject.id);
+            if (element) {
+                const average = Number(element.getAttribute("data-subject-average"));
+                if (average !== 0) {
+                    subjectAverages.push({ name: subject.name, average: average, color: subject.color});
+                    totalAverage += average;
+                }
+            }
+        });
+    });
+    let subjectWeights = subjectAverages.map(subject => {
+        return {
+            name: subject.name,
+            weight: parseFloat(((subject.average / totalAverage) * 100).toFixed(2)),
+            color: hexToRGBA(subject.color, 0.3),
+            borderColor: hexToRGBA(subject.color, 1)
+        };
+    });
+
+    return subjectWeights;
 }
 
 
@@ -359,8 +395,57 @@ function generateChart() {
 }
 
 
-function generategradeDistributionChartData() {
+function generateChartDistribution() {
+    const chartData = generategradeDistributionChartData();
+    const canvas = document.getElementById('gradeDistributionChart');
+    const ctx = canvas.getContext('2d');
+
+    if (window.gradeDistributionChart instanceof Chart) {
+        window.gradeDistributionChart.destroy();
+    }
+    window.gradeDistributionChart = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: chartData.map(data => data.name),
+            datasets: [{
+                label: 'Fach',
+                data: chartData.map(data => data.weight),
+                backgroundColor: chartData.map(data => data.color),
+                borderColor: chartData.map(data => data.borderColor),
+                borderWidth: 1.3,
+                fill: false,
+                pointRadius: 3,
+                tension: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            animations: {
+                tension: {
+                    duration: 1000,
+                    easing: 'linear',
+                    from: 0.7,
+                    to: 0,
+                    loop: false
+                }
+            },
+            scales: {
+                r: {
+                    backdropColor: 'red'
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
 }
+
+
 
 
 function calculateAverageForSubject(subjectId) {
@@ -656,6 +741,7 @@ deleteSubject = (id, box) => {
     box.remove();
     pushSubjectClass(id, "", "", "delete");
     generateChart();
+    generateChartDistribution();
     calculateAverageForAllSubjects();
 }
 
@@ -882,6 +968,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
             generateChart();
+            generateChartDistribution();
             calculateAverageForAllSubjects();
         }
     });
@@ -975,6 +1062,7 @@ document.getElementById("zurückZurMainPage").addEventListener("click", function
     removeAllCategoriesFromUI();
     disableAllButtons();
     generateChart();
+    generateChartDistribution();
     const average = calculateAverageForSubject(subjectId);
     document.getElementById("subject-average" + subjectId).textContent = average;
     calculateAverageForAllSubjects();
