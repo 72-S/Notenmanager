@@ -436,7 +436,9 @@ function generateChartDistribution() {
             },
             scales: {
                 r: {
-                    backdropColor: 'red'
+                    ticks: {
+                        backdropColor: 'transparent'
+                    }
                 }
             },
             responsive: true,
