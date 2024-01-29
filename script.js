@@ -126,6 +126,12 @@ class PushLocalDataToDB {
                         if (localSubjects[subject.id]) {
                             delete localSubjects[subject.id];
                         }
+                        const notSubjectMessage = document.getElementById("noSubjectMessage");
+                        if (Object.keys(localSubjects).length === 0) {
+                            notSubjectMessage.style.display = "block";
+                        } else {
+                            notSubjectMessage.style.display = "none";
+                        }
                     });
                     subject.action = "get";
                 }
@@ -515,6 +521,10 @@ function openSubjectPage(id, name) {
     document.getElementById("subjectContent").style.display = "block";
     document.getElementById("neueKategoriePopup").setAttribute("category-data-subject-id", id);
     document.getElementById("FachName").textContent = name;
+    const subjectboxes = document.getElementsByClassName("subject-box");
+    for (let i = 0; i < subjectboxes.length; i++) {
+        subjectboxes[i].classList.remove("show");
+    }
     Object.values(localCategories).forEach(categoryArray => {
         categoryArray.forEach(category => {
             if (category.subjectId === id) {
@@ -555,6 +565,9 @@ function addCategoryToUI(name, weight, id, subjectId) {
         `;
 
     container.appendChild(box);
+    setTimeout(function () {
+        box.classList.add("show");
+    }, 20);
 }
 
 
@@ -574,6 +587,9 @@ function createGrade(subjectId, categoryId) {
     input.value = "";
     select.value = 3;
     popup.style.display = "block";
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 20);
     popup.setAttribute('data-grade-subject-id', subjectId);
     popup.setAttribute('data-grade-category-id', categoryId);
 
@@ -586,6 +602,9 @@ function editGrades(subjectId, categoryId) {
     closeAllPopups();
     const popup = document.getElementById('editNotePopup');
     popup.style.display = "block";
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 20);
     popup.setAttribute('data-category-subject-id', subjectId);
     popup.setAttribute('data-category-category-id', categoryId);
     document.getElementById("editNotePopup-input").value = name;
@@ -689,7 +708,10 @@ function addSubjectToUI(name, color, id) {
         event.preventDefault();
         const existingMenu = document.querySelector('.context-menu');
         if (existingMenu) {
-            existingMenu.remove();
+            contextMenu.classList.remove('show');
+        setTimeout( function() {
+            contextMenu.remove();
+        }, 100);
         }
     
         const contextMenuHTML = `
@@ -699,13 +721,21 @@ function addSubjectToUI(name, color, id) {
             </div>`;
     
         document.body.insertAdjacentHTML('beforeend', contextMenuHTML);
-    
+        
+        setTimeout(() => {
+            document.querySelector('.context-menu').classList.add('show');
+        }, 20);
+
         document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, color, name));
         document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
     });
     container.appendChild(box);
     box.appendChild(subjectName);
     box.appendChild(average);
+
+    setTimeout(function () {
+        box.classList.add("show");
+    }, 20);
 }
 
 
@@ -730,7 +760,10 @@ function addGradeToUI(value, date, categoryId, id) {
 editSubject = (id, color, name) => {
     const popup = document.getElementById('editFachPopup');
     const contextMenu = document.querySelector('.context-menu');
-    contextMenu.remove();
+    contextMenu.classList.remove('show');
+        setTimeout( function() {
+            contextMenu.remove();
+        }, 100);
     popup.setAttribute('data-subject-id', id);
     document.getElementById("editFachPopup-input").value = name;
     const colorChoices = document.querySelectorAll('.color-choice');
@@ -744,17 +777,27 @@ editSubject = (id, color, name) => {
     });
     selectedColor = color;
     popup.style.display = "block";
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 20);
 }
 
 
 deleteSubject = (id, box) => {
     const contextMenu = document.querySelector('.context-menu');
-    contextMenu.remove();
+    contextMenu.classList.remove('show');
+        setTimeout( function() {
+            contextMenu.remove();
+        }, 100);
+
+    box.classList.remove("show");
+    setTimeout(function () {
     box.remove();
     pushSubjectClass(id, "", "", "delete");
     generateChart();
     calculateAverageForAllSubjects();
     generateChartDistribution();
+    }, 100);
 }
 
 function selectColor(element) {
@@ -804,7 +847,10 @@ function saveChanges(categoryId, subjectId) {
     if (gradesToDelete.length > 0) {
         gradesToDelete.forEach(gradeId => {
             const gradeElement = document.getElementById(gradeId);
+            gradeElement.classList.remove("show");
+            setTimeout(function () {
             gradeElement.remove();
+            }, 100);
             pushGradeClass(gradeId, "", "", "", "", "delete");
         });
     }
@@ -995,7 +1041,10 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('click', function (event) {
     const contextMenu = document.querySelector('.context-menu');
     if (contextMenu && !contextMenu.contains(event.target)) {
-        contextMenu.remove();
+        contextMenu.classList.remove('show');
+        setTimeout( function() {
+            contextMenu.remove();
+        }, 100);
     }
 });
 
@@ -1009,12 +1058,18 @@ document.getElementById("neuesFachButtonClick").addEventListener("click", functi
     const input = document.getElementById("neusFachPopup-input");
     input.value = "";
     popup.style.display = "block";
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 20);
     disableAllButtons();
 });
  
 document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neuesFachPopup');
-    popup.style.display = "none";
+    popup.classList.remove('show');
+    setTimeout(function() {
+        popup.style.display = "none";
+    }, 100);
     resetFachPopup();
     disableAllButtons();
 });
@@ -1036,7 +1091,10 @@ document.getElementById("neuesFachPopup-create").addEventListener("click", funct
 
 document.getElementById("editFachPopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('editFachPopup');
-    popup.style.display = "none";
+    popup.classList.remove('show');
+    setTimeout(function() {
+        popup.style.display = "none";
+    }, 100);
     resetFachPopup();
     disableAllButtons();
 });
@@ -1056,7 +1114,7 @@ document.getElementById("editFachPopup-save").addEventListener("click", function
     subjectBox.getElementsByClassName("subject-name")[0].textContent = name;
     resetFachPopup();
     disableAllButtons();
-    selectedColor = '';
+    generateChartDistribution();
 });
 
 document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
@@ -1067,6 +1125,9 @@ document.getElementById("neueKategorieButtonClick").addEventListener("click", fu
     input.value = "";
     select.value = 1;
     popup.style.display = "block";
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 20);
     disableAllButtons();
 });
 
@@ -1082,11 +1143,18 @@ document.getElementById("zurückZurMainPage").addEventListener("click", function
     document.getElementById("subject-average" + subjectId).textContent = average;
     calculateAverageForAllSubjects();
     generateChartDistribution();
+    const subjectboxes = document.getElementsByClassName("subject-box");
+    for (let i = 0; i < subjectboxes.length; i++) {
+        subjectboxes[i].classList.add("show");
+    }
 });
 
 document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neueKategoriePopup');
-    popup.style.display = "none";
+    popup.classList.remove('show');
+    setTimeout(function() {
+        popup.style.display = "none";
+    }, 100);
     disableAllButtons();
 });
 
@@ -1106,7 +1174,10 @@ document.getElementById("neueKategoriePopup-create").addEventListener("click", f
 
 document.getElementById("neueNotePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('neueNotePopup');
-    popup.style.display = "none";
+    popup.classList.remove('show');
+    setTimeout(function() {
+        popup.style.display = "none";
+    }, 100);
     disableAllButtons();
 });
 
@@ -1128,7 +1199,10 @@ document.getElementById("neueNotePopup-create").addEventListener("click", functi
 document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
     const popup = document.getElementById('editNotePopup');
     const CheckedButton = document.getElementById("Notetrashcan-button");
-    popup.style.display = "none";
+    popup.classList.remove('show');
+    setTimeout(function() {
+        popup.style.display = "none";
+    }, 100);
     CheckedButton.classList.remove('checked');
     gradesToDelete = [];
     disableAllButtons();
@@ -1145,7 +1219,10 @@ document.getElementById("editNotePopup-save").addEventListener("click", function
         return;
     }
     saveChanges(categoryId, subjectId);
-    popup.style.display = "none";
+    popup.classList.remove('show');
+    setTimeout(function() {
+        popup.style.display = "none";
+    }, 100);
     CheckedButton.classList.remove('checked');
     disableAllButtons();
 });

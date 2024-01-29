@@ -57,6 +57,30 @@ body {
     margin-bottom: 2px;
 }
 
+.popup {
+    transition: all 0.1s ease-in-out;
+}
+
+.FachPopup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.KategoriePopup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.NotePopup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.context-menu.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .context-menu {
     background-color: #dbebfa;
     border-radius: var(--BorderRadius);
@@ -70,6 +94,9 @@ body {
     border: none;
     display: flex;
     flex-direction: column;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all 0.1s ease-in-out;
 }
 
 .popup-buttons {
@@ -82,6 +109,14 @@ body {
     padding: 10px 10px;
     cursor: pointer;
     transition: var(--transition);
+}
+
+#zurückZurMainPage {
+    background-color: var(--button-container-buttons-cancel-color);
+}
+
+#zurückZurMainPage:hover {
+    background-color: var(--button-container-buttons-cancel-color-hover);
 }
 
 #EditSubjectContext {
@@ -370,7 +405,8 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
+    opacity: 0;
     width: 60%;
     min-width: 350px;
     max-width: 610px;
@@ -418,7 +454,8 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
+    opacity: 0;
     width: 40%;
     min-width: 360px;
     max-width: 610px;
@@ -476,7 +513,8 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
+    opacity: 0;
     width: 40%;
     min-width: 350px;
     max-width: 610px;
@@ -586,8 +624,16 @@ body {
     padding: 10px;
     width: calc(100% - 20px);
     border-radius: var(--BorderRadius);
+    transition: var(--transition);
+    opacity: 0;
+    transform: translateX(-100%);
 }
 
+.subject-box.show{
+    opacity: 1;
+    transform: translateX(0%);
+
+}
 
 
 /* SUBJECTPAGE */
@@ -610,6 +656,14 @@ body {
     padding: 10px;
     height: 200px;
     border-radius: var(--BorderRadius);
+    transition: var(--transition);
+    opacity: 0.7; 
+    transform: scale(0.9);
+}
+
+.category-box.show{
+    opacity: 1;
+    transform: scale(1);
 }
 
 .titleContainer {
