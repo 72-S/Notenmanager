@@ -827,7 +827,7 @@ deleteSubject = (id, box) => {
     generateChart();
     calculateAverageForAllSubjects();
     generateChartDistribution();
-    }, 100);
+    }, 300);
 }
 
 function selectColor(element) {
