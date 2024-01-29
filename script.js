@@ -858,11 +858,15 @@ function saveChanges(categoryId, subjectId) {
     if (gradesToDelete.length > 0) {
         gradesToDelete.forEach(gradeId => {
             const gradeElement = document.getElementById(gradeId);
-            gradeElement.classList.remove("show");
+            const gradeDateElement = gradeElement.querySelector('.gradeDate');
+            const gradeValueElement = gradeElement.querySelector('.gradeValue');
+            gradeDateElement.classList.remove("show");
+            gradeValueElement.classList.remove("show");
             setTimeout(function () {
             gradeElement.remove();
-            }, 100);
+            }, 120);
             pushGradeClass(gradeId, "", "", "", "", "delete");
+            gradesToDelete = [];
         });
     }
     if (CheckedButton.classList.contains('checked')) {
