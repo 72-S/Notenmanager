@@ -437,7 +437,7 @@ function generateChartDistribution() {
             scales: {
                 r: {
                     ticks: {
-                        backdropColor: 'transparent'
+                        backdropColor: 'transparent',
                     }
                 }
             },
