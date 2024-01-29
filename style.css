@@ -674,6 +674,44 @@ body {
     font-size: 20px;
 }
 
+.category-name {
+    color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 200px;
+    transition: var(--transition);
+    opacity: 1;
+}
+
+.category-name.change {
+    opacity: 0;
+}
+
+.category-weight {
+    color: #333333;
+    transition: var(--transition);
+    opacity: 1;
+}
+
+.category-weight.change {
+    opacity: 0;
+}
+
+.subject-name {
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 270px;
+    transition: var(--transition);
+    opacity: 1;
+}
+
+.subject-name.change {
+    opacity: 0;
+}
+
 .gradesContainer {
     overflow-y: auto;
     max-height: 150px; 

@@ -284,6 +284,18 @@ function hexToRGBA(hex, opacity) {
     }
 }
 
+function changeTextWithTransition(element, newText) {
+    if (element.textContent !== newText) {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            element.textContent = newText;
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        }, 300);
+    }
+}
+
 function generateChartData() {
     const grades = [];
     Object.values(localGrades).forEach(subjectArray => {
@@ -554,8 +566,8 @@ function addCategoryToUI(name, weight, id, subjectId) {
 
     box.innerHTML = `
         <div class="titleContainer">
-            <span id="category-name${id}">${name}</span>
-            <span id="category-weight${id}">x ${weight}</span>
+            <span id="category-name${id}" class="category-name">${name}</span>
+            <span id="category-weight${id}" class="category-weight">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
         <button class="neuesFachButton" onclick="createGrade('${subjectId}', '${id}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
@@ -584,7 +596,11 @@ function createGrade(subjectId, categoryId) {
     const popup = document.getElementById('neueNotePopup');
     const input = document.getElementById("neueNotePopup-input");
     const select = document.getElementById("neueNotePopup-select");
-    input.value = "";
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0];
+    const saveButton = document.getElementById('neueNotePopup-create');
+    saveButton.disabled = false;
+    input.value = formattedDate;
     select.value = 3;
     popup.style.display = "block";
     setTimeout(() => {
@@ -770,6 +786,8 @@ function addGradeToUI(value, date, categoryId, id) {
 
 editSubject = (id, color, name) => {
     const popup = document.getElementById('editFachPopup');
+    const popupInput = document.getElementById('editFachPopup-input');
+    const subjectName = document.getElementById(id).querySelector('.subject-name').textContent;
     const contextMenu = document.querySelector('.context-menu');
     contextMenu.classList.remove('show');
         setTimeout( function() {
@@ -787,6 +805,7 @@ editSubject = (id, color, name) => {
         }
     });
     selectedColor = color;
+    popupInput.value = subjectName;
     popup.style.display = "block";
     setTimeout(() => {
         popup.classList.add('show');
@@ -847,14 +866,16 @@ function resetFachPopup() {
     selectedColor = '';
 }
 
+
+
 function saveChanges(categoryId, subjectId) {
     const input = document.getElementById("editNotePopup-input").value;
     const select = document.getElementById("editNotePopup-select").value;
     const CheckedButton = document.getElementById("Notetrashcan-button");
     const categoryName = document.getElementById("category-name" + categoryId);
     const categoryWeight = document.getElementById("category-weight" + categoryId);
-    categoryName.textContent = input;
-    categoryWeight.textContent = "x " + select;
+    changeTextWithTransition(categoryName, input);
+    changeTextWithTransition(categoryWeight, "x " + select);
     if (gradesToDelete.length > 0) {
         gradesToDelete.forEach(gradeId => {
             const gradeElement = document.getElementById(gradeId);
@@ -1129,7 +1150,7 @@ document.getElementById("editFachPopup-save").addEventListener("click", function
     pushSubjectClass(id, name, color, "overwrite");
     popup.style.display = "none";
     subjectBox.style.backgroundColor = color;
-    subjectBox.getElementsByClassName("subject-name")[0].textContent = name;
+    changeTextWithTransition(subjectBox.getElementsByClassName("subject-name")[0], name);
     resetFachPopup();
     disableAllButtons();
     generateChartDistribution();
