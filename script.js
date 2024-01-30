@@ -491,6 +491,7 @@ function generateChartDistribution() {
     const chartData = generategradeDistributionChartData();
     const canvas = document.getElementById('gradeDistributionChart');
     const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (window.gradeDistributionChart instanceof Chart) {
         window.gradeDistributionChart.destroy();
