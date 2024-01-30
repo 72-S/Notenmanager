@@ -105,8 +105,8 @@ class PushLocalDataToDB {
                     newRef.then((ref) => {
                         const newId = ref.key;
                         localSubjects[newId] = [{
-                            id: newId, 
-                            name: subject.name, 
+                            id: newId,
+                            name: subject.name,
                             color: subject.color,
                             action: "get"
                         }];
@@ -154,8 +154,8 @@ class PushLocalDataToDB {
                     newRef.then((ref) => {
                         const newId = ref.key;
                         localCategories[newId] = [{
-                            id: newId, 
-                            name: category.name, 
+                            id: newId,
+                            name: category.name,
                             weight: category.weight,
                             subjectId: category.subjectId,
                             action: "get"
@@ -166,7 +166,7 @@ class PushLocalDataToDB {
                 } else if (category.action === "overwrite") {
                     const categoryRef = db.child(category.id);
                     categoryRef.update({
-                        name: category.name, 
+                        name: category.name,
                         weight: category.weight
                     });
                     category.action = "get";
@@ -199,7 +199,7 @@ class PushLocalDataToDB {
                     newRef.then((ref) => {
                         const newId = ref.key;
                         localGrades[newId] = [{
-                            id: newId, 
+                            id: newId,
                             value: grade.value,
                             date: grade.date,
                             subjectId: grade.subjectId,
@@ -265,30 +265,30 @@ class PushLocalDataToDB {
 
 function signInWithGoogle() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-    }).catch(function(error) {
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+    }).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         var email = error.email;
-        var credential = error.credential; 
+        var credential = error.credential;
         console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
     });
 }
 
 function signOut() {
     if (confirm("Möchten Sie sich wirklich abmelden?")) {
-      firebase.auth().signOut().then(function() {
-        userId = null;
-        console.log("Abmeldung erfolgreich");
-      }).catch(function(error) {
-        console.error("Fehler beim Abmelden", error);
-      });
+        firebase.auth().signOut().then(function () {
+            userId = null;
+            console.log("Abmeldung erfolgreich");
+        }).catch(function (error) {
+            console.error("Fehler beim Abmelden", error);
+        });
     }
-  }
-  
+}
+
 
 function checkAuthStatus() {
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // Benutzer ist angemeldet.
             document.getElementById("mainContent").style.display = "block";
@@ -312,6 +312,12 @@ function loadUserData(userId) {
             saveLocalData.loadGrades(() => {
                 removeAllSubjectsFromUI();
                 removeAllCategoriesFromUI();
+                const noSubjectMessage = document.getElementById("noSubjectMessage");
+                if (Object.keys(localSubjects).length === 0) {
+                    noSubjectMessage.style.display = "block";
+                } else {
+                    noSubjectMessage.style.display = "none";
+                }
                 Object.values(localSubjects).forEach(subjectArray => {
                     subjectArray.forEach(subject => {
                         addSubjectToUI(subject.name, subject.color, subject.id);
@@ -322,9 +328,9 @@ function loadUserData(userId) {
                 calculateAverageForAllSubjects();
                 generateChart();
                 generateChartDistribution();
-            },userId);
-        },userId);
-    },userId);
+            }, userId);
+        }, userId);
+    }, userId);
 }
 
 function getWeekNumber(d) {
@@ -397,7 +403,7 @@ function generategradeDistributionChartData() {
             if (element) {
                 const average = Number(element.getAttribute("data-subject-average"));
                 if (average !== 0) {
-                    subjectAverages.push({ name: subject.name, average: average, color: subject.color});
+                    subjectAverages.push({ name: subject.name, average: average, color: subject.color });
                     totalAverage += average;
                 }
             }
@@ -450,13 +456,13 @@ function generateChart() {
 
             animations: {
                 tension: {
-                  duration: 1000,
-                  easing: 'linear',
-                  from: 0.7,
-                  to: 0,
-                  loop: false
+                    duration: 1000,
+                    easing: 'linear',
+                    from: 0.7,
+                    to: 0,
+                    loop: false
                 }
-              },
+            },
             scales: {
                 y: {
                     beginAtZero: false,
@@ -507,7 +513,7 @@ function generateChartDistribution() {
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             return "Gewichtung" + ': ' + context.formattedValue + '%';
                         }
                     }
@@ -546,7 +552,7 @@ function calculateAverageForSubject(subjectId) {
         gradeArray.forEach(grade => {
             if (grade.subjectId === subjectId) {
                 const category = localCategories[grade.categoryId][0];
-                const categoryWeight = category ? parseFloat(category.weight) : 1; 
+                const categoryWeight = category ? parseFloat(category.weight) : 1;
                 let gradeValue = parseFloat(grade.value);
                 if (!isNaN(gradeValue) && !isNaN(categoryWeight)) {
                     sum += gradeValue * categoryWeight;
@@ -581,8 +587,8 @@ function calculateAverageForAllSubjects() {
         });
     });
 
-    const allAverage = count > 0 
-        ? subjectSum.reduce((a, b) => a + b, 0) / count 
+    const allAverage = count > 0
+        ? subjectSum.reduce((a, b) => a + b, 0) / count
         : 0;
     document.getElementById("averageMessage").textContent = "Ø " + allAverage.toFixed(2);
 }
@@ -698,7 +704,7 @@ function editGrades(subjectId, categoryId) {
         gradeArray.forEach(grade => {
             if (grade.subjectId === subjectId) {
                 if (grade.categoryId === categoryId) {
-                addGradeToPopupUI(grade.value, grade.date, grade.id);
+                    addGradeToPopupUI(grade.value, grade.date, grade.id);
                 }
             }
         });
@@ -710,7 +716,7 @@ function addGradeToPopupUI(value, date, id) {
     if (!container) {
         return console.error("Grade Container not found");
     }
-    
+
     const gradeElement = document.createElement('div');
     gradeElement.className = 'gradePopupElement';
     gradeElement.id = id;
@@ -728,7 +734,7 @@ function addGradeToPopupUI(value, date, id) {
     container.appendChild(gradeElement);
 
     const checkbox = gradeElement.querySelector('.gradeCheckbox');
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
         if (this.checked) {
             gradeElement.classList.add('selectedGrade');
             if (!gradesToDelete.includes(id)) {
@@ -744,7 +750,7 @@ function addGradeToPopupUI(value, date, id) {
     });
 
     const gradePopupContainer = gradeElement.querySelector('.gradePopupContainer');
-    gradePopupContainer.addEventListener('click', function(event) {
+    gradePopupContainer.addEventListener('click', function (event) {
         if (event.target !== checkbox && event.target !== gradePopupContainer.querySelector('label')) {
             checkbox.checked = !checkbox.checked;
             checkbox.dispatchEvent(new Event('change'));
@@ -789,19 +795,19 @@ function addSubjectToUI(name, color, id) {
         const existingMenu = document.querySelector('.context-menu');
         if (existingMenu) {
             contextMenu.classList.remove('show');
-        setTimeout( function() {
-            contextMenu.remove();
-        }, 100);
+            setTimeout(function () {
+                contextMenu.remove();
+            }, 100);
         }
-    
+
         const contextMenuHTML = `
             <div class="context-menu" style="position: absolute; top: ${event.clientY}px; left: ${event.clientX}px;">
                 <button class="popup-buttons" id="EditSubjectContext">Bearbeiten</button>
                 <button class="popup-buttons" id="DeleteSubjectContext">Löschen</button>
             </div>`;
-    
+
         document.body.insertAdjacentHTML('beforeend', contextMenuHTML);
-        
+
         setTimeout(() => {
             document.querySelector('.context-menu').classList.add('show');
         }, 20);
@@ -837,7 +843,7 @@ function addGradeToUI(value, date, categoryId, id) {
     setTimeout(function () {
         const gradeDates = document.getElementsByClassName("gradeDate");
         const gradeValues = document.getElementsByClassName("gradeValue");
-        
+
         for (let i = 0; i < gradeDates.length; i++) {
             gradeDates[i].classList.add("show");
         }
@@ -854,15 +860,15 @@ editSubject = (id, color, name) => {
     const subjectName = document.getElementById(id).querySelector('.subject-name').textContent;
     const contextMenu = document.querySelector('.context-menu');
     contextMenu.classList.remove('show');
-        setTimeout( function() {
-            contextMenu.remove();
-        }, 100);
+    setTimeout(function () {
+        contextMenu.remove();
+    }, 100);
     popup.setAttribute('data-subject-id', id);
     document.getElementById("editFachPopup-input").value = name;
     const colorChoices = document.querySelectorAll('.color-choice');
     colorChoices.forEach(colorChoice => {
         colorChoice.classList.remove('selected');
-    });  
+    });
     colorChoices.forEach(colorChoice => {
         if (colorChoice.getAttribute('data-color') === color) {
             colorChoice.classList.add('selected');
@@ -880,17 +886,17 @@ editSubject = (id, color, name) => {
 deleteSubject = (id, box) => {
     const contextMenu = document.querySelector('.context-menu');
     contextMenu.classList.remove('show');
-        setTimeout( function() {
-            contextMenu.remove();
-        }, 100);
+    setTimeout(function () {
+        contextMenu.remove();
+    }, 100);
 
     box.classList.remove("show");
     setTimeout(function () {
-    box.remove();
-    pushSubjectClass(id, "", "", "delete");
-    generateChart();
-    calculateAverageForAllSubjects();
-    generateChartDistribution();
+        box.remove();
+        pushSubjectClass(id, "", "", "delete");
+        generateChart();
+        calculateAverageForAllSubjects();
+        generateChartDistribution();
     }, 300);
 }
 
@@ -948,7 +954,7 @@ function saveChanges(categoryId, subjectId) {
             gradeDateElement.classList.remove("show");
             gradeValueElement.classList.remove("show");
             setTimeout(function () {
-            gradeElement.remove();
+                gradeElement.remove();
             }, 120);
             pushGradeClass(gradeId, "", "", "", "", "delete");
             gradesToDelete = [];
@@ -958,11 +964,11 @@ function saveChanges(categoryId, subjectId) {
         const categoryElement = document.getElementById(categoryId);
         categoryElement.classList.remove("show");
         setTimeout(function () {
-        categoryElement.remove();
+            categoryElement.remove();
         }, 100);
         pushCategoryClass(categoryId, "", "", "", "delete");
     } else {
-    pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
+        pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
     }
 }
 
@@ -984,21 +990,21 @@ function pushSubjectClass(id, name, color, action) {
                 action: "overwrite"
             };
         }
-    } 
+    }
     else if (action === "delete") {
         localSubjects[id] = [{
-            id: id, 
-            name: name, 
-            color: color, 
-            action: "delete" 
+            id: id,
+            name: name,
+            color: color,
+            action: "delete"
         }]
     }
     else if (action === "push") {
-        localSubjects[tempId] = [{ 
-            id: tempId, 
-            name: name, 
-            color: color, 
-            action: "push" 
+        localSubjects[tempId] = [{
+            id: tempId,
+            name: name,
+            color: color,
+            action: "push"
         }];
     }
     if (action === "push" || action === "overwrite" || action === "delete") {
@@ -1021,23 +1027,23 @@ function pushCategoryClass(id, name, weight, subjectId, action) {
                 action: "overwrite"
             };
         }
-    } 
+    }
     else if (action === "delete") {
         localCategories[id] = [{
-            id: id, 
-            name: name, 
-            weight: weight, 
+            id: id,
+            name: name,
+            weight: weight,
             subjectId: subjectId,
-            action: "delete" 
+            action: "delete"
         }]
     }
     else if (action === "push") {
-        localCategories[tempId] = [{ 
-            id: tempId, 
-            name: name, 
-            weight: weight, 
+        localCategories[tempId] = [{
+            id: tempId,
+            name: name,
+            weight: weight,
             subjectId: subjectId,
-            action: "push" 
+            action: "push"
         }];
     }
     if (action === "push" || action === "overwrite" || action === "delete") {
@@ -1061,25 +1067,25 @@ function pushGradeClass(id, value, date, subjectId, categoryId, action) {
                 action: "overwrite"
             };
         }
-    } 
+    }
     else if (action === "delete") {
         localGrades[id] = [{
-            id: id, 
-            value: value, 
-            date: date, 
+            id: id,
+            value: value,
+            date: date,
             subjectId: subjectId,
             categoryId: categoryId,
-            action: "delete" 
+            action: "delete"
         }]
     }
     else if (action === "push") {
-        localGrades[tempId] = [{ 
-            id: tempId, 
-            value: value, 
-            date: date, 
+        localGrades[tempId] = [{
+            id: tempId,
+            value: value,
+            date: date,
             subjectId: subjectId,
             categoryId: categoryId,
-            action: "push" 
+            action: "push"
         }];
     }
     if (action === "push" || action === "overwrite" || action === "delete") {
@@ -1120,221 +1126,221 @@ document.addEventListener("DOMContentLoaded", function () {
     setButtonStateneuesFachPopup();
     disableAllButtons();
 
-//EVENT LISTENER
-document.addEventListener('click', function (event) {
-    const contextMenu = document.querySelector('.context-menu');
-    if (contextMenu && !contextMenu.contains(event.target)) {
-        contextMenu.classList.remove('show');
-        setTimeout( function() {
-            contextMenu.remove();
+    //EVENT LISTENER
+    document.addEventListener('click', function (event) {
+        const contextMenu = document.querySelector('.context-menu');
+        if (contextMenu && !contextMenu.contains(event.target)) {
+            contextMenu.classList.remove('show');
+            setTimeout(function () {
+                contextMenu.remove();
+            }, 100);
+        }
+    });
+
+    document.querySelectorAll('.color-choice').forEach(span => {
+        span.addEventListener('click', () => selectColor(span));
+    });
+
+    document.getElementById("neuesFachButtonClick").addEventListener("click", function () {
+        closeAllPopups();
+        const popup = document.getElementById('neuesFachPopup');
+        const input = document.getElementById("neusFachPopup-input");
+        input.value = "";
+        popup.style.display = "block";
+        setTimeout(() => {
+            popup.classList.add('show');
+        }, 20);
+        disableAllButtons();
+    });
+
+    document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
+        const popup = document.getElementById('neuesFachPopup');
+        popup.classList.remove('show');
+        setTimeout(function () {
+            popup.style.display = "none";
         }, 100);
-    }
-});
+        resetFachPopup();
+        disableAllButtons();
+    });
 
-document.querySelectorAll('.color-choice').forEach(span => {
-    span.addEventListener('click', () => selectColor(span));
-});
-
-document.getElementById("neuesFachButtonClick").addEventListener("click", function () {
-    closeAllPopups();
-    const popup = document.getElementById('neuesFachPopup');
-    const input = document.getElementById("neusFachPopup-input");
-    input.value = "";
-    popup.style.display = "block";
-    setTimeout(() => {
-        popup.classList.add('show');
-    }, 20);
-    disableAllButtons();
-});
- 
-document.getElementById("neuesFachPopup-cancel").addEventListener("click", function () {
-    const popup = document.getElementById('neuesFachPopup');
-    popup.classList.remove('show');
-    setTimeout(function() {
+    document.getElementById("neuesFachPopup-create").addEventListener("click", function () {
+        const popup = document.getElementById('neuesFachPopup');
+        const noSubjectMessage = document.getElementById("noSubjectMessage");
+        const name = document.getElementById("neusFachPopup-input").value;
+        const color = selectedColor;
+        if (name === "") {
+            return;
+        }
+        pushSubjectClass("", name, color, "push");
         popup.style.display = "none";
-    }, 100);
-    resetFachPopup();
-    disableAllButtons();
-});
+        noSubjectMessage.style.display = "none";
+        resetFachPopup();
+        disableAllButtons();
+    });
 
-document.getElementById("neuesFachPopup-create").addEventListener("click", function () {
-    const popup = document.getElementById('neuesFachPopup');
-    const noSubjectMessage = document.getElementById("noSubjectMessage");
-    const name = document.getElementById("neusFachPopup-input").value;
-    const color = selectedColor;
-    if (name === "") {
-        return;
-    }
-    pushSubjectClass("", name, color, "push");
-    popup.style.display = "none";
-    noSubjectMessage.style.display = "none";
-    resetFachPopup();
-    disableAllButtons();
-});
+    document.getElementById("editFachPopup-cancel").addEventListener("click", function () {
+        const popup = document.getElementById('editFachPopup');
+        popup.classList.remove('show');
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 100);
+        resetFachPopup();
+        disableAllButtons();
+    });
 
-document.getElementById("editFachPopup-cancel").addEventListener("click", function () {
-    const popup = document.getElementById('editFachPopup');
-    popup.classList.remove('show');
-    setTimeout(function() {
+    document.getElementById("editFachPopup-save").addEventListener("click", function () {
+        const popup = document.getElementById('editFachPopup');
+        const name = document.getElementById("editFachPopup-input").value;
+        const color = selectedColor;
+        const id = popup.getAttribute('data-subject-id');
+        const subjectBox = document.getElementById(id);
+        if (name === "") {
+            return;
+        }
+        pushSubjectClass(id, name, color, "overwrite");
         popup.style.display = "none";
-    }, 100);
-    resetFachPopup();
-    disableAllButtons();
-});
+        subjectBox.style.backgroundColor = color;
+        changeTextWithTransition(subjectBox.getElementsByClassName("subject-name")[0], name);
+        resetFachPopup();
+        disableAllButtons();
+        generateChartDistribution();
+    });
 
-document.getElementById("editFachPopup-save").addEventListener("click", function () {
-    const popup = document.getElementById('editFachPopup');
-    const name = document.getElementById("editFachPopup-input").value;
-    const color = selectedColor;
-    const id = popup.getAttribute('data-subject-id');
-    const subjectBox = document.getElementById(id);
-    if (name === "") {
-        return;
-    }
-    pushSubjectClass(id, name, color, "overwrite");
-    popup.style.display = "none";
-    subjectBox.style.backgroundColor = color;
-    changeTextWithTransition(subjectBox.getElementsByClassName("subject-name")[0], name);
-    resetFachPopup();
-    disableAllButtons();
-    generateChartDistribution();
-});
+    document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
+        closeAllPopups();
+        const popup = document.getElementById('neueKategoriePopup');
+        const input = document.getElementById("neueKategoriePopup-input");
+        const select = document.getElementById("neueKategoriePopup-select");
+        input.value = "";
+        select.value = 1;
+        popup.style.display = "block";
+        setTimeout(() => {
+            popup.classList.add('show');
+        }, 20);
+        disableAllButtons();
+    });
 
-document.getElementById("neueKategorieButtonClick").addEventListener("click", function () {
-    closeAllPopups();
-    const popup = document.getElementById('neueKategoriePopup');
-    const input = document.getElementById("neueKategoriePopup-input");
-    const select = document.getElementById("neueKategoriePopup-select");
-    input.value = "";
-    select.value = 1;
-    popup.style.display = "block";
-    setTimeout(() => {
-        popup.classList.add('show');
-    }, 20);
-    disableAllButtons();
-});
+    document.getElementById("zurückZurMainPage").addEventListener("click", function () {
+        const subjectId = this.getAttribute('category-data-subject-id');
+        closeAllPopups();
+        document.getElementById("mainContent").style.display = "block";
+        document.getElementById("subjectContent").style.display = "none";
+        removeAllCategoriesFromUI();
+        disableAllButtons();
+        generateChart();
+        const average = calculateAverageForSubject(subjectId);
+        document.getElementById("subject-average" + subjectId).textContent = average;
+        calculateAverageForAllSubjects();
+        generateChartDistribution();
+        const subjectboxes = document.getElementsByClassName("subject-box");
+        for (let i = 0; i < subjectboxes.length; i++) {
+            subjectboxes[i].classList.add("show");
+        }
+    });
 
-document.getElementById("zurückZurMainPage").addEventListener("click", function () {
-    const subjectId = this.getAttribute('category-data-subject-id');
-    closeAllPopups();
-    document.getElementById("mainContent").style.display = "block";
-    document.getElementById("subjectContent").style.display = "none";
-    removeAllCategoriesFromUI();
-    disableAllButtons();
-    generateChart();
-    const average = calculateAverageForSubject(subjectId);
-    document.getElementById("subject-average" + subjectId).textContent = average;
-    calculateAverageForAllSubjects();
-    generateChartDistribution();
-    const subjectboxes = document.getElementsByClassName("subject-box");
-    for (let i = 0; i < subjectboxes.length; i++) {
-        subjectboxes[i].classList.add("show");
-    }
-});
+    document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
+        const popup = document.getElementById('neueKategoriePopup');
+        popup.classList.remove('show');
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 100);
+        disableAllButtons();
+    });
 
-document.getElementById("neueKategoriePopup-cancel").addEventListener("click", function () {
-    const popup = document.getElementById('neueKategoriePopup');
-    popup.classList.remove('show');
-    setTimeout(function() {
+    document.getElementById("neueKategoriePopup-create").addEventListener("click", function () {
+        const popup = document.getElementById('neueKategoriePopup');
+        const name = document.getElementById("neueKategoriePopup-input").value;
+        const weight = document.getElementById("neueKategoriePopup-select").value;
+        const subjectId = popup.getAttribute('category-data-subject-id');
+        if (name === "") {
+            return;
+        }
+        pushCategoryClass("", name, weight, subjectId, "push");
         popup.style.display = "none";
-    }, 100);
-    disableAllButtons();
-});
-
-document.getElementById("neueKategoriePopup-create").addEventListener("click", function () {
-    const popup = document.getElementById('neueKategoriePopup');
-    const name = document.getElementById("neueKategoriePopup-input").value;
-    const weight = document.getElementById("neueKategoriePopup-select").value;
-    const subjectId = popup.getAttribute('category-data-subject-id');
-    if (name === "") {
-        return;
-    }
-    pushCategoryClass("", name, weight, subjectId, "push");
-    popup.style.display = "none";
-    disableAllButtons();
-});
+        disableAllButtons();
+    });
 
 
-document.getElementById("neueNotePopup-cancel").addEventListener("click", function () {
-    const popup = document.getElementById('neueNotePopup');
-    popup.classList.remove('show');
-    setTimeout(function() {
+    document.getElementById("neueNotePopup-cancel").addEventListener("click", function () {
+        const popup = document.getElementById('neueNotePopup');
+        popup.classList.remove('show');
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 100);
+        disableAllButtons();
+    });
+
+    document.getElementById("neueNotePopup-create").addEventListener("click", function () {
+        const popup = document.getElementById('neueNotePopup');
+        const value = document.getElementById("neueNotePopup-select").value;
+        const date = document.getElementById("neueNotePopup-input").value;
+        const subjectId = popup.getAttribute('data-grade-subject-id');
+        const categoryId = popup.getAttribute('data-grade-category-id');
+        if (date === "") {
+            return;
+        }
+        pushGradeClass("", value, date, subjectId, categoryId, "push");
         popup.style.display = "none";
-    }, 100);
-    disableAllButtons();
-});
-
-document.getElementById("neueNotePopup-create").addEventListener("click", function () {
-    const popup = document.getElementById('neueNotePopup');
-    const value = document.getElementById("neueNotePopup-select").value;
-    const date = document.getElementById("neueNotePopup-input").value;
-    const subjectId = popup.getAttribute('data-grade-subject-id');
-    const categoryId = popup.getAttribute('data-grade-category-id');
-    if (date === "") {
-        return;
-    }
-    pushGradeClass("", value, date, subjectId, categoryId, "push");
-    popup.style.display = "none";
-    disableAllButtons();
-});
+        disableAllButtons();
+    });
 
 
-document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
-    const popup = document.getElementById('editNotePopup');
-    const CheckedButton = document.getElementById("Notetrashcan-button");
-    popup.classList.remove('show');
-    setTimeout(function() {
-        popup.style.display = "none";
-    }, 100);
-    CheckedButton.classList.remove('checked');
-    gradesToDelete = [];
-    disableAllButtons();
-});
+    document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
+        const popup = document.getElementById('editNotePopup');
+        const CheckedButton = document.getElementById("Notetrashcan-button");
+        popup.classList.remove('show');
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 100);
+        CheckedButton.classList.remove('checked');
+        gradesToDelete = [];
+        disableAllButtons();
+    });
 
 
-document.getElementById("editNotePopup-save").addEventListener("click", function () {
-    const popup = document.getElementById('editNotePopup');
-    const name = document.getElementById("editNotePopup-input").value;
-    const subjectId = popup.getAttribute('data-category-subject-id');
-    const categoryId = popup.getAttribute('data-category-category-id');
-    const CheckedButton = document.getElementById("Notetrashcan-button");
-    if (name === "") {
-        return;
-    }
-    saveChanges(categoryId, subjectId);
-    popup.classList.remove('show');
-    setTimeout(function() {
-        popup.style.display = "none";
-    }, 100);
-    CheckedButton.classList.remove('checked');
-    disableAllButtons();
-});
+    document.getElementById("editNotePopup-save").addEventListener("click", function () {
+        const popup = document.getElementById('editNotePopup');
+        const name = document.getElementById("editNotePopup-input").value;
+        const subjectId = popup.getAttribute('data-category-subject-id');
+        const categoryId = popup.getAttribute('data-category-category-id');
+        const CheckedButton = document.getElementById("Notetrashcan-button");
+        if (name === "") {
+            return;
+        }
+        saveChanges(categoryId, subjectId);
+        popup.classList.remove('show');
+        setTimeout(function () {
+            popup.style.display = "none";
+        }, 100);
+        CheckedButton.classList.remove('checked');
+        disableAllButtons();
+    });
 
 
 
-//Button deactivate listeners
-document.getElementById('neusFachPopup-input').addEventListener('input', setButtonStateneuesFachPopup);
-document.getElementById('editFachPopup-input').addEventListener('input', setButtonStateEditFachPopup);
-document.getElementById('neueKategoriePopup-input').addEventListener('input', function () {
-    const button = document.getElementById('neueKategoriePopup-create');
-    const nameInput = document.getElementById('neueKategoriePopup-input').value;
-    button.disabled = !(nameInput);
-});
-document.getElementById('neueNotePopup-input').addEventListener('input', function () {
-    const button = document.getElementById('neueNotePopup-create');
-    const nameInput = document.getElementById('neueNotePopup-input').value;
-    button.disabled = !(nameInput);
-});
-document.getElementById('editNotePopup-input').addEventListener('input', function () {
-    const button = document.getElementById('editNotePopup-save');
-    const nameInput = document.getElementById('editNotePopup-input').value;
-    button.disabled = !(nameInput);
-});
-document.getElementById('Notetrashcan-button').addEventListener('click', function(event) {
-    this.classList.toggle('checked');
-});
-// Event-Listener für den Anmelde-Button
-document.getElementById('loginButton').addEventListener('click', signInWithGoogle);
-// Event-Listener für den Abmelde-Button
-document.getElementById('logoutButton').addEventListener('click', signOut);
+    //Button deactivate listeners
+    document.getElementById('neusFachPopup-input').addEventListener('input', setButtonStateneuesFachPopup);
+    document.getElementById('editFachPopup-input').addEventListener('input', setButtonStateEditFachPopup);
+    document.getElementById('neueKategoriePopup-input').addEventListener('input', function () {
+        const button = document.getElementById('neueKategoriePopup-create');
+        const nameInput = document.getElementById('neueKategoriePopup-input').value;
+        button.disabled = !(nameInput);
+    });
+    document.getElementById('neueNotePopup-input').addEventListener('input', function () {
+        const button = document.getElementById('neueNotePopup-create');
+        const nameInput = document.getElementById('neueNotePopup-input').value;
+        button.disabled = !(nameInput);
+    });
+    document.getElementById('editNotePopup-input').addEventListener('input', function () {
+        const button = document.getElementById('editNotePopup-save');
+        const nameInput = document.getElementById('editNotePopup-input').value;
+        button.disabled = !(nameInput);
+    });
+    document.getElementById('Notetrashcan-button').addEventListener('click', function (event) {
+        this.classList.toggle('checked');
+    });
+    // Event-Listener für den Anmelde-Button
+    document.getElementById('loginButton').addEventListener('click', signInWithGoogle);
+    // Event-Listener für den Abmelde-Button
+    document.getElementById('logoutButton').addEventListener('click', signOut);
 });
