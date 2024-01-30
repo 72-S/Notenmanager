@@ -280,6 +280,10 @@ function signOut() {
         firebase.auth().signOut().then(function () {
             userId = null;
             console.log("Abmeldung erfolgreich");
+            localCategories = {};
+            localGrades = {};
+            localSubjects = {};
+            removeAllSubjectsFromUI();
         }).catch(function (error) {
             console.error("Fehler beim Abmelden", error);
         });
