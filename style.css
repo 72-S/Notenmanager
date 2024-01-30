@@ -979,14 +979,11 @@ body {
 
 
 @media (max-width: 767px) {
-    /* Hier können Sie Ihre mobilen CSS-Regeln definieren */
     #logoutButton {
-        /* Beispiel: Ändern der Schriftgröße für den Logout-Button auf mobilen Geräten */
         font-size: 14px;
     }   
 
     .login-wrapper {
-        /* Beispiel: Ändern der Höhe des Login-Wrapper auf mobilen Geräten */
         height: 80vh;
     }
     .mainContentBox {
@@ -1025,5 +1022,4 @@ body {
         height: 100%;
         width: 100%;
     }
-    /* Weitere Anpassungen für mobile Geräte */
 }
