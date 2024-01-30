@@ -278,6 +278,7 @@ function signInWithGoogle() {
 function signOut() {
     if (confirm("Möchten Sie sich wirklich abmelden?")) {
       firebase.auth().signOut().then(function() {
+        userId = null;
         console.log("Abmeldung erfolgreich");
       }).catch(function(error) {
         console.error("Fehler beim Abmelden", error);
@@ -290,7 +291,6 @@ function checkAuthStatus() {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             // Benutzer ist angemeldet.
-            console.log("Benutzer angemeldet:", user);
             document.getElementById("mainContent").style.display = "block";
             document.getElementById("loginContent").style.display = "none";
             loadUserData(user.uid);
@@ -315,20 +315,12 @@ function loadUserData(userId) {
                 Object.values(localSubjects).forEach(subjectArray => {
                     subjectArray.forEach(subject => {
                         addSubjectToUI(subject.name, subject.color, subject.id);
+                        const average = calculateAverageForSubject(subject.id);
+                        document.getElementById("subject-average" + subject.id).textContent = average;
                     });
                 });
-                Object.values(localCategories).forEach(categoryArray => {
-                    categoryArray.forEach(category => {
-                        addCategoryToUI(category.name, category.weight, category.id, category.subjectId);
-                    });
-                });
-                Object.values(localGrades).forEach(gradeArray => {
-                    gradeArray.forEach(grade => {
-                        addGradeToUI(grade.value, grade.date, grade.categoryId, grade.id);
-                    });
-                });
-                generateChart();
                 calculateAverageForAllSubjects();
+                generateChart();
                 generateChartDistribution();
             },userId);
         },userId);
