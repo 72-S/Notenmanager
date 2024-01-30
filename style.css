@@ -994,22 +994,36 @@ body {
         grid-template-rows: auto;
     }
     .FächerBox {
-        width: 400px;
+        width: calc(100% - 45px);
     }
     .NotenentwicklungBox {
-        width: 400px;
+        width: calc(100% - 45px);
     }
     .NotenverteilungBox {
-        min-width: 400px;
-        max-width: 400px;
-        width: 400px;
+            min-width: calc(100% - 45px);
+            max-width: calc(100% - 45px);
+            width: calc(100% - 45px);
     }
     
     .DurschnittBox {
-        min-width: 190px;
-    }
+        min-width: calc(100% / 2 - 35px);
+    }   
     .RechnerBox {
-        min-width: 190px;
+        max-width: calc(100% / 2 - 35px);
+    }
+
+    .miniboxgroup {
+        display: flex;
+        justify-content: space-between;
+        width: calc(100% - 45px);
+    }
+
+    .chart-wrapper-notenverteilung{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
     }
     /* Weitere Anpassungen für mobile Geräte */
 }
