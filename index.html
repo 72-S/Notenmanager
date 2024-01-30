@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script src="script.js"></script>
 </head>
@@ -16,13 +17,22 @@
 
 
     <h1 class="MainTitle">NotenManager</h1>
+    <div id="loginContent" class="login-wrapper" style="display: none;">
+        <div class="login-wrapper-content">
+            <div class="login-wrapper-content-text">
+                <h2 class="login-wrapper-content-text-title">Willkommen</h2>
+                <p class="login-wrapper-content-text-subtitle">Melde dich an, um deine Noten zu verwalten</p>
+            </div>
+            <div class="login-wrapper-content-buttons">
+                <button id="loginButton" class="login-wrapper-content-buttons-login">Mit Google anmelden</button>
+            </div>
+        </div>
+    </div>
 
-
-
-    <div id="mainContent" style="display: block;">
+    <div id="mainContent" style="display: none;">
         <h1 class="SubTitle">Übersicht</h1>
         <button id="neuesFachButtonClick" class="neuesFachButton">Neues Fach <img src="assets/add.svg" alt="+" class="IMG"></button>
-
+        <button id="logoutButton">Abmelden <img src="assets/logout.svg" alt="+" class="IMG"></button>
         <section class="mainContentBox">
 
 

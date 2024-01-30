@@ -16,10 +16,11 @@ let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
 let gradesToDelete = [];
+let userId = null;
 
 class SaveLocalDataFromDB {
-    loadSubjects(callback) {
-        const db = firebase.database().ref("subjects");
+    loadSubjects(callback, userId) {
+        const db = firebase.database().ref("/users/" + userId + "/subjects");
         db.once('value', snapshot => {
             snapshot.forEach(childSnapshot => {
                 const subject = childSnapshot.val();
@@ -40,8 +41,8 @@ class SaveLocalDataFromDB {
         });
     }
 
-    loadCategories(callback) {
-        const db = firebase.database().ref("categories");
+    loadCategories(callback, userId) {
+        const db = firebase.database().ref("/users/" + userId + "/categories");
         db.once('value', snapshot => {
             snapshot.forEach(childSnapshot => {
                 const category = childSnapshot.val();
@@ -63,8 +64,8 @@ class SaveLocalDataFromDB {
         });
     }
 
-    loadGrades(callback) {
-        const db = firebase.database().ref("grades");
+    loadGrades(callback, userId) {
+        const db = firebase.database().ref("/users/" + userId + "/grades");
         db.once('value', snapshot => {
             snapshot.forEach(childSnapshot => {
                 const grade = childSnapshot.val();
@@ -91,8 +92,8 @@ class SaveLocalDataFromDB {
 
 
 class PushLocalDataToDB {
-    pushSubjects() {
-        const db = firebase.database().ref("subjects");
+    pushSubjects(userId) {
+        const db = firebase.database().ref("/users/" + userId + "/subjects");
         Object.values(localSubjects).forEach(subjectArray => {
             subjectArray.forEach(subject => {
                 if (subject.action === "push") {
@@ -139,8 +140,8 @@ class PushLocalDataToDB {
         });
     }
 
-    pushCategories() {
-        const db = firebase.database().ref("categories");
+    pushCategories(userId) {
+        const db = firebase.database().ref("/users/" + userId + "/categories");
         Object.values(localCategories).forEach(categoryArray => {
             categoryArray.forEach(category => {
                 if (category.action === "push") {
@@ -183,8 +184,8 @@ class PushLocalDataToDB {
         });
     }
 
-    pushGrades() {
-        const db = firebase.database().ref("grades");
+    pushGrades(userId) {
+        const db = firebase.database().ref("/users/" + userId + "/grades");
         Object.values(localGrades).forEach(gradeArray => {
             gradeArray.forEach(grade => {
                 if (grade.action === "push") {
@@ -262,6 +263,77 @@ class PushLocalDataToDB {
     }
 }
 
+function signInWithGoogle() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+    }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential; 
+        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+    });
+}
+
+function signOut() {
+    if (confirm("Möchten Sie sich wirklich abmelden?")) {
+      firebase.auth().signOut().then(function() {
+        console.log("Abmeldung erfolgreich");
+      }).catch(function(error) {
+        console.error("Fehler beim Abmelden", error);
+      });
+    }
+  }
+  
+
+function checkAuthStatus() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // Benutzer ist angemeldet.
+            console.log("Benutzer angemeldet:", user);
+            document.getElementById("mainContent").style.display = "block";
+            document.getElementById("loginContent").style.display = "none";
+            loadUserData(user.uid);
+            userId = user.uid;
+        } else {
+            // Benutzer ist nicht angemeldet.
+            console.log("Kein Benutzer angemeldet.");
+            document.getElementById("mainContent").style.display = "none";
+            document.getElementById("loginContent").style.display = "block";
+        }
+    });
+}
+
+
+function loadUserData(userId) {
+    const saveLocalData = new SaveLocalDataFromDB();
+    saveLocalData.loadSubjects(() => {
+        saveLocalData.loadCategories(() => {
+            saveLocalData.loadGrades(() => {
+                removeAllSubjectsFromUI();
+                removeAllCategoriesFromUI();
+                Object.values(localSubjects).forEach(subjectArray => {
+                    subjectArray.forEach(subject => {
+                        addSubjectToUI(subject.name, subject.color, subject.id);
+                    });
+                });
+                Object.values(localCategories).forEach(categoryArray => {
+                    categoryArray.forEach(category => {
+                        addCategoryToUI(category.name, category.weight, category.id, category.subjectId);
+                    });
+                });
+                Object.values(localGrades).forEach(gradeArray => {
+                    gradeArray.forEach(grade => {
+                        addGradeToUI(grade.value, grade.date, grade.categoryId, grade.id);
+                    });
+                });
+                generateChart();
+                calculateAverageForAllSubjects();
+                generateChartDistribution();
+            },userId);
+        },userId);
+    },userId);
+}
 
 function getWeekNumber(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -939,7 +1011,7 @@ function pushSubjectClass(id, name, color, action) {
     }
     if (action === "push" || action === "overwrite" || action === "delete") {
         const pushData = new PushLocalDataToDB();
-        pushData.pushSubjects();
+        pushData.pushSubjects(userId);
     }
 }
 
@@ -978,7 +1050,7 @@ function pushCategoryClass(id, name, weight, subjectId, action) {
     }
     if (action === "push" || action === "overwrite" || action === "delete") {
         const pushData = new PushLocalDataToDB();
-        pushData.pushCategories();
+        pushData.pushCategories(userId);
     }
 }
 
@@ -1020,7 +1092,7 @@ function pushGradeClass(id, value, date, subjectId, categoryId, action) {
     }
     if (action === "push" || action === "overwrite" || action === "delete") {
         const pushData = new PushLocalDataToDB();
-        pushData.pushGrades();
+        pushData.pushGrades(userId);
     }
 }
 
@@ -1052,27 +1124,7 @@ function disableAllButtons() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    const saveLocalData = new SaveLocalDataFromDB();
-    saveLocalData.loadCategories();
-    saveLocalData.loadGrades();
-    saveLocalData.loadSubjects(function () {
-        const noSubjectMessage = document.getElementById("noSubjectMessage");
-        if (Object.keys(localSubjects).length === 0) {
-            noSubjectMessage.style.display = "block";
-        } else {
-            noSubjectMessage.style.display = "none";
-            Object.values(localSubjects).forEach(subjectArray => {
-                subjectArray.forEach(subject => {
-                    addSubjectToUI(subject.name, subject.color, subject.id);
-                    const average = calculateAverageForSubject(subject.id);
-                    document.getElementById("subject-average" + subject.id).textContent = average;
-                });
-            });
-            generateChart();
-            calculateAverageForAllSubjects();
-            generateChartDistribution();
-        }
-    });
+    checkAuthStatus();
     setButtonStateneuesFachPopup();
     disableAllButtons();
 
@@ -1289,4 +1341,8 @@ document.getElementById('editNotePopup-input').addEventListener('input', functio
 document.getElementById('Notetrashcan-button').addEventListener('click', function(event) {
     this.classList.toggle('checked');
 });
+// Event-Listener für den Anmelde-Button
+document.getElementById('loginButton').addEventListener('click', signInWithGoogle);
+// Event-Listener für den Abmelde-Button
+document.getElementById('logoutButton').addEventListener('click', signOut);
 });

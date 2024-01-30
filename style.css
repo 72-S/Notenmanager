@@ -870,6 +870,31 @@ body {
 }
 
 
+#logoutButton {
+    background-color: var(--button-container-buttons-cancel-color);
+    border: none;
+    border-radius: var(--ButtonRadius);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: var(--ButtonSchriftfarbe);
+    cursor: pointer;
+    font-family: 'Lato-Medium' , sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: var(--transition);
+    margin-top: 5px;
+    height: var(--ButtonHeight);
+    margin-right: 5px;
+}
+
+#logoutButton:hover {
+    background-color: var(--button-container-buttons-cancel-color-hover);
+}
+
 /* Mobile Style */
 @media (max-width: 768px) {
 
