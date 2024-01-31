@@ -1180,7 +1180,6 @@ function getCookie(name) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    checkAuthStatus();
     const body = document.body;
     const darkModeIcon = document.getElementById('darkModeIcon');
     const darkModeStatus = getCookie('darkMode');
@@ -1192,6 +1191,7 @@ document.addEventListener("DOMContentLoaded", function () {
         body.classList.remove('dark');
         darkModeIcon.src = "assets/lightmode.svg";
     }
+    checkAuthStatus();
     setButtonStateneuesFachPopup();
     disableAllButtons();
 
