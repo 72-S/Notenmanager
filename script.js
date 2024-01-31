@@ -764,13 +764,39 @@ function addGradeToPopupUI(value, date, id) {
 }
 
 
+function showContextMenu(event, id, color, name, box) {
+    event.preventDefault();
+    const existingMenu = document.querySelector('.context-menu');
+    if (existingMenu) {
+        existingMenu.classList.remove('show');
+        setTimeout(function () {
+            existingMenu.remove();
+        }, 100);
+    }
 
+    const contextMenuHTML = `
+        <div class="context-menu" style="position: absolute; top: ${event.touches[0].clientY}px; left: ${event.touches[0].clientX}px;">
+            <button class="popup-buttons" id="EditSubjectContext">Bearbeiten</button>
+            <button class="popup-buttons" id="DeleteSubjectContext">Löschen</button>
+        </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', contextMenuHTML);
+
+    setTimeout(() => {
+        document.querySelector('.context-menu').classList.add('show');
+    }, 20);
+
+    document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, color, name));
+    document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
+}
 
 
 
 //funktion to add Subject to UI
 
 function addSubjectToUI(name, color, id) {
+    let touchTimer;
+    const longPressDuration = 350;
 
     const container = document.getElementsByClassName("subjects-wrapper")[0];
     if (!container) {
@@ -793,6 +819,20 @@ function addSubjectToUI(name, color, id) {
 
     box.addEventListener("click", function () {
         openSubjectPage(id, name);
+    });
+
+    box.addEventListener("touchstart", function (event) {
+        touchTimer = setTimeout(() => {
+            showContextMenu(event, id, color, name, box); 
+        }, longPressDuration);
+    }, { passive: true });
+
+    box.addEventListener("touchend", function () {
+        clearTimeout(touchTimer);
+    });
+
+    box.addEventListener("touchmove", function () {
+        clearTimeout(touchTimer);
     });
 
     box.addEventListener("contextmenu", function (event) {
@@ -820,6 +860,8 @@ function addSubjectToUI(name, color, id) {
         document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, color, name));
         document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
     });
+
+
     container.appendChild(box);
     box.appendChild(subjectName);
     box.appendChild(average);
