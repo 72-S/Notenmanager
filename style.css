@@ -1036,12 +1036,14 @@ body {
 }
 
 .login-wrapper-content-text-title {
+    color: var(--Schriftfarbe);
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
 .login-wrapper-content-text-subtitle {
+    color: var(--Schriftfarbe);
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 20px;
