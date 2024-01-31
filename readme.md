@@ -15,13 +15,6 @@ NotenManager is a web application for managing school grades. It allows users to
 - JavaScript
 - Firebase Realtime Database
 
-## Setup
-To set up this project, follow these steps:
-1. Clone the repository or download the files.
-2. Create a Firebase project and configure the Firebase Realtime Database.
-3. Update script.js with your Firebase project details.
-4. Open index.html in a web browser.
-
 ## Usage
 - To add a new subject, click the "New Subject" button and enter the required information.
 - Right-click on a subject to open the context menu, where you can edit or delete the subject.

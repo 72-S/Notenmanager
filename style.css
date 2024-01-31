@@ -354,7 +354,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 550px;
-    min-width: 300px;
+    min-width: 250px;
     max-width: 500px;
 }
 
@@ -970,10 +970,10 @@ body {
 
 @media (max-width: 1200px) {
     .mainContentBox {
-        grid-template-columns: 300px auto;
+        grid-template-columns: 250px auto;
     }
     .FächerBox {
-        width: 300px;
+        width: 250px;
     }
 }
 
@@ -1023,5 +1023,4 @@ body {
         height: 100%;
         width: 100%;
     }
-    /* Weitere Anpassungen für mobile Geräte */
 }
