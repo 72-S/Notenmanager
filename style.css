@@ -117,6 +117,36 @@ body {
     margin-bottom: 2px;
 }
 
+.THEME-IMG {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 2px;
+}
+
+.THEME-BUTTON{
+    background-color: var(--ButtonBackground);
+    border: none;
+    border-radius: var(--ButtonRadius);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: var(--ButtonSchriftfarbe);
+    cursor: pointer;
+    font-family: 'Lato-Medium' , sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: var(--transition);
+    height: var(--ButtonHeight);
+    margin-right: 5px;
+}
+
+.THEME-BUTTON:hover {
+    background-color: var(--ButtonBackgroundHover);
+}
+
 .popup {
     transition: all 0.1s ease-in-out;
 }
@@ -310,18 +340,21 @@ body {
 }
 
 
-
+.MainTitle-wrapper {
+    position: absolute;
+    width: 220px;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    right: 20px;
+}
 
 /* Titles */
 .MainTitle {
     color: var(--Schriftfarbe);
     font-family: "Architects Daughter", Helvetica, sans-serif;
     font-size: 24px;
-    margin: 0;
-    position: absolute;
-    right: 20px;
-    text-align: right;
-    top: 20px;
 }
 
 .SubTitle {
