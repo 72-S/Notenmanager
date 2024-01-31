@@ -378,6 +378,7 @@ body {
     height: 120px;
     min-width: 200px;
     max-width: 200px;
+    text-align: center;
 }
 
 .NotenentwicklungBox {
@@ -979,14 +980,11 @@ body {
 
 
 @media (max-width: 767px) {
-    /* Hier können Sie Ihre mobilen CSS-Regeln definieren */
     #logoutButton {
-        /* Beispiel: Ändern der Schriftgröße für den Logout-Button auf mobilen Geräten */
         font-size: 14px;
     }   
 
     .login-wrapper {
-        /* Beispiel: Ändern der Höhe des Login-Wrapper auf mobilen Geräten */
         height: 80vh;
     }
     .mainContentBox {
