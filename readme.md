@@ -9,6 +9,7 @@ NotenManager is a web application for managing school grades. It allows users to
 - Grade Management: Add grades to various categories and calculate averages.
 - Interactive UI: Context menus and modal popups for an enhanced user experience.
 - Firebase Integration: Uses Firebase Realtime Database for data storage and management.
+- Responsive Design: You can use it also on mobile devices or on devices with smaller screen width.
 
 ## Technologies
 - HTML/CSS
