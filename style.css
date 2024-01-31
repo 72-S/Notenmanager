@@ -33,12 +33,12 @@
     --SiteBackground: #202124;
     --Schriftfarbe: #ffffff;
     --ButtonSchriftfarbe: #ffffff;
-    --ButtonBackground: #333333;
-    --ButtonBackgroundHover: #555555;
-    --LightBlue: #343541;
-    --RED: #ff4136;
+    --ButtonBackground: #044992;
+    --ButtonBackgroundHover: #00326b;
+    --LightBlue: #3c3c3c;
+    --RED: #54282c;
     --ButtonHeight: 35px;
-    --PopupBackground: #292727;
+    --PopupBackground: #2c2d2f;
     --BorderRadius: 10px;
     --ButtonRadius: 5px;
     --InputBackground: #333333;
@@ -46,7 +46,7 @@
     --InputBorder: #555555;
     --InputColor: #ffffff;
     --TrashcanButtonHover: #222222;
-    --CategoryBoxBackground: #001f3f;
+    --CategoryBoxBackground: #3c3c3c;
     --button-container-buttons-save-color: #333333;
     --button-container-buttons-cancel-color: #6C757D;
     --button-container-buttons-save-color-hover: #555555;

@@ -1169,9 +1169,29 @@ function disableAllButtons() {
 }
 
 
+function getCookie(name) {
+    let cookie = {};
+    document.cookie.split(';').forEach(function(el) {
+        let [k,v] = el.split('=');
+        cookie[k.trim()] = v;
+    })
+    return cookie[name];
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     checkAuthStatus();
+    const body = document.body;
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const darkModeStatus = getCookie('darkMode');
+
+    if (darkModeStatus === 'true') {
+        body.classList.add('dark');
+        darkModeIcon.src = "assets/darkmode.svg";
+    } else {
+        body.classList.remove('dark');
+        darkModeIcon.src = "assets/lightmode.svg";
+    }
     setButtonStateneuesFachPopup();
     disableAllButtons();
 
@@ -1396,12 +1416,15 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('darkMode').addEventListener('click', function () {
         const body = document.body;
         const darkModeIcon = document.getElementById('darkModeIcon');
+    
         if (body.classList.contains('dark')) {
             body.classList.remove('dark');
             darkModeIcon.src = "assets/lightmode.svg";
+            document.cookie = "darkMode=false; path=/; max-age=31536000";
         } else {
             body.classList.add('dark');
             darkModeIcon.src = "assets/darkmode.svg";
+            document.cookie = "darkMode=true; path=/; max-age=31536000";
         }
     });
 });
