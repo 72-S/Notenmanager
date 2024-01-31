@@ -905,7 +905,7 @@ function addGradeToUI(value, date, categoryId, id) {
 }
 
 
-editSubject = (id, color, name) => {
+function editSubject(id, color, name) {
     const popup = document.getElementById('editFachPopup');
     const popupInput = document.getElementById('editFachPopup-input');
     const subjectName = document.getElementById(id).querySelector('.subject-name').textContent;
@@ -934,7 +934,7 @@ editSubject = (id, color, name) => {
 }
 
 
-deleteSubject = (id, box) => {
+function deleteSubject(id, box) {
     const contextMenu = document.querySelector('.context-menu');
     contextMenu.classList.remove('show');
     setTimeout(function () {
