@@ -31,32 +31,32 @@
 
 .dark {
     --SiteBackground: #202124;
-    --Schriftfarbe: #ffffff;
-    --ButtonSchriftfarbe: #ffffff;
+    --Schriftfarbe: #dad7cd;
+    --ButtonSchriftfarbe: black;
     --ButtonBackground: #044992;
     --ButtonBackgroundHover: #00326b;
     --LightBlue: #3c3c3c;
     --RED: #54282c;
     --ButtonHeight: 35px;
-    --PopupBackground: #2c2d2f;
+    --PopupBackground: #262527;
     --BorderRadius: 10px;
     --ButtonRadius: 5px;
-    --InputBackground: #333333;
-    --InputBackgroundFocus: #444444;
+    --InputBackground: #444444;
+    --InputBackgroundFocus: #555555;
     --InputBorder: #555555;
-    --InputColor: #ffffff;
-    --TrashcanButtonHover: #222222;
+    --InputColor: #dad7cd;
+    --TrashcanButtonHover: #555555;
     --CategoryBoxBackground: #3c3c3c;
-    --button-container-buttons-save-color: #333333;
-    --button-container-buttons-cancel-color: #6C757D;
-    --button-container-buttons-save-color-hover: #555555;
-    --button-container-buttons-cancel-color-hover: #777777;
+    --button-container-buttons-save-color: #044992;
+    --button-container-buttons-cancel-color: #575757;
+    --button-container-buttons-save-color-hover: #00326b;
+    --button-container-buttons-cancel-color-hover: #6C757D;
     --button-container-buttons-color-disabled: #444444;
     --button-container-buttons-color-disabled-hover: #444444;
     --button-container-buttons-text-color-disabled: #6c757d;
-    --color-choice-border-color: #555555;
-    --color-choice-border-color-selected: #888888;
-    --miniTitle-border-color: #666666;
+    --color-choice-border-color: #888888;
+    --color-choice-border-color-selected: #ffffff;
+    --miniTitle-border-color: #9da9b3;
     --transition: all 0.2s ease-in-out;
 }
 
@@ -572,6 +572,7 @@ body {
 }
 
 .KategoriePopupInput {
+    color: var(--InputColor);
     background-color: var(--InputBackground);
     border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
@@ -590,6 +591,7 @@ body {
 }
 
 .KategoriePopupSelect {
+    color: var(--InputColor);
     border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 15%;
@@ -640,6 +642,7 @@ body {
 }
 
 .NotePopupInput {
+    color: var(--InputColor);
     background-color: var(--InputBackground);
     border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
@@ -661,6 +664,7 @@ body {
 }
 
 .NotePopupSelect {
+    color: var(--InputColor);
     border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 20%;
@@ -947,12 +951,14 @@ body {
 }
 
 .grade{ 
+    color: var(--Schriftfarbe);
     font-size: 16px;
     font-weight: bold;
     margin-right: 5px;
 }
 
 .gradePopup{
+    color: var(--Schriftfarbe);
     font-size: 16px;
     font-weight: bold;
     margin-right: 5px;
