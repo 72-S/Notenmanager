@@ -644,6 +644,9 @@ body {
 
 }
 
+.subject-box.pressed {
+    transform: scale(0.94);
+}
 
 /* SUBJECTPAGE */
 .categoriesContainer {

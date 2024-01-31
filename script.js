@@ -796,7 +796,7 @@ function showContextMenu(event, id, color, name, box) {
 
 function addSubjectToUI(name, color, id) {
     let touchTimer;
-    const longPressDuration = 350;
+    const longPressDuration = 300;
 
     const container = document.getElementsByClassName("subjects-wrapper")[0];
     if (!container) {
@@ -822,17 +822,21 @@ function addSubjectToUI(name, color, id) {
     });
 
     box.addEventListener("touchstart", function (event) {
+        box.classList.add('pressed');
         touchTimer = setTimeout(() => {
+            box.classList.remove('pressed'); 
             showContextMenu(event, id, color, name, box); 
         }, longPressDuration);
     }, { passive: true });
 
     box.addEventListener("touchend", function () {
         clearTimeout(touchTimer);
+        box.classList.remove('pressed');
     });
 
     box.addEventListener("touchmove", function () {
         clearTimeout(touchTimer);
+        box.classList.remove('pressed');
     });
 
     box.addEventListener("contextmenu", function (event) {
@@ -1012,7 +1016,7 @@ function saveChanges(categoryId, subjectId) {
         categoryElement.classList.remove("show");
         setTimeout(function () {
             categoryElement.remove();
-        }, 100);
+        }, 180);
         pushCategoryClass(categoryId, "", "", "", "delete");
     } else {
         pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
