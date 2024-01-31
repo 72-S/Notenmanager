@@ -961,8 +961,6 @@ function selectColor(element) {
 }
 
 
-
-
 //funktion to remove Subject from UI
 function removeAllSubjectsFromUI() {
     const subjectBoxes = document.getElementsByClassName("subject-box");
@@ -1394,4 +1392,16 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('loginButton').addEventListener('click', signInWithGoogle);
     // Event-Listener für den Abmelde-Button
     document.getElementById('logoutButton').addEventListener('click', signOut);
+
+    document.getElementById('darkMode').addEventListener('click', function () {
+        const body = document.body;
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        if (body.classList.contains('dark')) {
+            body.classList.remove('dark');
+            darkModeIcon.src = "assets/lightmode.svg";
+        } else {
+            body.classList.add('dark');
+            darkModeIcon.src = "assets/darkmode.svg";
+        }
+    });
 });

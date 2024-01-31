@@ -1,6 +1,7 @@
 :root {
-    --Schriftfarbe: #333;
-    --ButtonSchriftfarbe: rgb(0, 0, 0);
+    --SiteBackground: #F3F4F6;
+    --Schriftfarbe: #333333;
+    --ButtonSchriftfarbe: #000000;
     --ButtonBackground: #007bff;
     --ButtonBackgroundHover: #0056b3;
     --LightBlue: #D1DCE5;
@@ -9,18 +10,61 @@
     --PopupBackground: #dbebfa;
     --BorderRadius: 10px;
     --ButtonRadius: 5px;
+    --InputBackground: #f7f7f7;
+    --InputBackgroundFocus: #ffffff;
+    --InputBorder: #ccc;
+    --InputColor: #333;
+    --TrashcanButtonHover: #e6e6e6;
+    --CategoryBoxBackground: #d1dce5;
     --button-container-buttons-save-color: #007BFF;
     --button-container-buttons-cancel-color: #6C757D;
     --button-container-buttons-save-color-hover: #0056B3;
     --button-container-buttons-cancel-color-hover: #575757;
+    --button-container-buttons-color-disabled: #a6b8d4;
+    --button-container-buttons-color-disabled-hover: #a6b8d4;
+    --button-container-buttons-text-color-disabled: #6c757d;
+    --color-choice-border-color: #5a5959;
+    --color-choice-border-color-selected: #424242;
+    --miniTitle-border-color: #9da9b3;
     --transition: all 0.2s ease-in-out;
 }
 
+.dark {
+    --SiteBackground: #202124;
+    --Schriftfarbe: #ffffff;
+    --ButtonSchriftfarbe: #ffffff;
+    --ButtonBackground: #333333;
+    --ButtonBackgroundHover: #555555;
+    --LightBlue: #343541;
+    --RED: #ff4136;
+    --ButtonHeight: 35px;
+    --PopupBackground: #292727;
+    --BorderRadius: 10px;
+    --ButtonRadius: 5px;
+    --InputBackground: #333333;
+    --InputBackgroundFocus: #444444;
+    --InputBorder: #555555;
+    --InputColor: #ffffff;
+    --TrashcanButtonHover: #222222;
+    --CategoryBoxBackground: #001f3f;
+    --button-container-buttons-save-color: #333333;
+    --button-container-buttons-cancel-color: #6C757D;
+    --button-container-buttons-save-color-hover: #555555;
+    --button-container-buttons-cancel-color-hover: #777777;
+    --button-container-buttons-color-disabled: #444444;
+    --button-container-buttons-color-disabled-hover: #444444;
+    --button-container-buttons-text-color-disabled: #6c757d;
+    --color-choice-border-color: #555555;
+    --color-choice-border-color-selected: #888888;
+    --miniTitle-border-color: #666666;
+    --transition: all 0.2s ease-in-out;
+}
 
 body {
     font-family: 'Lato' , sans-serif;
     font-size: 16px;
-    background-color: #F3F4F6;
+    background-color: var(--SiteBackground);
+    transition: 0.4s cubic-bezier(0.37, 0, 0.63, 1) 0s;
 }
 
 
@@ -41,13 +85,29 @@ body {
     height: 70px;
 }
 
+.calculator-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+}
+
 #averageMessage {
     font-family: 'Lato-Medium' , sans-serif;
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 25px;
     font-weight: bold;
-    color: #333;
+    color: var(--Schriftfarbe);
+}
+
+#calculatorMessage{
+    font-family: 'Lato-Medium' , sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--Schriftfarbe);
 }
 
 .IMG {
@@ -82,10 +142,10 @@ body {
 }
 
 .context-menu {
-    background-color: #dbebfa;
+    background-color: var(--PopupBackground);
     border-radius: var(--BorderRadius);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    color: #333333;
+    color: var(--Schriftfarbe);
     left: 0;
     padding: 10px;
     position: absolute;
@@ -142,7 +202,7 @@ body {
 }
 
 .color-choice {
-    border: 1px solid #5a5959;
+    border: 1px solid var(--color-choice-border-color);
     border-radius: 50%;
     cursor: pointer;
     height: 35px;
@@ -152,7 +212,7 @@ body {
 
 .color-choice.selected {
     transform: scale(1.2);
-    border-color: #424242;
+    border-color: var(--color-choice-border-color-selected);
 }
 
 .color-choice:hover {
@@ -169,6 +229,7 @@ body {
 }
 
 .button-container-buttons {
+    color: var(--ButtonSchriftfarbe);
     flex-grow: 1;
     text-align: center;
     margin: 0 10px;
@@ -182,17 +243,17 @@ body {
 }
 
 .button-container-buttons:disabled {
-    background-color: #a6b8d4;
-    color: #6c757d;
-    border: 0px solid #a6b8d4;
+    background-color: var(--button-container-buttons-color-disabled);
+    color: var(--button-container-buttons-text-color-disabled);
+    border: 0px solid var(--button-container-buttons-color-disabled);
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 .button-container-buttons:disabled:hover {
-    background-color: #a6b8d4;
-    color: #6c757d;
-    border: 0px solid #a6b8d4;
+    background-color: var(--button-container-buttons-color-disabled-hover);
+    color: var(--button-container-buttons-text-color-disabled);
+    border: 0px solid var(--button-container-buttons-color-disabled-hover);
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -271,9 +332,9 @@ body {
 }
 
 .miniTitle {
-    color: #333;
+    color: var(--Schriftfarbe);
     font-family: Arial, sans-serif;
-    border-bottom:  1px #9da9b3 solid;
+    border-bottom:  1px var(--miniTitle-border-color) solid;
     text-align: center;
     vertical-align: middle;
     font-size: 20px;
@@ -311,6 +372,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
+    transition: 0.5s cubic-bezier(0.37, 0, 0.63, 1) 0s;
 }
  
 
@@ -427,8 +489,9 @@ body {
 }
 
 .FachPopupInput {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
+    color: var(--InputColor);
+    background-color: var(--InputBackground);
+    border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 90%;
     height: 40px;
@@ -442,7 +505,7 @@ body {
 
 .FachPopupInput:focus {
     outline: none;
-    background-color: #ffffff;
+    background-color: var(--InputBackgroundFocus);
 }
 
 .FachPopupColor {
@@ -476,8 +539,8 @@ body {
 }
 
 .KategoriePopupInput {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
+    background-color: var(--InputBackground);
+    border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 75%;
     height: 40px;
@@ -490,11 +553,11 @@ body {
 
 .KategoriePopupInput:focus {
     outline: none;
-    background-color: #ffffff;
+    background-color: var(--InputBackgroundFocus);
 }
 
 .KategoriePopupSelect {
-    border: 1px solid #ccc;
+    border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 15%;
     height: 40px;
@@ -506,12 +569,12 @@ body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: url('assets/arrow.svg') no-repeat 75% center, #f7f7f7;
+    background: url('assets/arrow.svg') no-repeat 75% center, var(--InputBackground);
     background-size: 13px;
 }
 .KategoriePopupSelect:focus {
     outline: none;
-    background-color: #ffffff;
+    background-color: var(--InputBackgroundFocus);
 }
 
 /* NotePopup */
@@ -544,8 +607,8 @@ body {
 }
 
 .NotePopupInput {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
+    background-color: var(--InputBackground);
+    border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 70%;
     height: 40px;
@@ -561,11 +624,11 @@ body {
 
 .NotePopupInput:focus {
     outline: none;
-    background-color: #ffffff;
+    background-color: var(--InputBackgroundFocus);
 }
 
 .NotePopupSelect {
-    border: 1px solid #ccc;
+    border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     width: 20%;
     height: 40px;
@@ -576,21 +639,21 @@ body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: url('assets/arrow.svg') no-repeat 75% center, #f7f7f7;
+    background: url('assets/arrow.svg') no-repeat 75% center, var(--InputBackground);
     background-size: 13px;
 }
 
 .NotePopupSelect:focus {
     outline: none;
-    background-color: #ffffff;
+    background-color: var(--InputBackgroundFocus);
 }
 
 /* editNotePopup */
 .trashcan-button {
-    background-color: #f7f7f7;
+    background-color: var(--InputBackground);
     height: 40px; 
     padding: 0 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--InputBorder);
     border-radius: var(--BorderRadius);
     transition: var(--transition);
     cursor: pointer;
@@ -598,11 +661,11 @@ body {
 
 .trashcan-button:focus {
     outline: none;
-    background-color: #f7f7f7;
+    background-color: var(--InputBackgroundFocus);
 }
 
 .trashcan-button:hover {
-    background-color: #e6e6e6;
+    background-color: var(--TrashcanButtonHover);
 }
 
 .trashcan-button.checked {
@@ -661,7 +724,7 @@ body {
 /* KategorieBoxen */
 .category-box {
     align-items: center;
-    background-color: #d1dce5;
+    background-color: var(--CategoryBoxBackground);
     display: flex;
     flex-direction: column;
     margin-top: 15px;
@@ -687,7 +750,7 @@ body {
 }
 
 .category-name {
-    color: #333333;
+    color: var(--Schriftfarbe);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -701,7 +764,7 @@ body {
 }
 
 .category-weight {
-    color: #333333;
+    color: var(--Schriftfarbe);
     transition: var(--transition);
     opacity: 1;
 }
