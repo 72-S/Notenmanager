@@ -865,7 +865,7 @@ function addSubjectToUI(name, color, id) {
             document.querySelector('.context-menu').classList.add('show');
         }, 20);
 
-        document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, color, name));
+        document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, name));
         document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
     });
 
@@ -909,14 +909,13 @@ function addGradeToUI(value, date, categoryId, id) {
 }
 
 
-function editSubject(id, color, name) {
+function editSubject(id, name) {
     const popup = document.getElementById('editFachPopup');
     const popupInput = document.getElementById('editFachPopup-input');
     const subjectName = document.getElementById(id).querySelector('.subject-name').textContent;
     const contextMenu = document.querySelector('.context-menu');
     const currentColor = document.getElementById(id).style.backgroundColor;
     const hexColor = rgbToHex(parseInt(currentColor.substring(4, currentColor.indexOf(','))), parseInt(currentColor.substring(currentColor.indexOf(',') + 2, currentColor.lastIndexOf(','))), parseInt(currentColor.substring(currentColor.lastIndexOf(',') + 2, currentColor.indexOf(')'))));
-    console.log(hexColor);
     contextMenu.classList.remove('show');
     setTimeout(function () {
         contextMenu.remove();
