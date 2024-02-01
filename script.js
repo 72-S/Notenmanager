@@ -358,6 +358,11 @@ function hexToRGBA(hex, opacity) {
     }
 }
 
+function rgbToHex(r, g, b) {
+    const toHex = c => c.toString(16).padStart(2, '0');
+    return "#" + toHex(r) + toHex(g) + toHex(b);
+}
+
 function changeTextWithTransition(element, newText) {
     if (element.textContent !== newText) {
         element.style.opacity = '0';
@@ -909,6 +914,9 @@ function editSubject(id, color, name) {
     const popupInput = document.getElementById('editFachPopup-input');
     const subjectName = document.getElementById(id).querySelector('.subject-name').textContent;
     const contextMenu = document.querySelector('.context-menu');
+    const currentColor = document.getElementById(id).style.backgroundColor;
+    const hexColor = rgbToHex(parseInt(currentColor.substring(4, currentColor.indexOf(','))), parseInt(currentColor.substring(currentColor.indexOf(',') + 2, currentColor.lastIndexOf(','))), parseInt(currentColor.substring(currentColor.lastIndexOf(',') + 2, currentColor.indexOf(')'))));
+    console.log(hexColor);
     contextMenu.classList.remove('show');
     setTimeout(function () {
         contextMenu.remove();
@@ -920,11 +928,11 @@ function editSubject(id, color, name) {
         colorChoice.classList.remove('selected');
     });
     colorChoices.forEach(colorChoice => {
-        if (colorChoice.getAttribute('data-color') === color) {
+        if (colorChoice.getAttribute('data-color') === hexColor) {
             colorChoice.classList.add('selected');
         }
     });
-    selectedColor = color;
+    selectedColor = hexColor;
     popupInput.value = subjectName;
     popup.style.display = "block";
     setTimeout(() => {
