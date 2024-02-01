@@ -448,7 +448,6 @@ function generateChart() {
                 borderWidth: 1.3,
                 fill: false,
                 pointRadius: 3,
-                tension: 1
             }]
         },
         options: {
@@ -461,9 +460,9 @@ function generateChart() {
             animations: {
                 tension: {
                     duration: 1000,
-                    easing: 'linear',
+                    easing: 'easeInOutQuart',
                     from: 0.7,
-                    to: 0,
+                    to: 0.25,
                     loop: false
                 }
             },
