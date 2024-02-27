@@ -75,9 +75,9 @@
                 <div class="NotenentwicklungBox">
                     <div class="rectangle">
                         <div class="miniTitle">Notenentwicklung für alle Fächer</div>
-
-                        Noch in Arbeit
-                        
+                        <div class="chart-wrapper">
+                            <canvas id="gradeChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,10 +99,12 @@
     <div id="subjectContent" style="display: none;">
         <h1 class="SubTitle" id="FachName">TEST</h1>
         <button id="neueKategorieButtonClick" class="neuesFachButton">Neue Kategorie <img src="assets/add.svg" alt="+" class="IMG"></button>
-        <button id="zurückZurMainPage" class="neuesFachButton">Zurück <img src="assets/back.svg" alt="-" class="I
+        <button id="zurückZurMainPage" class="neuesFachButton">Zurück <img src="assets/back.svg" alt="-" class="IMG"></button>
+        <div class="categoriesContainer"></div>
+    </div>
 
-            Noch in Arbeit
-            
+                                                <!-- Fächer Popups -->
+
     <div id="neuesFachPopup" class="FachPopup popup" style="display: none;">
          <div class="FachPopupContent">
             <input type="text" id="neusFachPopup-input" class="FachPopupInput" placeholder="Fachname">
@@ -123,10 +125,7 @@
             </form>
             <div class="button-container">
                 <button class="button-container-buttons button-container-buttons-save popup-buttons" type="submit" id="neuesFachPopup-create">Fach erstellen</button>
-                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="neuesFa
-
-                Noch in Arbeit
-                chPopup-cancel">Schließen</button>
+                <button class="button-container-buttons button-container-buttons-cancel" type="submit" id="neuesFachPopup-cancel">Schließen</button>
             </div>
          </div>
     </div>
@@ -148,9 +147,6 @@
                 <span class="color-choice" style="background-color: #336666;" data-color="#336666"></span>
                 <span class="color-choice" style="background-color: #666699;" data-color="#666699"></span>
                 <span class="color-choice" style="background-color: #999966;" data-color="#999966"></span>
-
-                Noch in Arbeit
-                
                 <span class="color-choice" style="background-color: #996699;" data-color="#996699"></span>
                 <span class="color-choice" style="background-color: #669999;" data-color="#669999"></span>
             </form>
@@ -172,9 +168,10 @@
                 <option value="0.5">0.5</option>
                 <option value="0.75">0.75</option>
                 <option value="1" selected>1</option>
-
-                Noch in Arbeit
-                
+                <option value="1.25">1.25</option>
+                <option value="1.5">1.5</option>
+                <option value="1.75">1.75</option>
+                <option value="2">2</option>
             </select>
             <div class="button-container">
                 <button class="button-container-buttons button-container-buttons-save popup-buttons" type="submit" id="neueKategoriePopup-create">Kategorie erstellen</button>
@@ -216,9 +213,8 @@
                     <option value="1.25">1.25</option>
                     <option value="1.5">1.5</option>
                     <option value="1.75">1.75</option>
-
-                    Noch in Arbeit
-                    
+                    <option value="2">2</option>
+                </select>
                 <button class="trashcan-button" id="Notetrashcan-button"><img src="assets/trashcan.svg" alt="Löschen" class="trashcan-button-img"></button>
             </div>
             <div id="editNotePopupList"></div>
