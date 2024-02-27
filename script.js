@@ -941,6 +941,7 @@ function editSubject(id, name) {
 
 
 function deleteSubject(id, box) {
+    closeAllPopups();
     const contextMenu = document.querySelector('.context-menu');
     contextMenu.classList.remove('show');
     setTimeout(function () {
