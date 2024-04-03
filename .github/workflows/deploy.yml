@@ -22,4 +22,7 @@ jobs:
       run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
 
     - name: Deploy to server
-      run: rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -o StrictHostKeyChecking=no" --rsync-path="env -i /usr/bin/rsync" ./ notenman@notenmanager.online:public_html/
+      run: |
+        ssh -o StrictHostKeyChecking=no notenman@notenmanager.online 'exit'
+        rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -v -o StrictHostKeyChecking=no" --rsync-path="env -i /usr/bin/rsync" ./ notenman@notenmanager.online:public_html/
+      
