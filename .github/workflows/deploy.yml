@@ -1,9 +1,7 @@
 name: Deploy on Tag
 
 on:
-  push:
-    tags:
-      - 'v*'
+  push
 
 jobs:
   deploy:
