@@ -22,11 +22,15 @@ jobs:
 
     - name: Deploy using Docker
       run: |
-        docker run --rm -v $PWD:/src -v $HOME/.ssh:/root/.ssh alpine /bin/sh -c "
+        docker volume create ssh-keys
+        docker run --rm -v ssh-keys:/root/.ssh alpine /bin/sh -c "
+        echo '$(cat $HOME/.ssh/id_rsa)' > /root/.ssh/id_rsa &&
+        chmod 600 /root/.ssh/id_rsa &&
         apk add --update rsync openssh &&
         eval $(ssh-agent -s) &&
         ssh-add /root/.ssh/id_rsa &&
         rsync -av --exclude-from='/src/deploy_ignore.txt' /src/ notenman@notenmanager.online:public_html/"
+    
     
 
 
