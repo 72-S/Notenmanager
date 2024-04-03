@@ -10,10 +10,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.5.3
       with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     
     - name: List files
       run: ls -la
@@ -22,8 +22,8 @@ jobs:
       run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
 
     - name: Deploy to server
-      run: rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -v -o StrictHostKeyChecking=no" --rsync-path="env -i /usr/bin/rsync" ./ notenman@notenmanager.online:public_html/
+      run: rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -o StrictHostKeyChecking=no" --rsync-path="env -i /usr/bin/rsync" ./ notenman@notenmanager.online:public_html/
 
-    - name: Test SSH connection
-      run: ssh -o StrictHostKeyChecking=no notenman@notenmanager.online echo "SSH connection successful"
+    - name: Deploy to server
+      run: rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -o StrictHostKeyChecking=no" --rsync-path="env -i /usr/bin/rsync" ./ notenman@notenmanager.online:public_html/
 
