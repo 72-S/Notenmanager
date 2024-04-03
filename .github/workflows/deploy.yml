@@ -20,7 +20,6 @@ jobs:
     - name: Accept Server Host Key
       run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
 
-
     - name: Deploy using Docker
       run: |
         docker run --rm -v $PWD:/src -v ~/.ssh:/root/.ssh alpine /bin/sh -c "
