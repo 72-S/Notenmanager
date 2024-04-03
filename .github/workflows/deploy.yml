@@ -1,7 +1,6 @@
 name: Deploy on Tag
 
-on:
-  push
+on: push
 
 jobs:
   deploy:
@@ -22,5 +21,6 @@ jobs:
       run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
 
     - name: Deploy to server
-      run: rsync -av --exclude-from='deploy_ignore.txt' ./ notenman@notenmanager.online:public_html/
+      run: rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR" --rsync-path="SHELL=/bin/sh rsync" ./ notenman@notenmanager.online:public_html/
+
 
