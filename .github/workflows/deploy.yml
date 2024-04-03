@@ -20,6 +20,8 @@ jobs:
     - name: List files
       run: ls -la
 
+    - name: Accept Server Host Key
+      run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
 
     - name: Deploy to server
       run: rsync -av --exclude-from='deploy_ignore.txt' ./ notenman@notenmanager.online:public_html/
