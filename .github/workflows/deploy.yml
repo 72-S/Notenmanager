@@ -9,29 +9,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up SSH key
-      uses: webfactory/ssh-agent@v0.5.3
+    - name: Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-    
-    - name: List files
-      run: ls -la
-
-    - name: Accept Server Host Key
-      run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
-
-    - name: Deploy using Docker
-      run: |
-        docker volume create ssh-keys
-        docker run --rm -v ssh-keys:/root/.ssh alpine /bin/sh -c "
-        echo '$(cat $HOME/.ssh/id_rsa)' > /root/.ssh/id_rsa &&
-        chmod 600 /root/.ssh/id_rsa &&
-        apk add --update rsync openssh &&
-        eval $(ssh-agent -s) &&
-        ssh-add /root/.ssh/id_rsa &&
-        rsync -av --exclude-from='/src/deploy_ignore.txt' /src/ notenman@notenmanager.online:public_html/"
-    
-    
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: .
+        remote-dir: /public_html
+        exclude: deploy_ignore.txt
 
 
 
