@@ -649,8 +649,8 @@ function addCategoryToUI(name, weight, id, subjectId) {
             <span id="category-weight${id}" class="category-weight">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
-        <button class="neuesFachButton" onclick="createGrade('${subjectId}', '${id}')">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
-        <button class="neuesFachButton" onclick="editGrades('${subjectId}', '${id}')">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" id="createGradeButton${id}">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" id="editGradesButton${id}">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
         </div>
         <div id="gradesContainer${id}" class="gradesContainer"></div>
         `;
@@ -659,6 +659,17 @@ function addCategoryToUI(name, weight, id, subjectId) {
     setTimeout(function () {
         box.classList.add("show");
     }, 20);
+
+    const createGradeButton = document.getElementById(`createGradeButton${id}`);
+    const editGradesButton = document.getElementById(`editGradesButton${id}`);
+
+    createGradeButton.addEventListener('click', function() {
+        createGrade(subjectId, id);
+    });
+
+    editGradesButton.addEventListener('click', function() {
+        editGrades(subjectId, id);
+    });
 }
 
 
