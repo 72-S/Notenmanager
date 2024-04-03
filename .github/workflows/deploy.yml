@@ -20,7 +20,12 @@ jobs:
     - name: Accept Server Host Key
       run: ssh-keyscan -H notenmanager.online >> ~/.ssh/known_hosts
 
-    - name: Deploy to server
-      run: rsync -av --exclude-from='deploy_ignore.txt' -e "ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR" --rsync-path="SHELL=/bin/sh rsync" ./ notenman@notenmanager.online:public_html/
+
+    - name: Deploy using Docker
+      run: |
+        docker run --rm -v $PWD:/src -v ~/.ssh:/root/.ssh alpine /bin/sh -c "
+        apk add --update rsync openssh-client &&
+        rsync -av --exclude-from='/src/deploy_ignore.txt' /src/ notenman@notenmanager.online:public_html/"
+
 
 
