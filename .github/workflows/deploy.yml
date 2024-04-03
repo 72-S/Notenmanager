@@ -22,9 +22,12 @@ jobs:
 
     - name: Deploy using Docker
       run: |
-        docker run --rm -v $PWD:/src -v ~/.ssh:/root/.ssh alpine /bin/sh -c "
-        apk add --update rsync openssh-client &&
+        docker run --rm -v $PWD:/src -v $HOME/.ssh:/root/.ssh alpine /bin/sh -c "
+        apk add --update rsync openssh &&
+        eval $(ssh-agent -s) &&
+        ssh-add /root/.ssh/id_rsa &&
         rsync -av --exclude-from='/src/deploy_ignore.txt' /src/ notenman@notenmanager.online:public_html/"
+    
 
 
 
