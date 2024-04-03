@@ -16,6 +16,10 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    
+    - name: List files
+      run: ls -la
+
 
     - name: Deploy to server
       run: rsync -av --exclude-from='deploy_ignore.txt' ./ notenman@notenmanager.online:public_html/
