@@ -18,4 +18,4 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Deploy to server
-      run: rsync -av --exclude-from='./deploy_ignore.txt' ./ notenman@notenmanager.online:public_html/
+      run: rsync -av --exclude-from='deploy_ignore.txt' ./ notenman@notenmanager.online:public_html/
