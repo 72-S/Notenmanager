@@ -235,7 +235,7 @@ class PushLocalDataToDB {
             categories.forEach((category, index) => {
                 if (category.subjectId === subjectId) {
                     this.deleteGradesByCategoryId(category.id);
-                    const categoryRef = firebase.database().ref(`categories/${categoryKey}`);
+                    const categoryRef = firebase.database().ref("/users/" + userId + `/categories/${categoryKey}`);
                     categoryRef.remove();
                     categories.splice(index, 1);
                 }
@@ -251,7 +251,7 @@ class PushLocalDataToDB {
             const grades = localGrades[gradeKey];
             grades.forEach((grade, index) => {
                 if (grade.categoryId === categoryId) {
-                    const gradeRef = firebase.database().ref(`grades/${gradeKey}`);
+                    const gradeRef = firebase.database().ref("/users/" + userId + `/grades/${gradeKey}`);
                     gradeRef.remove();
                     grades.splice(index, 1);
                 }
@@ -839,8 +839,8 @@ function addSubjectToUI(name, color, id) {
     box.addEventListener("touchstart", function (event) {
         box.classList.add('pressed');
         touchTimer = setTimeout(() => {
-            box.classList.remove('pressed'); 
-            showContextMenu(event, id, color, name, box); 
+            box.classList.remove('pressed');
+            showContextMenu(event, id, color, name, box);
         }, longPressDuration);
     }, { passive: true });
 
@@ -858,10 +858,10 @@ function addSubjectToUI(name, color, id) {
         event.preventDefault();
         const existingMenu = document.querySelector('.context-menu');
         if (existingMenu) {
-            contextMenu.classList.remove('show');
+            existingMenu.classList.remove('show');
             setTimeout(function () {
-                contextMenu.remove();
-            }, 100);
+                existingMenu.remove();
+            }, 20);
         }
 
         const contextMenuHTML = `
@@ -1434,7 +1434,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('darkMode').addEventListener('click', function () {
         const body = document.body;
         const darkModeIcon = document.getElementById('darkModeIcon');
-    
+
         if (body.classList.contains('dark')) {
             body.classList.remove('dark');
             darkModeIcon.src = "assets/lightmode.svg";
