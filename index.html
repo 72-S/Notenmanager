@@ -22,98 +22,106 @@
     <button id="darkMode" class="THEME-BUTTON"><img id="darkModeIcon" src="assets/lightmode.svg" alt="+"
                                                     class="THEME-IMG"></button>
 </div>
-<footer class="Footer-Wrapper">
-    <p class="footer-heart">
-        Made with <g-emoji class="g-emoji" alias="heart" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png">
-        <img class="emoji" alt="heart" height="20" width="20" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png"></g-emoji> by <a href="https://github.com/72-S">72S</a>
-    </p>
-</footer>
-<div id="loginContent" class="login-wrapper" style="display: none;">
-    <div class="login-wrapper-content">
-        <div class="login-wrapper-content-text">
-            <h2 class="login-wrapper-content-text-title">Willkommen</h2>
-            <p class="login-wrapper-content-text-subtitle">Melde dich an, um deine Noten zu verwalten</p>
-        </div>
-        <div class="login-wrapper-content-buttons">
-            <button id="loginButton" class="login-wrapper-content-buttons-login">Mit Google anmelden <img
-                    src="assets/google.svg" alt="+" class="IMG"></button>
+<div class="Content-Wrapper">
+    <div id="loginContent" class="login-wrapper" style="display: none;">
+        <div class="login-wrapper-content">
+            <div class="login-wrapper-content-text">
+                <h2 class="login-wrapper-content-text-title">Willkommen</h2>
+                <p class="login-wrapper-content-text-subtitle">Melde dich an, um deine Noten zu verwalten</p>
+            </div>
+            <div class="login-wrapper-content-buttons">
+                <button id="loginButton" class="login-wrapper-content-buttons-login">Mit Google anmelden <img
+                        src="assets/google.svg" alt="+" class="IMG"></button>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="mainContent" style="display: none;">
-    <h1 class="SubTitle">Übersicht</h1>
-    <button id="neuesFachButtonClick" class="neuesFachButton">Neues Fach <img src="assets/add.svg" alt="+" class="IMG">
-    </button>
-    <button id="logoutButton">Abmelden <img src="assets/logout.svg" alt="+" class="IMG"></button>
-    <section class="mainContentBox">
-
-
-        <div class="FächerBox">
-            <div class="rectangle">
-                <div class="miniTitle">Fächer</div>
-                <div class="subjects-wrapper">
-                    <p id="noSubjectMessage" style="display: none;">Du hast noch keine Fächer erstellt</p>
-                </div>
-            </div>
-        </div>
+    <div id="mainContent" style="display: none;">
+        <h1 class="SubTitle">Übersicht</h1>
+        <button id="neuesFachButtonClick" class="neuesFachButton">Neues Fach <img src="assets/add.svg" alt="+"
+                                                                                  class="IMG">
+        </button>
+        <button id="logoutButton">Abmelden <img src="assets/logout.svg" alt="+" class="IMG"></button>
+        <section class="mainContentBox">
 
 
-        <div class="boxgroup">
-            <div class="miniboxgroup">
-                <div class="DurschnittBox">
-                    <div class="rectangle">
-                        <div class="miniTitle">Durchschnitt</div>
-                        <div class="average-wrapper">
-                            <div id="averageMessage">Ø 0.00</div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="RechnerBox">
-                    <div class="rectangle">
-                        <div class="miniTitle">Eltern Zugang</div>
-                        <div class="calculator-wrapper">
-                            <p id="calculatorMessage">Noch in Arbeit</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="NotenentwicklungBox">
+            <div class="FächerBox">
                 <div class="rectangle">
-                    <div class="miniTitle">Notenentwicklung für alle Fächer</div>
-                    <div class="chart-wrapper">
-                        <canvas id="gradeChart"></canvas>
+                    <div class="miniTitle">Fächer</div>
+                    <div class="subjects-wrapper">
+                        <p id="noSubjectMessage" style="display: none;">Du hast noch keine Fächer erstellt</p>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <div class="NotenverteilungBox">test
-            <div class="rectangle">
-                <div class="miniTitle">Notenverteilung aller Fächer</div>
-                <div class="chart-wrapper-notenverteilung">
-                    <canvas id="gradeDistributionChart"></canvas>
+            <div class="boxgroup">
+                <div class="miniboxgroup">
+                    <div class="DurschnittBox">
+                        <div class="rectangle">
+                            <div class="miniTitle">Durchschnitt</div>
+                            <div class="average-wrapper">
+                                <div id="averageMessage">Ø 0.00</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="RechnerBox">
+                        <div class="rectangle">
+                            <div class="miniTitle">Eltern Zugang</div>
+                            <div class="calculator-wrapper">
+                                <p id="calculatorMessage">Noch in Arbeit</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="NotenentwicklungBox">
+                    <div class="rectangle">
+                        <div class="miniTitle">Notenentwicklung für alle Fächer</div>
+                        <div class="chart-wrapper">
+                            <canvas id="gradeChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
 
 
-<!-- Subject Page -->
-<div id="subjectContent" style="display: none;">
-    <h1 class="SubTitle" id="FachName">TEST</h1>
-    <button id="neueKategorieButtonClick" class="neuesFachButton">Neue Kategorie <img src="assets/add.svg" alt="+"
-                                                                                      class="IMG"></button>
-    <button id="zurückZurMainPage" class="neuesFachButton">Zurück <img src="assets/back.svg" alt="-" class="IMG">
-    </button>
-    <div class="categoriesContainer"></div>
+            <div class="NotenverteilungBox">
+                <div class="rectangle">
+                    <div class="miniTitle">Notenverteilung aller Fächer</div>
+                    <div class="chart-wrapper-notenverteilung">
+                        <canvas id="gradeDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- Subject Page -->
+    <div id="subjectContent" style="display: none;">
+        <h1 class="SubTitle" id="FachName">TEST</h1>
+        <button id="neueKategorieButtonClick" class="neuesFachButton">Neue Kategorie <img src="assets/add.svg" alt="+"
+                                                                                          class="IMG"></button>
+        <button id="zurückZurMainPage" class="neuesFachButton">Zurück <img src="assets/back.svg" alt="-" class="IMG">
+        </button>
+        <div class="categoriesContainer"></div>
+    </div>
+
 </div>
+<footer class="Footer-Wrapper">
+    <p class="footer-heart">
+        Made with
+        <g-emoji class="g-emoji" alias="heart"
+                 fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png">
+            <img class="emoji" alt="heart" height="20" width="20"
+                 src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png"></g-emoji>
+        by <a href="https://github.com/72-S">72S</a>
+    </p>
+</footer>
 
 <!-- Fächer Popups -->
 
