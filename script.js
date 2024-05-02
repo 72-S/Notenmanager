@@ -861,7 +861,7 @@ function addSubjectToUI(name, color, id) {
             existingMenu.classList.remove('show');
             setTimeout(function () {
                 existingMenu.remove();
-            }, 20);
+            }, 19);
         }
 
         const contextMenuHTML = `
@@ -870,14 +870,16 @@ function addSubjectToUI(name, color, id) {
                 <button class="popup-buttons" id="DeleteSubjectContext">Löschen</button>
             </div>`;
 
-        document.body.insertAdjacentHTML('beforeend', contextMenuHTML);
+        setTimeout(() => {
+            document.body.insertAdjacentHTML('beforeend', contextMenuHTML);
+            document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, name));
+            document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
+        }, 20);
 
         setTimeout(() => {
             document.querySelector('.context-menu').classList.add('show');
-        }, 20);
+        }, 40);
 
-        document.getElementById('EditSubjectContext').addEventListener('click', () => editSubject(id, name));
-        document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
     });
 
 
