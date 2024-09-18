@@ -263,17 +263,42 @@ class PushLocalDataToDB {
     }
 }
 
-function signInWithGoogle() {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function (result) {
-    }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
-    });
+function signInWithProvider(providerName, email, password) {
+    let provider;
+
+    switch (providerName) {
+        case 'google':
+            provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider).then(function (result) {
+                // Erfolgreiche Anmeldung
+            }).catch(handleError);
+            break;
+
+        case 'email':
+            firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
+                // Erfolgreiche Anmeldung
+            }).catch(handleError);
+            break;
+
+        case 'anonymous':
+            firebase.auth().signInAnonymously().then(function (result) {
+                // Erfolgreiche anonyme Anmeldung
+            }).catch(handleError);
+            break;
+
+        default:
+            console.error("Unbekannter Anbieter:", providerName);
+    }
 }
+
+function handleError(error) {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    var email = error.email;
+    var credential = error.credential;
+    console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+}
+
 
 function signOut() {
     if (confirm("Möchten Sie sich wirklich abmelden?")) {
@@ -1429,7 +1454,9 @@ document.addEventListener("DOMContentLoaded", function () {
         this.classList.toggle('checked');
     });
     // Event-Listener für den Anmelde-Button
-    document.getElementById('loginButton').addEventListener('click', signInWithGoogle);
+    document.getElementById('googleButton').addEventListener('click', signInWithProvider('google'));
+
+    document.getElementById('anonymButton').addEventListener('click', signInWithProvider('google'));
     // Event-Listener für den Abmelde-Button
     document.getElementById('logoutButton').addEventListener('click', signOut);
 
