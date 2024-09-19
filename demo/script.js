@@ -1,364 +1,39 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyBFnHlWuc5pR9NxAvUVZkeFORIZor1lmrs",
-    authDomain: "notenmanager-c2a2e.firebaseapp.com",
-    databaseURL: "https://notenmanager-c2a2e-default-rtdb.firebaseio.com",
-    projectId: "notenmanager-c2a2e",
-    storageBucket: "notenmanager-c2a2e.appspot.com",
-    messagingSenderId: "21273119934",
-    appId: "1:21273119934:web:8448400bde5c124f1aa2ef",
-    measurementId: "G-Q7YMZ047F0"
-};
-firebase.initializeApp(firebaseConfig);
-
-
 let localSubjects = {};
 let localCategories = {};
 let localGrades = {};
 let selectedColor = '';
 let gradesToDelete = [];
-let userId = null;
 
-class SaveLocalDataFromDB {
-    loadSubjects(callback, userId) {
-        const db = firebase.database().ref("/users/" + userId + "/subjects");
-        db.once('value', snapshot => {
-            snapshot.forEach(childSnapshot => {
-                const subject = childSnapshot.val();
-                const subjectId = childSnapshot.key;
-                if (!localSubjects[subjectId]) {
-                    localSubjects[subjectId] = [];
-                }
-                localSubjects[subjectId].push({
-                    id: subjectId,
-                    name: subject.name,
-                    color: subject.color,
-                    action: "get"
-                });
-            });
-            if (callback && typeof callback === 'function') {
-                callback();
-            }
-        });
-    }
-
-    loadCategories(callback, userId) {
-        const db = firebase.database().ref("/users/" + userId + "/categories");
-        db.once('value', snapshot => {
-            snapshot.forEach(childSnapshot => {
-                const category = childSnapshot.val();
-                const categoryId = childSnapshot.key;
-                if (!localCategories[categoryId]) {
-                    localCategories[categoryId] = [];
-                }
-                localCategories[categoryId].push({
-                    id: categoryId,
-                    name: category.name,
-                    weight: category.weight,
-                    subjectId: category.subjectId,
-                    action: "get"
-                });
-            });
-            if (callback && typeof callback === 'function') {
-                callback();
-            }
-        });
-    }
-
-    loadGrades(callback, userId) {
-        const db = firebase.database().ref("/users/" + userId + "/grades");
-        db.once('value', snapshot => {
-            snapshot.forEach(childSnapshot => {
-                const grade = childSnapshot.val();
-                const gradeId = childSnapshot.key;
-                if (!localGrades[gradeId]) {
-                    localGrades[gradeId] = [];
-                }
-                localGrades[gradeId].push({
-                    id: gradeId,
-                    name: grade.name,
-                    value: grade.value,
-                    date: grade.date,
-                    subjectId: grade.subjectId,
-                    categoryId: grade.categoryId,
-                    action: "get"
-                });
-            });
-            if (callback && typeof callback === 'function') {
-                callback();
-            }
-        });
-    }
+function saveDataToLocalStorage() {
+    localStorage.setItem('localSubjects', JSON.stringify(localSubjects));
+    localStorage.setItem('localCategories', JSON.stringify(localCategories));
+    localStorage.setItem('localGrades', JSON.stringify(localGrades));
 }
 
-
-class PushLocalDataToDB {
-    pushSubjects(userId) {
-        const db = firebase.database().ref("/users/" + userId + "/subjects");
-        Object.values(localSubjects).forEach(subjectArray => {
-            subjectArray.forEach(subject => {
-                if (subject.action === "push") {
-                    const newRef = db.push();
-                    newRef.set({
-                        name: subject.name,
-                        color: subject.color
-                    });
-                    newRef.then((ref) => {
-                        const newId = ref.key;
-                        localSubjects[newId] = [{
-                            id: newId,
-                            name: subject.name,
-                            color: subject.color,
-                            action: "get"
-                        }];
-                        delete localSubjects[subject.id];
-                        addSubjectToUI(subject.name, subject.color, newId);
-                    });
-                } else if (subject.action === "overwrite") {
-                    const subjectRef = db.child(subject.id);
-                    subjectRef.update({
-                        name: subject.name,
-                        color: subject.color
-                    });
-                    subject.action = "get";
-                } else if (subject.action === "delete") {
-                    this.deleteCategoriesAndGradesBySubjectId(subject.id);
-                    const subjectRef = db.child(subject.id);
-                    subjectRef.remove().then(() => {
-                        if (localSubjects[subject.id]) {
-                            delete localSubjects[subject.id];
-                        }
-                        const notSubjectMessage = document.getElementById("noSubjectMessage");
-                        if (Object.keys(localSubjects).length === 0) {
-                            notSubjectMessage.style.display = "block";
-                        } else {
-                            notSubjectMessage.style.display = "none";
-                        }
-                    });
-                    subject.action = "get";
-                }
-            });
-        });
-    }
-
-    pushCategories(userId) {
-        const db = firebase.database().ref("/users/" + userId + "/categories");
-        Object.values(localCategories).forEach(categoryArray => {
-            categoryArray.forEach(category => {
-                if (category.action === "push") {
-                    const newRef = db.push();
-                    newRef.set({
-                        name: category.name,
-                        weight: category.weight,
-                        subjectId: category.subjectId
-                    });
-                    newRef.then((ref) => {
-                        const newId = ref.key;
-                        localCategories[newId] = [{
-                            id: newId,
-                            name: category.name,
-                            weight: category.weight,
-                            subjectId: category.subjectId,
-                            action: "get"
-                        }];
-                        delete localCategories[category.id];
-                        addCategoryToUI(category.name, category.weight, newId, category.subjectId);
-                    });
-                } else if (category.action === "overwrite") {
-                    const categoryRef = db.child(category.id);
-                    categoryRef.update({
-                        name: category.name,
-                        weight: category.weight
-                    });
-                    category.action = "get";
-                } else if (category.action === "delete") {
-                    this.deleteGradesByCategoryId(category.id);
-                    const categoryRef = db.child(category.id);
-                    categoryRef.remove().then(() => {
-                        if (localCategories[category.id]) {
-                            delete localCategories[category.id];
-                        }
-                    });
-                    category.action = "get";
-                }
-            });
-        });
-    }
-
-    pushGrades(userId) {
-        const db = firebase.database().ref("/users/" + userId + "/grades");
-        Object.values(localGrades).forEach(gradeArray => {
-            gradeArray.forEach(grade => {
-                if (grade.action === "push") {
-                    const newRef = db.push();
-                    newRef.set({
-                        value: grade.value,
-                        date: grade.date,
-                        subjectId: grade.subjectId,
-                        categoryId: grade.categoryId
-                    });
-                    newRef.then((ref) => {
-                        const newId = ref.key;
-                        localGrades[newId] = [{
-                            id: newId,
-                            value: grade.value,
-                            date: grade.date,
-                            subjectId: grade.subjectId,
-                            categoryId: grade.categoryId,
-                            action: "get"
-                        }];
-                        delete localGrades[grade.id];
-                        addGradeToUI(grade.value, grade.date, grade.categoryId, newId);
-                    });
-                } else if (grade.action === "overwrite") {
-                    const gradeRef = db.child(grade.id);
-                    gradeRef.update({
-                        value: grade.value,
-                        date: grade.date
-                    });
-                    subject.action = "get";
-                } else if (grade.action === "delete") {
-                    const gradeRef = db.child(grade.id);
-                    gradeRef.remove().then(() => {
-                        if (localGrades[grade.id]) {
-                            delete localGrades[grade.id];
-                        }
-                    });
-                    grade.action = "get";
-                }
-            });
-        });
-    }
-
-    deleteCategoriesAndGradesBySubjectId(subjectId) {
-        Object.keys(localCategories).forEach(categoryKey => {
-            const categories = localCategories[categoryKey];
-            categories.forEach((category, index) => {
-                if (category.subjectId === subjectId) {
-                    this.deleteGradesByCategoryId(category.id);
-                    const categoryRef = firebase.database().ref("/users/" + userId + `/categories/${categoryKey}`);
-                    categoryRef.remove();
-                    categories.splice(index, 1);
-                }
-            });
-            if (categories.length === 0) {
-                delete localCategories[categoryKey];
-            }
-        });
-    }
-
-    deleteGradesByCategoryId(categoryId) {
-        Object.keys(localGrades).forEach(gradeKey => {
-            const grades = localGrades[gradeKey];
-            grades.forEach((grade, index) => {
-                if (grade.categoryId === categoryId) {
-                    const gradeRef = firebase.database().ref("/users/" + userId + `/grades/${gradeKey}`);
-                    gradeRef.remove();
-                    grades.splice(index, 1);
-                }
-            });
-            if (grades.length === 0) {
-                delete localGrades[gradeKey];
-            }
-        });
-    }
+function loadDataFromLocalStorage() {
+    localSubjects = JSON.parse(localStorage.getItem('localSubjects')) || {};
+    localCategories = JSON.parse(localStorage.getItem('localCategories')) || {};
+    localGrades = JSON.parse(localStorage.getItem('localGrades')) || {};
 }
 
-function signInWithGoogle() {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function (result) {
-    }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+function loadUserData() {
+    loadDataFromLocalStorage();
+    removeAllSubjectsFromUI();
+    removeAllCategoriesFromUI();
+    const noSubjectMessage = document.getElementById("noSubjectMessage");
+    if (Object.keys(localSubjects).length === 0) {
+        noSubjectMessage.style.display = "block";
+    } else {
+        noSubjectMessage.style.display = "none";
+    }
+    Object.values(localSubjects).forEach(subject => {
+        addSubjectToUI(subject.name, subject.color, subject.id);
+        const average = calculateAverageForSubject(subject.id);
+        document.getElementById("subject-average" + subject.id).textContent = average;
     });
-}
-
-function signInWithMicrosoft() {
-    var provider = new firebase.auth.OAuthProvider('microsoft.com');
-    firebase.auth().signInWithPopup(provider).then(function (result) {
-    }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
-    });
-}
-
-function signInWithGithub() {
-    var provider = new firebase.auth.GithubAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function (result) {
-    }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
-    });
-}
-
-function signOut() {
-    if (confirm("Möchten Sie sich wirklich abmelden?")) {
-        firebase.auth().signOut().then(function () {
-            userId = null;
-            console.log("Abmeldung erfolgreich");
-            localCategories = {};
-            localGrades = {};
-            localSubjects = {};
-            removeAllSubjectsFromUI();
-        }).catch(function (error) {
-            console.error("Fehler beim Abmelden", error);
-        });
-    }
-}
-
-
-function checkAuthStatus() {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            // Benutzer ist angemeldet.
-            document.getElementById("mainContent").style.display = "block";
-            document.getElementById("loginContent").style.display = "none";
-            loadUserData(user.uid);
-            userId = user.uid;
-        } else {
-            // Benutzer ist nicht angemeldet.
-            console.log("Kein Benutzer angemeldet.");
-            document.getElementById("mainContent").style.display = "none";
-            document.getElementById("loginContent").style.display = "block";
-        }
-    });
-}
-
-
-function loadUserData(userId) {
-    const saveLocalData = new SaveLocalDataFromDB();
-    saveLocalData.loadSubjects(() => {
-        saveLocalData.loadCategories(() => {
-            saveLocalData.loadGrades(() => {
-                removeAllSubjectsFromUI();
-                removeAllCategoriesFromUI();
-                const noSubjectMessage = document.getElementById("noSubjectMessage");
-                if (Object.keys(localSubjects).length === 0) {
-                    noSubjectMessage.style.display = "block";
-                } else {
-                    noSubjectMessage.style.display = "none";
-                }
-                Object.values(localSubjects).forEach(subjectArray => {
-                    subjectArray.forEach(subject => {
-                        addSubjectToUI(subject.name, subject.color, subject.id);
-                        const average = calculateAverageForSubject(subject.id);
-                        document.getElementById("subject-average" + subject.id).textContent = average;
-                    });
-                });
-                calculateAverageForAllSubjects();
-                generateChart();
-                generateChartDistribution();
-            }, userId);
-        }, userId);
-    }, userId);
+    calculateAverageForAllSubjects();
+    generateChart();
+    generateChartDistribution();
 }
 
 function getWeekNumber(d) {
@@ -368,7 +43,6 @@ function getWeekNumber(d) {
     const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
     return d.getUTCFullYear().toString().substring(2) + "-W" + weekNo.toString().padStart(2, '0');
 }
-
 
 function hexToRGBA(hex, opacity) {
     let r = parseInt(hex.slice(1, 3), 16),
@@ -401,12 +75,10 @@ function changeTextWithTransition(element, newText) {
 
 function generateChartData() {
     const grades = [];
-    Object.values(localGrades).forEach(subjectArray => {
-        subjectArray.forEach(grade => {
-            grades.push({
-                value: parseFloat(grade.value),
-                week: getWeekNumber(new Date(grade.date))
-            });
+    Object.values(localGrades).forEach(grade => {
+        grades.push({
+            value: parseFloat(grade.value),
+            week: getWeekNumber(new Date(grade.date))
         });
     });
     const gradesByWeek = grades.reduce((acc, grade) => {
@@ -425,22 +97,18 @@ function generateChartData() {
     return chartData;
 }
 
-
-
 function generategradeDistributionChartData() {
     let subjectAverages = [];
     let totalAverage = 0;
-    Object.values(localSubjects).forEach(subjectArray => {
-        subjectArray.forEach(subject => {
-            const element = document.getElementById(subject.id);
-            if (element) {
-                const average = Number(element.getAttribute("data-subject-average"));
-                if (average !== 0) {
-                    subjectAverages.push({ name: subject.name, average: average, color: subject.color });
-                    totalAverage += average;
-                }
+    Object.values(localSubjects).forEach(subject => {
+        const element = document.getElementById(subject.id);
+        if (element) {
+            const average = Number(element.getAttribute("data-subject-average"));
+            if (average !== 0) {
+                subjectAverages.push({ name: subject.name, average: average, color: subject.color });
+                totalAverage += average;
             }
-        });
+        }
     });
     let subjectWeights = subjectAverages.map(subject => {
         return {
@@ -453,9 +121,6 @@ function generategradeDistributionChartData() {
 
     return subjectWeights;
 }
-
-
-
 
 function generateChart() {
     const chartData = generateChartData();
@@ -513,7 +178,6 @@ function generateChart() {
         }
     });
 }
-
 
 function generateChartDistribution() {
     const chartData = generategradeDistributionChartData();
@@ -575,24 +239,19 @@ function generateChartDistribution() {
     });
 }
 
-
-
-
 function calculateAverageForSubject(subjectId) {
     let sum = 0;
     let count = 0;
-    Object.values(localGrades).forEach(gradeArray => {
-        gradeArray.forEach(grade => {
-            if (grade.subjectId === subjectId) {
-                const category = localCategories[grade.categoryId][0];
-                const categoryWeight = category ? parseFloat(category.weight) : 1;
-                let gradeValue = parseFloat(grade.value);
-                if (!isNaN(gradeValue) && !isNaN(categoryWeight)) {
-                    sum += gradeValue * categoryWeight;
-                    count += categoryWeight;
-                }
+    Object.values(localGrades).forEach(grade => {
+        if (grade.subjectId === subjectId) {
+            const category = localCategories[grade.categoryId];
+            const categoryWeight = category ? parseFloat(category.weight) : 1;
+            let gradeValue = parseFloat(grade.value);
+            if (!isNaN(gradeValue) && !isNaN(categoryWeight)) {
+                sum += gradeValue * categoryWeight;
+                count += categoryWeight;
             }
-        });
+        }
     });
     if (count === 0) {
         return "0.00";
@@ -606,18 +265,16 @@ function calculateAverageForSubject(subjectId) {
 function calculateAverageForAllSubjects() {
     let subjectSum = [];
     let count = 0;
-    Object.values(localSubjects).forEach(subjectArray => {
-        subjectArray.forEach(subject => {
-            const element = document.getElementById(subject.id);
-            if (element) {
-                const average = element.getAttribute("data-subject-average");
-                const averageNumber = Number(average);
-                if (averageNumber !== 0) {
-                    subjectSum.push(averageNumber);
-                    count++;
-                }
+    Object.values(localSubjects).forEach(subject => {
+        const element = document.getElementById(subject.id);
+        if (element) {
+            const average = element.getAttribute("data-subject-average");
+            const averageNumber = Number(average);
+            if (averageNumber !== 0) {
+                subjectSum.push(averageNumber);
+                count++;
             }
-        });
+        }
     });
 
     const allAverage = count > 0
@@ -626,9 +283,6 @@ function calculateAverageForAllSubjects() {
     document.getElementById("averageMessage").textContent = "Ø " + allAverage.toFixed(2);
 }
 
-
-
-//function to open subject page
 function openSubjectPage(id, name) {
     closeAllPopups();
     document.getElementById("zurückZurMainPage").setAttribute("category-data-subject-id", id);
@@ -640,24 +294,18 @@ function openSubjectPage(id, name) {
     for (let i = 0; i < subjectboxes.length; i++) {
         subjectboxes[i].classList.remove("show");
     }
-    Object.values(localCategories).forEach(categoryArray => {
-        categoryArray.forEach(category => {
-            if (category.subjectId === id) {
-                addCategoryToUI(category.name, category.weight, category.id, category.subjectId);
-            }
-        });
+    Object.values(localCategories).forEach(category => {
+        if (category.subjectId === id) {
+            addCategoryToUI(category.name, category.weight, category.id, category.subjectId);
+        }
     });
-    Object.values(localGrades).forEach(gradeArray => {
-        gradeArray.forEach(grade => {
-            if (grade.subjectId === id) {
-                addGradeToUI(grade.value, grade.date, grade.categoryId, grade.id);
-            }
-        });
+    Object.values(localGrades).forEach(grade => {
+        if (grade.subjectId === id) {
+            addGradeToUI(grade.value, grade.date, grade.categoryId, grade.id);
+        }
     });
 }
 
-
-//function to add Category to UI
 function addCategoryToUI(name, weight, id, subjectId) {
     const container = document.getElementsByClassName("categoriesContainer")[0];
     if (!container) {
@@ -673,8 +321,8 @@ function addCategoryToUI(name, weight, id, subjectId) {
             <span id="category-weight${id}" class="category-weight">x ${weight}</span>
         </div>
         <div class="buttonsContainerKategorie">
-        <button class="neuesFachButton" id="createGradeButton${id}">Note hinzufügen <img src="assets/add.svg" alt="+" class="IMG"></button>
-        <button class="neuesFachButton" id="editGradesButton${id}">Bearbeiten <img src="assets/edit.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" id="createGradeButton${id}">Note hinzufügen <img src="../assets/add.svg" alt="+" class="IMG"></button>
+        <button class="neuesFachButton" id="editGradesButton${id}">Bearbeiten <img src="../assets/edit.svg" alt="+" class="IMG"></button>
         </div>
         <div id="gradesContainer${id}" class="gradesContainer"></div>
         `;
@@ -696,14 +344,12 @@ function addCategoryToUI(name, weight, id, subjectId) {
     });
 }
 
-
 function closeAllPopups() {
     const popups = document.querySelectorAll('.popup');
     popups.forEach(popup => {
         popup.style.display = "none";
     });
 }
-
 
 function createGrade(subjectId, categoryId) {
     closeAllPopups();
@@ -744,14 +390,12 @@ function editGrades(subjectId, categoryId) {
         return console.error("Grade Container not found");
     }
     container.innerHTML = "";
-    Object.values(localGrades).forEach(gradeArray => {
-        gradeArray.forEach(grade => {
-            if (grade.subjectId === subjectId) {
-                if (grade.categoryId === categoryId) {
-                    addGradeToPopupUI(grade.value, grade.date, grade.id);
-                }
+    Object.values(localGrades).forEach(grade => {
+        if (grade.subjectId === subjectId) {
+            if (grade.categoryId === categoryId) {
+                addGradeToPopupUI(grade.value, grade.date, grade.id);
             }
-        });
+        }
     });
 }
 
@@ -802,7 +446,6 @@ function addGradeToPopupUI(value, date, id) {
     });
 }
 
-
 function showContextMenu(event, id, color, name, box) {
     event.preventDefault();
     const existingMenu = document.querySelector('.context-menu');
@@ -829,10 +472,6 @@ function showContextMenu(event, id, color, name, box) {
     document.getElementById('DeleteSubjectContext').addEventListener('click', () => deleteSubject(id, box));
 }
 
-
-
-//funktion to add Subject to UI
-
 function addSubjectToUI(name, color, id) {
     let touchTimer;
     const longPressDuration = 300;
@@ -854,7 +493,6 @@ function addSubjectToUI(name, color, id) {
     average.classList.add("subject-average");
     average.id = "subject-average" + id;
     average.textContent = "0.00";
-
 
     box.addEventListener("click", function () {
         openSubjectPage(id, name);
@@ -906,7 +544,6 @@ function addSubjectToUI(name, color, id) {
 
     });
 
-
     container.appendChild(box);
     box.appendChild(subjectName);
     box.appendChild(average);
@@ -915,7 +552,6 @@ function addSubjectToUI(name, color, id) {
         box.classList.add("show");
     }, 20);
 }
-
 
 function addGradeToUI(value, date, categoryId, id) {
     const container = document.getElementById("gradesContainer" + categoryId);
@@ -944,7 +580,6 @@ function addGradeToUI(value, date, categoryId, id) {
         }
     }, 20);
 }
-
 
 function editSubject(id, name) {
     const popup = document.getElementById('editFachPopup');
@@ -976,7 +611,6 @@ function editSubject(id, name) {
     }, 20);
 }
 
-
 function deleteSubject(id, box) {
     closeAllPopups();
     const contextMenu = document.querySelector('.context-menu');
@@ -988,11 +622,41 @@ function deleteSubject(id, box) {
     box.classList.remove("show");
     setTimeout(function () {
         box.remove();
+        deleteCategoriesAndGradesBySubjectId(id);
         pushSubjectClass(id, "", "", "delete");
         generateChart();
         calculateAverageForAllSubjects();
         generateChartDistribution();
     }, 300);
+}
+
+function deleteCategoriesAndGradesBySubjectId(subjectId) {
+    // Delete categories associated with this subject
+    Object.keys(localCategories).forEach(categoryId => {
+        const category = localCategories[categoryId];
+        if (category.subjectId === subjectId) {
+            deleteGradesByCategoryId(categoryId);
+            delete localCategories[categoryId];
+        }
+    });
+    // Delete grades associated with this subject
+    Object.keys(localGrades).forEach(gradeId => {
+        const grade = localGrades[gradeId];
+        if (grade.subjectId === subjectId) {
+            delete localGrades[gradeId];
+        }
+    });
+    saveDataToLocalStorage();
+}
+
+function deleteGradesByCategoryId(categoryId) {
+    Object.keys(localGrades).forEach(gradeId => {
+        const grade = localGrades[gradeId];
+        if (grade.categoryId === categoryId) {
+            delete localGrades[gradeId];
+        }
+    });
+    saveDataToLocalStorage();
 }
 
 function selectColor(element) {
@@ -1004,8 +668,6 @@ function selectColor(element) {
     setButtonStateneuesFachPopup();
 }
 
-
-//funktion to remove Subject from UI
 function removeAllSubjectsFromUI() {
     const subjectBoxes = document.getElementsByClassName("subject-box");
     while (subjectBoxes.length > 0) {
@@ -1029,8 +691,6 @@ function resetFachPopup() {
     selectedColor = '';
 }
 
-
-
 function saveChanges(categoryId, subjectId) {
     const input = document.getElementById("editNotePopup-input").value;
     const select = document.getElementById("editNotePopup-select").value;
@@ -1049,9 +709,10 @@ function saveChanges(categoryId, subjectId) {
             setTimeout(function () {
                 gradeElement.remove();
             }, 120);
-            pushGradeClass(gradeId, "", "", "", "", "delete");
-            gradesToDelete = [];
+            delete localGrades[gradeId];
         });
+        gradesToDelete = [];
+        saveDataToLocalStorage();
     }
     if (CheckedButton.classList.contains('checked')) {
         const categoryElement = document.getElementById(categoryId);
@@ -1059,135 +720,95 @@ function saveChanges(categoryId, subjectId) {
         setTimeout(function () {
             categoryElement.remove();
         }, 180);
-        pushCategoryClass(categoryId, "", "", "", "delete");
+        deleteGradesByCategoryId(categoryId);
+        delete localCategories[categoryId];
+        saveDataToLocalStorage();
     } else {
-        pushCategoryClass(categoryId, input, select, subjectId, "overwrite");
+        localCategories[categoryId] = {
+            id: categoryId,
+            name: input,
+            weight: select,
+            subjectId: subjectId
+        };
+        saveDataToLocalStorage();
     }
 }
-
-
-
-
-
-
 
 function pushSubjectClass(id, name, color, action) {
-    const tempId = Date.now();
     if (action === "overwrite") {
-        const existingSubjectIndex = localSubjects[id].findIndex(subject => subject.id === id);
-        if (existingSubjectIndex !== -1) {
-            localSubjects[id][existingSubjectIndex] = {
+        if (localSubjects[id]) {
+            localSubjects[id] = {
                 id: id,
                 name: name,
-                color: color,
-                action: "overwrite"
+                color: color
             };
         }
-    }
-    else if (action === "delete") {
-        localSubjects[id] = [{
-            id: id,
-            name: name,
-            color: color,
-            action: "delete"
-        }]
-    }
-    else if (action === "push") {
-        localSubjects[tempId] = [{
+    } else if (action === "delete") {
+        delete localSubjects[id];
+    } else if (action === "push") {
+        const tempId = Date.now().toString();
+        localSubjects[tempId] = {
             id: tempId,
             name: name,
-            color: color,
-            action: "push"
-        }];
+            color: color
+        };
+        addSubjectToUI(name, color, tempId);
     }
-    if (action === "push" || action === "overwrite" || action === "delete") {
-        const pushData = new PushLocalDataToDB();
-        pushData.pushSubjects(userId);
-    }
+    saveDataToLocalStorage();
 }
 
-
 function pushCategoryClass(id, name, weight, subjectId, action) {
-    const tempId = Date.now();
     if (action === "overwrite") {
-        const existingCategoryIndex = localCategories[id].findIndex(category => category.id === id);
-        if (existingCategoryIndex !== -1) {
-            localCategories[id][existingCategoryIndex] = {
+        if (localCategories[id]) {
+            localCategories[id] = {
                 id: id,
                 name: name,
                 weight: weight,
-                subjectId: subjectId,
-                action: "overwrite"
+                subjectId: subjectId
             };
         }
-    }
-    else if (action === "delete") {
-        localCategories[id] = [{
-            id: id,
-            name: name,
-            weight: weight,
-            subjectId: subjectId,
-            action: "delete"
-        }]
-    }
-    else if (action === "push") {
-        localCategories[tempId] = [{
+    } else if (action === "delete") {
+        delete localCategories[id];
+    } else if (action === "push") {
+        const tempId = Date.now().toString();
+        localCategories[tempId] = {
             id: tempId,
             name: name,
             weight: weight,
-            subjectId: subjectId,
-            action: "push"
-        }];
+            subjectId: subjectId
+        };
+        addCategoryToUI(name, weight, tempId, subjectId);
     }
-    if (action === "push" || action === "overwrite" || action === "delete") {
-        const pushData = new PushLocalDataToDB();
-        pushData.pushCategories(userId);
-    }
+    saveDataToLocalStorage();
 }
 
-
 function pushGradeClass(id, value, date, subjectId, categoryId, action) {
-    const tempId = Date.now();
     if (action === "overwrite") {
-        const existingGradeIndex = localGrades[id].findIndex(grade => grade.id === id);
-        if (existingGradeIndex !== -1) {
-            localGrades[id][existingGradeIndex] = {
+        if (localGrades[id]) {
+            localGrades[id] = {
                 id: id,
                 value: value,
                 date: date,
                 subjectId: subjectId,
-                categoryId: categoryId,
-                action: "overwrite"
+                categoryId: categoryId
             };
         }
-    }
-    else if (action === "delete") {
-        localGrades[id] = [{
-            id: id,
-            value: value,
-            date: date,
-            subjectId: subjectId,
-            categoryId: categoryId,
-            action: "delete"
-        }]
-    }
-    else if (action === "push") {
-        localGrades[tempId] = [{
+    } else if (action === "delete") {
+        delete localGrades[id];
+    } else if (action === "push") {
+        const tempId = Date.now().toString();
+        localGrades[tempId] = {
             id: tempId,
             value: value,
             date: date,
             subjectId: subjectId,
-            categoryId: categoryId,
-            action: "push"
-        }];
+            categoryId: categoryId
+        };
+        addGradeToUI(value, date, categoryId, tempId);
     }
-    if (action === "push" || action === "overwrite" || action === "delete") {
-        const pushData = new PushLocalDataToDB();
-        pushData.pushGrades(userId);
-    }
+    saveDataToLocalStorage();
 }
 
-//BUTTON STATE FUNCTIONS
 function setButtonStateneuesFachPopup() {
     const nameInput = document.getElementById('neusFachPopup-input').value;
     const isColorSelected = selectedColor !== '';
@@ -1204,14 +825,12 @@ function setButtonStateEditFachPopup() {
     saveButton.disabled = !(nameInput && isColorSelected);
 }
 
-
 function disableAllButtons() {
     const buttons = document.querySelectorAll('.popup-buttons');
     buttons.forEach(button => {
         button.disabled = true;
     });
 }
-
 
 function getCookie(name) {
     let cookie = {};
@@ -1221,7 +840,6 @@ function getCookie(name) {
     })
     return cookie[name];
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const body = document.body;
@@ -1235,11 +853,10 @@ document.addEventListener("DOMContentLoaded", function () {
         body.classList.remove('dark');
         darkModeIcon.src = "assets/lightmode.svg";
     }
-    checkAuthStatus();
+    loadUserData();
     setButtonStateneuesFachPopup();
     disableAllButtons();
 
-    //EVENT LISTENER
     document.addEventListener('click', function (event) {
         const contextMenu = document.querySelector('.context-menu');
         if (contextMenu && !contextMenu.contains(event.target)) {
@@ -1373,7 +990,6 @@ document.addEventListener("DOMContentLoaded", function () {
         disableAllButtons();
     });
 
-
     document.getElementById("neueNotePopup-cancel").addEventListener("click", function () {
         const popup = document.getElementById('neueNotePopup');
         popup.classList.remove('show');
@@ -1397,7 +1013,6 @@ document.addEventListener("DOMContentLoaded", function () {
         disableAllButtons();
     });
 
-
     document.getElementById("editNotePopup-cancel").addEventListener("click", function () {
         const popup = document.getElementById('editNotePopup');
         const CheckedButton = document.getElementById("Notetrashcan-button");
@@ -1409,7 +1024,6 @@ document.addEventListener("DOMContentLoaded", function () {
         gradesToDelete = [];
         disableAllButtons();
     });
-
 
     document.getElementById("editNotePopup-save").addEventListener("click", function () {
         const popup = document.getElementById('editNotePopup');
@@ -1429,9 +1043,6 @@ document.addEventListener("DOMContentLoaded", function () {
         disableAllButtons();
     });
 
-
-
-    //Button deactivate listeners
     document.getElementById('neusFachPopup-input').addEventListener('input', setButtonStateneuesFachPopup);
     document.getElementById('editFachPopup-input').addEventListener('input', setButtonStateEditFachPopup);
     document.getElementById('neueKategoriePopup-input').addEventListener('input', function () {
@@ -1452,19 +1063,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('Notetrashcan-button').addEventListener('click', function (event) {
         this.classList.toggle('checked');
     });
-    // Event-Listener für den Anmelde-Button
-    document.getElementById('googleButton').addEventListener('click', signInWithGoogle);
-
-    document.getElementById('microsoftButton').addEventListener('click', signInWithMicrosoft);
-
-    document.getElementById('githubButton').addEventListener('click', signInWithGithub);
-
-    document.getElementById('demoButton').addEventListener('click', function () {
-        window.location.href = "demo/";
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        window.location.href = "../";
     });
-
-    // Event-Listener für den Abmelde-Button
-    document.getElementById('logoutButton').addEventListener('click', signOut);
 
     document.getElementById('darkMode').addEventListener('click', function () {
         const body = document.body;
