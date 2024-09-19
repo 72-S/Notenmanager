@@ -274,38 +274,67 @@ class PushLocalDataToDB {
 function signInWithGoogle() {
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function (result) {
+        // Erfolgreiches Login
     }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+        handleAuthError(error);
     });
 }
 
 function signInWithMicrosoft() {
     var provider = new firebase.auth.OAuthProvider('microsoft.com');
     firebase.auth().signInWithPopup(provider).then(function (result) {
+        // Erfolgreiches Login
     }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+        handleAuthError(error);
     });
 }
 
 function signInWithGithub() {
     var provider = new firebase.auth.GithubAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function (result) {
+        // Erfolgreiches Login
     }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+        handleAuthError(error);
     });
 }
+
+function handleAuthError(error) {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    var email = error.email;
+    var credential = error.credential;
+
+    // Fehler abfangen, wenn das Konto mit einem anderen Provider existiert
+    if (errorCode === "auth/account-exists-with-different-credential") {
+        // Hole den ursprünglichen Provider
+        firebase.auth().fetchSignInMethodsForEmail(email).then(function (signInMethods) {
+            var originalProvider = getProviderName(signInMethods[0]); // Nimm den ersten Provider aus der Liste
+            showProviderPopup(originalProvider);
+        });
+    } else {
+        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+    }
+}
+
+// Funktion, um den Provider-Namen aus der Methode zu ermitteln
+function getProviderName(signInMethod) {
+    switch (signInMethod) {
+        case firebase.auth.GoogleAuthProvider.PROVIDER_ID:
+            return "Google";
+        case firebase.auth.OAuthProvider.PROVIDER_ID:
+            return "Microsoft";
+        case firebase.auth.GithubAuthProvider.PROVIDER_ID:
+            return "GitHub";
+        default:
+            return "ein anderer Provider";
+    }
+}
+
+// Popup, das den Benutzer informiert
+function showProviderPopup(providerName) {
+    alert("Sie haben sich bereits mit " + providerName + " angemeldet. Bitte melden Sie sich mit diesem Anbieter an oder verwenden Sie ein anderes Konto mit einer anderen E-Mail-Adresse.");
+}
+
 
 function signOut() {
     if (confirm("Möchten Sie sich wirklich abmelden?")) {
