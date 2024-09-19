@@ -27,6 +27,9 @@
     --color-choice-border-color-selected: #424242;
     --miniTitle-border-color: #9da9b3;
     --transition: all 0.2s ease-in-out;
+    --LoginButtonBackground: #000000;
+    --LoginButtonBackgroundHover: #423e3e;
+    --LoginButtonSchriftfarbe: #e0dddd;  
 }
 
 .dark {
@@ -58,6 +61,9 @@
     --color-choice-border-color-selected: #ffffff;
     --miniTitle-border-color: #9da9b3;
     --transition: all 0.2s ease-in-out;
+    --LoginButtonBackground: #0761c2;
+    --LoginButtonBackgroundHover: #1c7fe9;
+    --LoginButtonSchriftfarbe: #e0dede;
 }
 
 body {
@@ -1046,37 +1052,44 @@ body {
 .login-wrapper-content-buttons {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Ensures buttons stretch to container's width */
-    width: 100%; /* Optional: adjust as needed */
-    max-width: 240px; /* Optional: sets a maximum width */
-    margin: 0 auto; /* Centers the container horizontally */
 }
 
 
 
 .loginButton {
-    background-color: var(--ButtonBackground);
+    background-color: var(--LoginButtonBackground);
     border: none;
     border-radius: var(--ButtonRadius);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    color: var(--ButtonSchriftfarbe);
+    color: var(--LoginButtonSchriftfarbe);
     cursor: pointer;
     font-family: 'Lato-Medium', sans-serif;
     font-weight: bold;
     font-size: 16px;
-    padding: 10px;
-    display: inline-flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: left;
+    text-align: left;
     transition: var(--transition);
-    margin-top: 5px;
+    margin-top: 7px;
     height: var(--ButtonHeight);
     margin-right: 5px;
 }
 
 .loginButton:hover {
-    background-color: var(--ButtonBackgroundHover);
+    background-color: var(--LoginButtonBackgroundHover);
+    color: var(--LoginButtonSchriftfarbe);
+}
+
+.loginButton .button-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    display: inline-block;
 }
 
 .Footer-Wrapper {
