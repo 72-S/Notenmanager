@@ -275,6 +275,30 @@ function signInWithGoogle() {
     });
 }
 
+function signInWithMicrosoft() {
+    var provider = new firebase.auth.OAuthProvider('microsoft.com');
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+    }).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+    });
+}
+
+function signInWithGithub() {
+    var provider = new firebase.auth.GithubAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+    }).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+        console.error("Authentifizierungsfehler", errorCode, errorMessage, email, credential);
+    });
+}
+
 function signOut() {
     if (confirm("Möchten Sie sich wirklich abmelden?")) {
         firebase.auth().signOut().then(function () {
@@ -1429,7 +1453,11 @@ document.addEventListener("DOMContentLoaded", function () {
         this.classList.toggle('checked');
     });
     // Event-Listener für den Anmelde-Button
-    document.getElementById('loginButton').addEventListener('click', signInWithGoogle);
+    document.getElementById('googleButton').addEventListener('click', signInWithGoogle);
+
+    document.getElementById('microsoftButton').addEventListener('click', signInWithMicrosoft);
+
+    document.getElementById('githubButton').addEventListener('click', signInWithGithub);
     // Event-Listener für den Abmelde-Button
     document.getElementById('logoutButton').addEventListener('click', signOut);
 

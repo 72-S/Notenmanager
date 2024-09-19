@@ -13,7 +13,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
-    <script src="dist/bundle.js"></script>
+    <script src="script.js"></script>
 </head>
 <body>
 
@@ -30,8 +30,10 @@
                 <p class="login-wrapper-content-text-subtitle">Melde dich an, um deine Noten zu verwalten</p>
             </div>
             <div class="login-wrapper-content-buttons">
-                <button id="loginButton" class="login-wrapper-content-buttons-login">Mit Google anmelden <img
-                        src="assets/google.svg" alt="+" class="IMG"></button>
+                <button id="googleButton" class="loginButton"><img src="assets/google.svg" alt="+" class="IMG">Mit Google anmelden</button>
+                <button id="microsoftButton" class="loginButton"><img src="assets/google.svg" alt="+" class="IMG">Mit Microsoft anmelden</button>
+                <button id="githubButton" class="loginButton"><img src="assets/google.svg" alt="+" class="IMG">Mit Github anmelden</button>
+                <button id="demoButton" class="loginButton"><img src="assets/google.svg" alt="+" class="IMG">Demo</button>
             </div>
         </div>
     </div>

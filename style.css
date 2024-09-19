@@ -33,8 +33,8 @@
     --SiteBackground: #242323;
     --Schriftfarbe: #dad7cd;
     --ButtonSchriftfarbe: black;
-    --ButtonBackground: #044992;
-    --ButtonBackgroundHover: #00326b;
+    --ButtonBackground: #0761c2;
+    --ButtonBackgroundHover: #1c7fe9;
     --LightBlue: #3c3c3c;
     --RED: #54282c;
     --ButtonHeight: 35px;
@@ -1043,8 +1043,19 @@ body {
     margin-bottom: 20px;
 }
 
-#loginButton {
-    background-color: var(--button-container-buttons-save-color);
+.login-wrapper-content-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensures buttons stretch to container's width */
+    width: 100%; /* Optional: adjust as needed */
+    max-width: 240px; /* Optional: sets a maximum width */
+    margin: 0 auto; /* Centers the container horizontally */
+}
+
+
+
+.loginButton {
+    background-color: var(--ButtonBackground);
     border: none;
     border-radius: var(--ButtonRadius);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -1064,8 +1075,8 @@ body {
     margin-right: 5px;
 }
 
-#loginButton:hover {
-    background-color: var(--button-container-buttons-save-color-hover);
+.loginButton:hover {
+    background-color: var(--ButtonBackgroundHover);
 }
 
 .Footer-Wrapper {
