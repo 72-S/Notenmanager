@@ -627,6 +627,12 @@ function deleteSubject(id, box) {
         generateChart();
         calculateAverageForAllSubjects();
         generateChartDistribution();
+        const noSubjectMessage = document.getElementById("noSubjectMessage");
+        if (Object.keys(localSubjects).length === 0) {
+            noSubjectMessage.style.display = "block";
+        } else {
+            noSubjectMessage.style.display = "none";
+        }
     }, 300);
 }
 
