@@ -875,10 +875,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (darkModeStatus === 'true') {
         body.classList.add('dark');
-        darkModeIcon.src = "assets/darkmode.svg";
+        darkModeIcon.src = "../assets/darkmode.svg";
     } else {
         body.classList.remove('dark');
-        darkModeIcon.src = "assets/lightmode.svg";
+        darkModeIcon.src = "../assets/lightmode.svg";
     }
     loadUserData();
     setButtonStateneuesFachPopup();
