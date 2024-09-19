@@ -5,6 +5,7 @@ Disallow: /
 # Allow specific files
 Allow: /sitemap.xml
 Allow: /robots.txt
+Allow: /.well-known/microsoft-identity-association.json
 
 # Sitemap location
 Sitemap: https://www.notenmanager.online/sitemap.xml
