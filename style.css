@@ -1043,7 +1043,7 @@ body {
     margin-bottom: 20px;
 }
 
-.loginButton {
+#loginButton {
     background-color: var(--button-container-buttons-save-color);
     border: none;
     border-radius: var(--ButtonRadius);
@@ -1064,7 +1064,7 @@ body {
     margin-right: 5px;
 }
 
-.loginButton:hover {
+#loginButton:hover {
     background-color: var(--button-container-buttons-save-color-hover);
 }
 
