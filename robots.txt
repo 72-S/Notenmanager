@@ -1,6 +1,10 @@
-# Allow all bots access to the site
+# Allow all bots access only to sitemap.xml and robots.txt
 User-agent: *
+Disallow: /
 
+# Allow specific files
+Allow: /sitemap.xml
+Allow: /robots.txt
 
-# Sitemap location (important for SEO)
+# Sitemap location
 Sitemap: https://www.notenmanager.online/sitemap.xml
