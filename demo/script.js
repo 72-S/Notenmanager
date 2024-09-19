@@ -290,6 +290,12 @@ function openSubjectPage(id, name) {
     document.getElementById("subjectContent").style.display = "block";
     document.getElementById("neueKategoriePopup").setAttribute("category-data-subject-id", id);
     document.getElementById("FachName").textContent = name;
+    const noKategorieMessage = document.getElementById("noKategorieMessage");
+    if (Object.keys(localCategories).length === 0) {
+        noKategorieMessage.style.display = "block";
+    } else {
+        noKategorieMessage.style.display = "none";
+    }
     const subjectboxes = document.getElementsByClassName("subject-box");
     for (let i = 0; i < subjectboxes.length; i++) {
         subjectboxes[i].classList.remove("show");
@@ -310,6 +316,12 @@ function addCategoryToUI(name, weight, id, subjectId) {
     const container = document.getElementsByClassName("categoriesContainer")[0];
     if (!container) {
         return console.error("Category Container not found");
+    }
+    const noKategorieMessage = document.getElementById("noKategorieMessage");
+    if (Object.keys(localCategories).length === 0) {
+        noKategorieMessage.style.display = "block";
+    } else {
+        noKategorieMessage.style.display = "none";
     }
     const box = document.createElement("div");
     box.classList.add("category-box");
@@ -729,6 +741,14 @@ function saveChanges(categoryId, subjectId) {
         deleteGradesByCategoryId(categoryId);
         delete localCategories[categoryId];
         saveDataToLocalStorage();
+        setTimeout(function () {
+            const noKategorieMessage = document.getElementById("noKategorieMessage");
+            if (Object.keys(localCategories).length === 0) {
+                noKategorieMessage.style.display = "block";
+            } else {
+                noKategorieMessage.style.display = "none";
+            }
+        }, 180);
     } else {
         localCategories[categoryId] = {
             id: categoryId,
@@ -738,6 +758,7 @@ function saveChanges(categoryId, subjectId) {
         };
         saveDataToLocalStorage();
     }
+    
 }
 
 function pushSubjectClass(id, name, color, action) {

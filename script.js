@@ -177,6 +177,14 @@ class PushLocalDataToDB {
                         if (localCategories[category.id]) {
                             delete localCategories[category.id];
                         }
+                        setTimeout(function () {
+                            const noKategorieMessage = document.getElementById("noKategorieMessage");
+                            if (Object.keys(localCategories).length === 0) {
+                                noKategorieMessage.style.display = "block";
+                            } else {
+                                noKategorieMessage.style.display = "none";
+                            }
+                        }, 180);
                     });
                     category.action = "get";
                 }
@@ -636,6 +644,12 @@ function openSubjectPage(id, name) {
     document.getElementById("subjectContent").style.display = "block";
     document.getElementById("neueKategoriePopup").setAttribute("category-data-subject-id", id);
     document.getElementById("FachName").textContent = name;
+    const noKategorieMessage = document.getElementById("noKategorieMessage");
+        if (Object.keys(localCategories).length === 0) {
+            noKategorieMessage.style.display = "block";
+        } else {
+            noKategorieMessage.style.display = "none";
+        }
     const subjectboxes = document.getElementsByClassName("subject-box");
     for (let i = 0; i < subjectboxes.length; i++) {
         subjectboxes[i].classList.remove("show");
@@ -663,6 +677,12 @@ function addCategoryToUI(name, weight, id, subjectId) {
     if (!container) {
         return console.error("Category Container not found");
     }
+    const noKategorieMessage = document.getElementById("noKategorieMessage");
+        if (Object.keys(localCategories).length === 0) {
+            noKategorieMessage.style.display = "block";
+        } else {
+            noKategorieMessage.style.display = "none";
+        }
     const box = document.createElement("div");
     box.classList.add("category-box");
     box.id = id;
