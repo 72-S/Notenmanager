@@ -1,0 +1,6 @@
+# Allow all bots access to the site
+User-agent: *
+
+
+# Sitemap location (important for SEO)
+Sitemap: https://www.notenmanager.online/sitemap.xml
