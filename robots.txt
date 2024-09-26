@@ -1,4 +1,3 @@
-# Allow all bots access only to sitemap.xml and robots.txt
 User-agent: *
 Allow: /
 
