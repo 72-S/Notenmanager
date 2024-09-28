@@ -1100,11 +1100,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (body.classList.contains('dark')) {
             body.classList.remove('dark');
-            darkModeIcon.src = "assets/lightmode.svg";
+            darkModeIcon.src = "../assets/lightmode.svg";
             document.cookie = "darkMode=false; path=/; max-age=31536000";
         } else {
             body.classList.add('dark');
-            darkModeIcon.src = "assets/darkmode.svg";
+            darkModeIcon.src = "../assets/darkmode.svg";
             document.cookie = "darkMode=true; path=/; max-age=31536000";
         }
     });
